@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirecionar todas as requisições para o diretório public
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Se o mod_rewrite não estiver disponível, redirecionar manualmente
+<IfModule !mod_rewrite.c>
+    RedirectMatch 302 ^/(.*)$ /public/$1
+</IfModule>
+
