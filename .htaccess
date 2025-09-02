@@ -11,3 +11,4 @@
     RedirectMatch 302 ^/(.*)$ /public/$1
 </IfModule>
 
+

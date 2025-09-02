@@ -1,3 +1,32 @@
+Write-Host "🔧 Corrigindo problema do cURL SSL..." -ForegroundColor Yellow
+
+# 1. Verificar se estamos no diretório correto
+if (-not (Test-Path "public\index.php")) {
+    Write-Host "❌ Erro: Execute este script na raiz do projeto Laravel" -ForegroundColor Red
+    exit 1
+}
+
+# 2. Limpar todos os caches do Laravel
+Write-Host "🧹 Limpando caches do Laravel..." -ForegroundColor Yellow
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+php artisan route:clear
+
+# 3. Verificar se o arquivo curl-ssl-fix.php existe
+if (Test-Path "config\curl-ssl-fix.php") {
+    Write-Host "✅ Arquivo curl-ssl-fix.php encontrado" -ForegroundColor Green
+    
+    # 4. Verificar se há funções duplicadas
+    $content = Get-Content "config\curl-ssl-fix.php" -Raw
+    $functionCount = ([regex]::Matches($content, "function configureCurlSSL")).Count
+    
+    if ($functionCount -gt 1) {
+        Write-Host "⚠️  Função configureCurlSSL encontrada $functionCount vezes" -ForegroundColor Yellow
+        Write-Host "🔧 Corrigindo arquivo..." -ForegroundColor Yellow
+        
+        # Substituir o conteúdo do arquivo
+        $correctedContent = @'
 <?php
 
 // Solução para erro de certificado SSL no cURL (Windows/XAMPP)
@@ -68,4 +97,22 @@ if (!function_exists('configureCurlSSL')) {
         return $ch;
     }
 }
+'@
+        
+        Set-Content "config\curl-ssl-fix.php" $correctedContent
+        Write-Host "✅ Arquivo corrigido com sucesso" -ForegroundColor Green
+    } else {
+        Write-Host "✅ Arquivo curl-ssl-fix.php está correto" -ForegroundColor Green
+    }
+} else {
+    Write-Host "❌ Arquivo curl-ssl-fix.php não encontrado" -ForegroundColor Red
+}
 
+# 5. Otimizar para produção
+Write-Host "⚡ Otimizando para produção..." -ForegroundColor Yellow
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+Write-Host "✅ Script de correção do cURL SSL concluído!" -ForegroundColor Green
+Write-Host "🎯 Agora você pode executar o deploy normalmente" -ForegroundColor Cyan

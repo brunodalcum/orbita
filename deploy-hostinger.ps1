@@ -9,29 +9,33 @@ if (-not (Test-Path "public\index.php")) {
 
 Write-Host "✅ Diretório correto detectado" -ForegroundColor Green
 
-# 2. Instalar dependências
-Write-Host "📦 Instalando dependências..." -ForegroundColor Yellow
+# 2. Instalar dependências PHP
+Write-Host "📦 Instalando dependências PHP..." -ForegroundColor Yellow
 composer install --no-dev --optimize-autoloader
 
-# 3. Build dos assets
+# 3. Instalar dependências Node.js
+Write-Host "📦 Instalando dependências Node.js..." -ForegroundColor Yellow
+npm ci --production
+
+# 4. Build dos assets
 Write-Host "🎨 Build dos assets..." -ForegroundColor Yellow
 npm run build
 
-# 4. Corrigir manifesto Vite
+# 5. Corrigir manifesto Vite
 Write-Host "🔧 Corrigindo manifesto Vite..." -ForegroundColor Yellow
 if (Test-Path "public\build\.vite\manifest.json") {
     Copy-Item "public\build\.vite\manifest.json" "public\build\manifest.json" -Force
     Write-Host "✅ Manifesto corrigido" -ForegroundColor Green
 }
 
-# 5. Limpar caches
+# 6. Limpar caches
 Write-Host "🧹 Limpando caches..." -ForegroundColor Yellow
 php artisan config:clear
 php artisan cache:clear
 php artisan route:clear
 php artisan view:clear
 
-# 6. Otimizar para produção
+# 7. Otimizar para produção
 Write-Host "⚡ Otimizando para produção..." -ForegroundColor Yellow
 php artisan config:cache
 php artisan route:cache
