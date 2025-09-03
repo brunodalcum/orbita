@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-use Google\Client;
-use Google\Service\Calendar;
-use Google\Service\Calendar\Event;
-use Google\Service\Calendar\EventDateTime;
-use Google\Service\Calendar\EventAttendee;
+use Google_Client;
+use Google_Service_Calendar;
+use Google_Service_Calendar_Event;
+use Google_Service_Calendar_EventDateTime;
+use Google_Service_Calendar_EventAttendee;
 use Illuminate\Support\Facades\Log;
 
 class GoogleCalendarService
@@ -16,19 +16,12 @@ class GoogleCalendarService
 
     public function __construct()
     {
-        $this->client = new Client();
+        $this->client = new Google_Client();
         $this->client->setApplicationName(config('app.name', 'Orbita Agenda'));
-        $this->client->setScopes(config('google-calendar.scopes', Calendar::CALENDAR));
+        $this->client->setScopes(config('google-calendar.scopes', Google_Service_Calendar::CALENDAR));
         
         // Configurar SSL para cURL (Windows/XAMPP)
-        if (function_exists('configureCurlSSL')) {
-            $this->client->setHttpClient(new \GuzzleHttp\Client([
-                'curl' => [
-                    CURLOPT_SSL_VERIFYPEER => false, // Temporariamente desabilitar para teste
-                    CURLOPT_SSL_VERIFYHOST => false,  // Temporariamente desabilitar para teste
-                ]
-            ]));
-        }
+        $this->configureCurlSSL();
         
         // Verificar se está usando Service Account ou OAuth2
         if (config('google-calendar.service_account_enabled', false)) {
@@ -37,7 +30,29 @@ class GoogleCalendarService
             $this->setupOAuth2();
         }
         
-        $this->service = new Calendar($this->client);
+        $this->service = new Google_Service_Calendar($this->client);
+    }
+
+    /**
+     * Configurar SSL para cURL (Windows/XAMPP)
+     */
+    private function configureCurlSSL()
+    {
+        // Configurações específicas para Windows/XAMPP
+        $curlOptions = [
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+        ];
+
+        // Criar cliente HTTP personalizado com configurações SSL
+        $httpClient = new \GuzzleHttp\Client([
+            'curl' => $curlOptions,
+            'timeout' => 30,
+            'verify' => false, // Desabilitar verificação SSL para desenvolvimento
+        ]);
+
+        $this->client->setHttpClient($httpClient);
     }
 
     /**
@@ -84,19 +99,19 @@ class GoogleCalendarService
     public function createEvent($titulo, $descricao, $dataInicio, $dataFim, $participantes = [])
     {
         try {
-            $event = new Event();
+            $event = new Google_Service_Calendar_Event();
             $event->setSummary($titulo);
             $event->setDescription($descricao);
 
             // Configurar horários
             $timezone = config('google-calendar.default_timezone', 'America/Sao_Paulo');
             
-            $start = new EventDateTime();
+            $start = new Google_Service_Calendar_EventDateTime();
             $start->setDateTime($dataInicio);
             $start->setTimeZone($timezone);
             $event->setStart($start);
 
-            $end = new EventDateTime();
+            $end = new Google_Service_Calendar_EventDateTime();
             $end->setDateTime($dataFim);
             $end->setTimeZone($timezone);
             $event->setEnd($end);
@@ -104,7 +119,7 @@ class GoogleCalendarService
             // Adicionar participantes
             $attendees = [];
             foreach ($participantes as $email) {
-                $attendee = new EventAttendee();
+                $attendee = new Google_Service_Calendar_EventAttendee();
                 $attendee->setEmail($email);
                 $attendees[] = $attendee;
             }
@@ -112,9 +127,9 @@ class GoogleCalendarService
 
             // Configurar Google Meet se estiver habilitado
             if (config('google-calendar.meet_enabled', true)) {
-                $conferenceData = new \Google\Service\Calendar\ConferenceData();
-                $createRequest = new \Google\Service\Calendar\CreateConferenceRequest();
-                $conferenceSolutionKey = new \Google\Service\Calendar\ConferenceSolutionKey();
+                $conferenceData = new \Google_Service_Calendar_ConferenceData();
+                $createRequest = new \Google_Service_Calendar_CreateConferenceRequest();
+                $conferenceSolutionKey = new \Google_Service_Calendar_ConferenceSolutionKey();
                 
                 $conferenceSolutionKey->setType('hangoutsMeet');
                 $createRequest->setRequestId(uniqid());
@@ -163,12 +178,12 @@ class GoogleCalendarService
             // Atualizar horários
             $timezone = config('google-calendar.default_timezone', 'America/Sao_Paulo');
             
-            $start = new EventDateTime();
+            $start = new Google_Service_Calendar_EventDateTime();
             $start->setDateTime($dataInicio);
             $start->setTimeZone($timezone);
             $event->setStart($start);
 
-            $end = new EventDateTime();
+            $end = new Google_Service_Calendar_EventDateTime();
             $end->setDateTime($dataFim);
             $end->setTimeZone($timezone);
             $event->setEnd($end);
@@ -176,7 +191,7 @@ class GoogleCalendarService
             // Atualizar participantes
             $attendees = [];
             foreach ($participantes as $email) {
-                $attendee = new EventAttendee();
+                $attendee = new Google_Service_Calendar_EventAttendee();
                 $attendee->setEmail($email);
                 $attendees[] = $attendee;
             }
@@ -222,6 +237,98 @@ class GoogleCalendarService
 
         } catch (\Exception $e) {
             Log::error('Erro ao excluir evento no Google Calendar: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Verificar se está autenticado
+     */
+    public function isAuthenticated()
+    {
+        try {
+            $tokenFile = storage_path('app/google-calendar-token.json');
+            
+            if (!file_exists($tokenFile)) {
+                return false;
+            }
+            
+            $token = json_decode(file_get_contents($tokenFile), true);
+            if (!$token || !isset($token['access_token'])) {
+                return false;
+            }
+            
+            $this->client->setAccessToken($token);
+            
+            // Verificar se o token expirou
+            if ($this->client->isAccessTokenExpired()) {
+                if (isset($token['refresh_token'])) {
+                    $this->client->refreshToken($token['refresh_token']);
+                    $newToken = $this->client->getAccessToken();
+                    file_put_contents($tokenFile, json_encode($newToken));
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            
+            return true;
+            
+        } catch (\Exception $e) {
+            Log::error('Erro ao verificar autenticação: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Obter URL de autorização OAuth2
+     */
+    public function getAuthUrl()
+    {
+        try {
+            $authUrl = $this->client->createAuthUrl();
+            return [
+                'success' => true,
+                'auth_url' => $authUrl
+            ];
+        } catch (\Exception $e) {
+            Log::error('Erro ao gerar URL de autorização: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Processar callback OAuth2 e salvar token
+     */
+    public function handleAuthCallback($code)
+    {
+        try {
+            $token = $this->client->fetchAccessTokenWithAuthCode($code);
+            
+            if (isset($token['error'])) {
+                throw new \Exception('Erro na autorização: ' . ($token['error_description'] ?? $token['error']));
+            }
+            
+            // Salvar token
+            $tokenFile = storage_path('app/google-calendar-token.json');
+            file_put_contents($tokenFile, json_encode($token));
+            
+            // Configurar token no cliente
+            $this->client->setAccessToken($token);
+            
+            return [
+                'success' => true,
+                'message' => 'Autorização realizada com sucesso!'
+            ];
+            
+        } catch (\Exception $e) {
+            Log::error('Erro ao processar callback OAuth2: ' . $e->getMessage());
             return [
                 'success' => false,
                 'error' => $e->getMessage()

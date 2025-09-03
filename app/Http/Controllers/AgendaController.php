@@ -88,8 +88,6 @@ class AgendaController extends Controller
             // Tentar criar evento no Google Calendar se for reunião online ou híbrida
             if ($request->tipo_reuniao === 'online' || $request->tipo_reuniao === 'hibrida') {
                 try {
-                    // Temporariamente desabilitado para desenvolvimento
-                    /*
                     $googleService = new GoogleCalendarService();
                     $googleResult = $googleService->createEvent(
                         $request->titulo,
@@ -102,12 +100,13 @@ class AgendaController extends Controller
                     if ($googleResult['success']) {
                         $agenda->google_event_id = $googleResult['event_id'];
                         $agenda->google_meet_link = $googleResult['meet_link'];
+                        \Log::info('Evento criado no Google Calendar com sucesso: ' . $googleResult['event_id']);
+                    } else {
+                        \Log::warning('Falha ao criar evento no Google Calendar: ' . ($googleResult['error'] ?? 'Erro desconhecido'));
+                        // Fallback: gerar link do Meet manualmente
+                        $agenda->google_meet_link = 'https://meet.google.com/' . strtolower(substr(md5(uniqid()), 0, 8)) . '-' . strtolower(substr(md5(uniqid()), 0, 4)) . '-' . strtolower(substr(md5(uniqid()), 0, 4));
                     }
-                    */
                     
-                    // Fallback: gerar link do Meet manualmente
-                    $agenda->google_meet_link = 'https://meet.google.com/' . strtolower(substr(md5(uniqid()), 0, 8)) . '-' . strtolower(substr(md5(uniqid()), 0, 4)) . '-' . strtolower(substr(md5(uniqid()), 0, 4));
-                    \Log::info('Usando link Meet manual para desenvolvimento');
                 } catch (\Exception $e) {
                     \Log::error('Erro ao criar evento no Google Calendar: ' . $e->getMessage());
                     // Fallback: gerar link do Meet manualmente se o Google falhar

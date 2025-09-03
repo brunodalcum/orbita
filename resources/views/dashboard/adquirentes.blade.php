@@ -140,6 +140,10 @@
                         <i class="fas fa-user-plus mr-3"></i>
                         Leads
                     </a>
+                    <a href="{{ route('dashboard.marketing') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                        <i class="fas fa-bullhorn mr-3"></i>
+                        Marketing
+                    </a>
                     <a href="{{ route('dashboard.configuracoes') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
                         <i class="fas fa-cog mr-3"></i>
                         Configurações

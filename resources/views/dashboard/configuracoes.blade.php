@@ -287,6 +287,10 @@
                         <i class="fas fa-user-plus mr-3 text-lg"></i>
                         <span class="font-medium">Leads</span>
                     </a>
+                    <a href="{{ route('dashboard.marketing') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-xl">
+                        <i class="fas fa-bullhorn mr-3 text-lg"></i>
+                        <span class="font-medium">Marketing</span>
+                    </a>
                     <a href="{{ route('dashboard.configuracoes') }}" class="sidebar-link active flex items-center px-4 py-3 text-white rounded-lg">
                         <i class="fas fa-cog mr-3 text-lg"></i>
                         <span class="font-medium">Configurações</span>

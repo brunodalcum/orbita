@@ -41,23 +41,38 @@
             </a>
             
             <a href="{{ route('dashboard.licenciados') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
-                <i class="fas fa-users mr-3"></i>
+                <i class="fas fa-id-card mr-3"></i>
                 Licenciados
             </a>
             
             <a href="{{ route('dashboard.operacoes') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
-                <i class="fas fa-handshake mr-3"></i>
+                <i class="fas fa-cogs mr-3"></i>
                 Operações
             </a>
             
             <a href="{{ route('dashboard.planos') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
-                <i class="fas fa-credit-card mr-3"></i>
+                <i class="fas fa-chart-line mr-3"></i>
                 Planos
             </a>
             
             <a href="{{ route('dashboard.adquirentes') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
                 <i class="fas fa-building mr-3"></i>
                 Adquirentes
+            </a>
+            
+            <a href="{{ route('dashboard.agenda') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                <i class="fas fa-calendar-alt mr-3"></i>
+                Agenda
+            </a>
+            
+            <a href="{{ route('dashboard.leads') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                <i class="fas fa-user-plus mr-3"></i>
+                Leads
+            </a>
+            
+            <a href="{{ route('dashboard.marketing') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                <i class="fas fa-bullhorn mr-3"></i>
+                Marketing
             </a>
             
             <a href="{{ route('dashboard.configuracoes') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">

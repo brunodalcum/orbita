@@ -60,3 +60,4 @@ class MarketingEmail extends Mailable
 
 
 
+

@@ -14,7 +14,7 @@ return [
     'client_id' => env('GOOGLE_CALENDAR_CLIENT_ID'),
     'client_secret' => env('GOOGLE_CALENDAR_CLIENT_SECRET'),
     'redirect_uri' => env('GOOGLE_CALENDAR_REDIRECT_URI', 'http://127.0.0.1:8000/auth/google/callback'),
-    'scopes' => env('GOOGLE_CALENDAR_SCOPES', 'https://www.googleapis.com/auth/calendar,https://www.googleapis.com/auth/calendar.events'),
+    'scopes' => env('GOOGLE_CALENDAR_SCOPES', 'https://www.googleapis.com/auth/calendar'),
 
     /*
     |--------------------------------------------------------------------------
