@@ -88,6 +88,8 @@ class AgendaController extends Controller
             // Tentar criar evento no Google Calendar se for reunião online ou híbrida
             if ($request->tipo_reuniao === 'online' || $request->tipo_reuniao === 'hibrida') {
                 try {
+                    // Temporariamente desabilitado para desenvolvimento
+                    /*
                     $googleService = new GoogleCalendarService();
                     $googleResult = $googleService->createEvent(
                         $request->titulo,
@@ -101,6 +103,11 @@ class AgendaController extends Controller
                         $agenda->google_event_id = $googleResult['event_id'];
                         $agenda->google_meet_link = $googleResult['meet_link'];
                     }
+                    */
+                    
+                    // Fallback: gerar link do Meet manualmente
+                    $agenda->google_meet_link = 'https://meet.google.com/' . strtolower(substr(md5(uniqid()), 0, 8)) . '-' . strtolower(substr(md5(uniqid()), 0, 4)) . '-' . strtolower(substr(md5(uniqid()), 0, 4));
+                    \Log::info('Usando link Meet manual para desenvolvimento');
                 } catch (\Exception $e) {
                     \Log::error('Erro ao criar evento no Google Calendar: ' . $e->getMessage());
                     // Fallback: gerar link do Meet manualmente se o Google falhar
@@ -439,7 +446,7 @@ class AgendaController extends Controller
      */
     public function getLicenciados()
     {
-        $licenciados = Licenciado::where('status', 'ativo')
+        $licenciados = Licenciado::whereIn('status', ['ativo', 'aprovado'])
             ->whereNotNull('email')
             ->orderBy('razao_social')
             ->get(['id', 'razao_social', 'nome_fantasia', 'email']);
@@ -456,7 +463,7 @@ class AgendaController extends Controller
     public function getLicenciadoDetails($id)
     {
         try {
-            $licenciado = Licenciado::where('status', 'ativo')
+            $licenciado = Licenciado::whereIn('status', ['ativo', 'aprovado'])
                 ->whereNotNull('email')
                 ->findOrFail($id);
 

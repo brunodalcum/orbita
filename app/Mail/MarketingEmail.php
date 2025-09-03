@@ -59,3 +59,4 @@ class MarketingEmail extends Mailable
 }
 
 
+
