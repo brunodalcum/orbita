@@ -14,11 +14,6 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        .sidebar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
-            overflow: hidden;
-        }
         .sidebar::before {
             content: '';
             position: absolute;
@@ -64,11 +59,6 @@
         .config-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
-        }
-        .sidebar-link {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
         }
         .sidebar-link::before {
             content: '';
@@ -248,7 +238,7 @@
 <body class="bg-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="sidebar w-64 flex-shrink-0 relative">
+        <div class="w-64 bg-gradient-to-b from-blue-500 to-purple-600 flex-shrink-0 relative">
             <div class="p-6 relative z-10">
                 <!-- Logo -->
                 <div class="flex items-center mb-8">
@@ -291,7 +281,7 @@
                         <i class="fas fa-bullhorn mr-3 text-lg"></i>
                         <span class="font-medium">Marketing</span>
                     </a>
-                    <a href="{{ route('dashboard.configuracoes') }}" class="sidebar-link active flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard.configuracoes') }}" class="flex items-center px-4 py-3 text-white rounded-lg bg-white/20 border-l-4 border-white">
                         <i class="fas fa-cog mr-3 text-lg"></i>
                         <span class="font-medium">Configurações</span>
                     </a>

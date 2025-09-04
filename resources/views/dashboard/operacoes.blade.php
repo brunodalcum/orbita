@@ -15,20 +15,6 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        .sidebar {
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-        }
-        .sidebar-link {
-            transition: all 0.3s ease;
-        }
-        .sidebar-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-        .sidebar-link.active {
-            background: rgba(255, 255, 255, 0.2);
-            border-left: 4px solid white;
-        }
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transition: all 0.3s ease;
@@ -109,7 +95,7 @@
 <body class="bg-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="sidebar w-64 flex-shrink-0">
+        <div class="w-64 bg-gradient-to-b from-blue-500 to-purple-600 flex-shrink-0">
             <div class="p-6">
                 <!-- Logo -->
                 <div class="flex items-center mb-8">
@@ -118,39 +104,39 @@
 
                 <!-- Menu -->
                 <nav class="space-y-2">
-                    <a href="{{ route('dashboard') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="{{ route('dashboard.licenciados') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard.licenciados') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
                         <i class="fas fa-id-card mr-3"></i>
                         Licenciados
                     </a>
-                    <a href="{{ route('dashboard.operacoes') }}" class="sidebar-link active flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard.operacoes') }}" class="flex items-center px-4 py-3 text-white rounded-lg bg-white/20 border-l-4 border-white">
                         <i class="fas fa-cogs mr-3"></i>
                         Operações
                     </a>
-                    <a href="{{ route('dashboard.planos') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard.planos') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
                         <i class="fas fa-chart-line mr-3"></i>
                         Planos
                     </a>
-                    <a href="{{ route('dashboard.adquirentes') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard.adquirentes') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
                         <i class="fas fa-building mr-3"></i>
                         Adquirentes
                     </a>
-                    <a href="{{ route('dashboard.agenda') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard.agenda') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Agenda
                     </a>
-                    <a href="{{ route('dashboard.leads') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard.leads') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
                         <i class="fas fa-user-plus mr-3"></i>
                         Leads
                     </a>
-                    <a href="{{ route('dashboard.marketing') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard.marketing') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
                         <i class="fas fa-bullhorn mr-3"></i>
                         Marketing
                     </a>
-                    <a href="{{ route('dashboard.configuracoes') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
+                    <a href="{{ route('dashboard.configuracoes') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
                         <i class="fas fa-cog mr-3"></i>
                         Configurações
                     </a>

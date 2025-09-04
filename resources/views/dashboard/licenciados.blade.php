@@ -48,6 +48,18 @@
                         <i class="fas fa-calendar-alt mr-3"></i>
                         Agenda
                     </a>
+                    <a href="{{ route('dashboard.leads') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
+                        <i class="fas fa-user-plus mr-3"></i>
+                        Leads
+                    </a>
+                    <a href="{{ route('dashboard.marketing') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
+                        <i class="fas fa-bullhorn mr-3"></i>
+                        Marketing
+                    </a>
+                    <a href="{{ route('dashboard.configuracoes') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
+                        <i class="fas fa-cog mr-3"></i>
+                        Configurações
+                    </a>
                 </nav>
             </div>
 
@@ -222,11 +234,11 @@
                                                         <i class="fas fa-edit mr-1"></i>
                                                         <span class="hidden sm:inline">Editar</span>
                                                     </button>
-                                                    <button onclick="approveLicenciado({{ $licenciado->id }}, {{ json_encode($licenciado->razao_social) }})" 
-                                                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 rounded-lg transition-colors duration-200" 
-                                                            title="Aprovar Licenciado">
-                                                        <i class="fas fa-check mr-1"></i>
-                                                        <span class="hidden sm:inline">Aprovar</span>
+                                                    <button onclick="openStatusModal({{ $licenciado->id }}, {{ json_encode($licenciado->razao_social) }}, '{{ $licenciado->status }}')" 
+                                                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors duration-200" 
+                                                            title="Alterar Status">
+                                                        <i class="fas fa-cogs mr-1"></i>
+                                                        <span class="hidden sm:inline">Status</span>
                                                     </button>
                                                     <button onclick="deleteLicenciado({{ $licenciado->id }}, {{ json_encode($licenciado->razao_social) }})" 
                                                             class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors duration-200" 
@@ -719,6 +731,110 @@
                 <div class="sr-only">
                     <div id="cancel-close-desc">Cancelar e continuar preenchendo o formulário</div>
                     <div id="confirm-close-desc">Confirmar saída e perder todos os dados</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Alteração de Status -->
+    <div id="statusModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none !important;">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="statusModalContent">
+            <div class="p-6">
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-cogs text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">Alterar Status</h3>
+                            <p class="text-sm text-gray-600">Selecione o novo status do licenciado</p>
+                        </div>
+                    </div>
+                    <button onclick="closeStatusModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Licenciado Info -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-building text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900" id="statusModalLicenciadoName">Nome do Licenciado</h4>
+                            <p class="text-sm text-gray-600">Status atual: <span id="statusModalCurrentStatus" class="font-medium">Em Análise</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Selection -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Novo Status</label>
+                    <select id="statusSelect" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all">
+                        <option value="">Selecione um status</option>
+                        <option value="aprovado">✅ Aprovado</option>
+                        <option value="recusado">❌ Recusado</option>
+                        <option value="em_analise">🔄 Em Análise</option>
+                        <option value="risco">⚠️ Risco</option>
+                    </select>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex space-x-3">
+                    <button onclick="closeStatusModal()" 
+                            class="flex-1 px-4 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors">
+                        Cancelar
+                    </button>
+                    <button onclick="confirmStatusChange()" 
+                            id="confirmStatusBtn"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg font-medium transition-all transform hover:scale-105">
+                        <i class="fas fa-save mr-2"></i>
+                        Alterar Status
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Aviso - Status Igual -->
+    <div id="statusWarningModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none !important;">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="statusWarningModalContent">
+            <div class="p-6">
+                <!-- Header -->
+                <div class="flex items-center justify-center mb-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Status Igual ao Atual</h3>
+                    <p class="text-gray-600 mb-4">
+                        O status selecionado é o mesmo do atual. 
+                        <br>
+                        <span class="font-medium text-amber-600">Nenhuma alteração será feita.</span>
+                    </p>
+                    
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i class="fas fa-info-circle text-amber-600"></i>
+                            <span class="text-sm text-amber-700">
+                                Selecione um status diferente para alterar
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex justify-center">
+                    <button onclick="closeStatusWarningModal()" 
+                            class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg font-medium transition-all transform hover:scale-105">
+                        <i class="fas fa-check mr-2"></i>
+                        Entendi
+                    </button>
                 </div>
             </div>
         </div>
@@ -1934,6 +2050,65 @@
             }
         });
 
+        // Event listeners para o modal de status
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusModal = document.getElementById('statusModal');
+            const statusSelect = document.getElementById('statusSelect');
+            const statusWarningModal = document.getElementById('statusWarningModal');
+            
+            // Modal de status
+            if (statusModal) {
+                // Clique fora do modal para fechar
+                statusModal.addEventListener('click', function(event) {
+                    if (event.target === statusModal) {
+                        closeStatusModal();
+                    }
+                });
+                
+                // Teclas de atalho
+                statusModal.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape') {
+                        closeStatusModal();
+                    } else if (event.key === 'Enter' && event.target.id === 'confirmStatusBtn') {
+                        confirmStatusChange();
+                    } else if (event.key === 'Tab') {
+                        handleTabKey(event, statusModal);
+                    }
+                });
+            }
+            
+            // Select de status
+            if (statusSelect) {
+                statusSelect.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        confirmStatusChange();
+                    }
+                });
+            }
+            
+            // Modal de aviso de status
+            if (statusWarningModal) {
+                // Clique fora do modal para fechar
+                statusWarningModal.addEventListener('click', function(event) {
+                    if (event.target === statusWarningModal) {
+                        closeStatusWarningModal();
+                    }
+                });
+                
+                // Teclas de atalho
+                statusWarningModal.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape') {
+                        closeStatusWarningModal();
+                    } else if (event.key === 'Enter') {
+                        closeStatusWarningModal();
+                    } else if (event.key === 'Tab') {
+                        handleTabKey(event, statusWarningModal);
+                    }
+                });
+            }
+        });
+
         // ===== FUNÇÕES DO MODAL DE CONFIRMAÇÃO DE FECHAMENTO =====
 
         // Função para mostrar modal de confirmação de fechamento
@@ -1980,6 +2155,194 @@
             forceCloseLicenciadoModal();
         }
 
+        // ===== MODAL DE ALTERAÇÃO DE STATUS =====
+        let currentLicenciadoId = null;
+        let currentLicenciadoName = null;
+        let currentLicenciadoStatus = null;
+
+        function openStatusModal(id, name, currentStatus) {
+            currentLicenciadoId = id;
+            currentLicenciadoName = name;
+            currentLicenciadoStatus = currentStatus;
+            
+            // Preencher informações do modal
+            document.getElementById('statusModalLicenciadoName').textContent = name;
+            document.getElementById('statusModalCurrentStatus').textContent = getStatusLabel(currentStatus);
+            
+            // Limpar seleção anterior
+            document.getElementById('statusSelect').value = '';
+            
+            // Mostrar modal com animação
+            const modal = document.getElementById('statusModal');
+            const modalContent = document.getElementById('statusModalContent');
+            
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+            
+            // Animar entrada
+            setTimeout(() => {
+                modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
+            }, 10);
+            
+            // Focar no select
+            setTimeout(() => {
+                document.getElementById('statusSelect').focus();
+            }, 300);
+        }
+
+        function closeStatusModal() {
+            const modal = document.getElementById('statusModal');
+            const modalContent = document.getElementById('statusModalContent');
+            
+            // Animar saída
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.classList.remove('show');
+            }, 300);
+            
+            // Limpar variáveis
+            currentLicenciadoId = null;
+            currentLicenciadoName = null;
+            currentLicenciadoStatus = null;
+        }
+
+        function confirmStatusChange() {
+            const newStatus = document.getElementById('statusSelect').value;
+            
+            if (!newStatus) {
+                alert('Por favor, selecione um status.');
+                return;
+            }
+            
+            if (newStatus === currentLicenciadoStatus) {
+                showStatusWarningModal();
+                return;
+            }
+            
+            // Mostrar loading no botão
+            const btn = document.getElementById('confirmStatusBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Alterando...';
+            btn.disabled = true;
+            
+            // Fazer requisição para alterar status
+            fetch(`/dashboard/licenciados/${currentLicenciadoId}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    status: newStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Mostrar toast de sucesso
+                    showStatusChangeToast(currentLicenciadoName, getStatusLabel(newStatus));
+                    
+                    // Fechar modal
+                    closeStatusModal();
+                    
+                    // Recarregar página após um delay
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    alert('Erro ao alterar status: ' + (data.message || 'Erro desconhecido'));
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao alterar status. Tente novamente.');
+            })
+            .finally(() => {
+                // Restaurar botão
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'aprovado': 'Aprovado',
+                'recusado': 'Recusado',
+                'em_analise': 'Em Análise',
+                'risco': 'Risco'
+            };
+            return labels[status] || status;
+        }
+
+        function showStatusChangeToast(licenciadoName, newStatus) {
+            // Criar toast
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg transform translate-y-full transition-transform duration-300 z-50';
+            toast.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-xl"></i>
+                    <div>
+                        <p class="font-semibold">Status alterado com sucesso!</p>
+                        <p class="text-sm opacity-90">${licenciadoName} → ${newStatus}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animar entrada
+            setTimeout(() => {
+                toast.style.transform = 'translate-y(0)';
+            }, 100);
+            
+            // Remover após 4 segundos
+            setTimeout(() => {
+                toast.style.transform = 'translate-y-full';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 4000);
+        }
+
+        // ===== MODAL DE AVISO - STATUS IGUAL =====
+        function showStatusWarningModal() {
+            const modal = document.getElementById('statusWarningModal');
+            const modalContent = document.getElementById('statusWarningModalContent');
+            
+            // Mostrar modal com animação
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+            
+            // Animar entrada
+            setTimeout(() => {
+                modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
+            }, 10);
+            
+            // Focar no botão após animação
+            setTimeout(() => {
+                document.querySelector('#statusWarningModal button').focus();
+            }, 300);
+        }
+
+        function closeStatusWarningModal() {
+            const modal = document.getElementById('statusWarningModal');
+            const modalContent = document.getElementById('statusWarningModalContent');
+            
+            // Animar saída
+            modalContent.style.transform = 'scale(0.95)';
+            modalContent.style.opacity = '0';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.classList.remove('show');
+            }, 300);
+        }
+
         // ===== EXEMPLO DE USO =====
         // Para usar em qualquer lugar da página:
         // <button onclick="approveLicenciado(123, 'Nome da Empresa')">Aprovar cadastro</button>
@@ -2022,6 +2385,24 @@
         }
         
         #closeConfirmModal.show {
+            display: flex !important;
+        }
+
+        /* Modal de Status */
+        #statusModal {
+            display: none !important;
+        }
+        
+        #statusModal.show {
+            display: flex !important;
+        }
+
+        /* Modal de Aviso de Status */
+        #statusWarningModal {
+            display: none !important;
+        }
+        
+        #statusWarningModal.show {
             display: flex !important;
         }
 
