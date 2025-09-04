@@ -63,6 +63,17 @@ Route::middleware([
     Route::post('/dashboard/marketing/modelos', [App\Http\Controllers\MarketingController::class, 'storeModelo'])->name('dashboard.marketing.modelos.store');
     Route::post('/dashboard/marketing/enviar-email', [App\Http\Controllers\MarketingController::class, 'enviarEmail'])->name('dashboard.marketing.enviar-email');
     
+    // Rotas para Campanhas
+    Route::get('/dashboard/marketing/campanhas/{id}', [App\Http\Controllers\MarketingController::class, 'getCampanha'])->name('dashboard.marketing.campanhas.show');
+    Route::get('/dashboard/marketing/campanhas/{id}/detalhes', [App\Http\Controllers\MarketingController::class, 'showCampanha'])->name('dashboard.marketing.campanhas.detalhes');
+    Route::post('/dashboard/marketing/campanhas', [App\Http\Controllers\MarketingController::class, 'storeCampanha'])->name('dashboard.marketing.campanhas.store');
+    Route::put('/dashboard/marketing/campanhas/{id}', [App\Http\Controllers\MarketingController::class, 'updateCampanha'])->name('dashboard.marketing.campanhas.update');
+    Route::patch('/dashboard/marketing/campanhas/{id}/status', [App\Http\Controllers\MarketingController::class, 'changeStatus'])->name('dashboard.marketing.campanhas.status');
+    Route::post('/dashboard/marketing/campanhas/{id}/enviar', [App\Http\Controllers\MarketingController::class, 'enviarCampanha'])->name('dashboard.marketing.campanhas.enviar');
+    
+    // Rota para teste de e-mail
+    Route::post('/dashboard/marketing/testar-email', [App\Http\Controllers\MarketingController::class, 'testarEmail'])->name('dashboard.marketing.testar-email');
+    
     // Rotas para Configurações
     Route::get('/dashboard/configuracoes', [App\Http\Controllers\ConfiguracaoController::class, 'index'])->name('dashboard.configuracoes');
     Route::post('/dashboard/configuracoes', [App\Http\Controllers\ConfiguracaoController::class, 'update'])->name('configuracoes.update');

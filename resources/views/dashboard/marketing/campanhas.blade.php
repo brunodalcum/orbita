@@ -96,6 +96,10 @@
                             <i class="fas fa-plus mr-2"></i>
                             Nova Campanha
                         </button>
+                        <button onclick="testarEnvioEmail()" class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Testar E-mail
+                        </button>
                         <button class="p-2 text-gray-400 hover:text-gray-600">
                             <i class="fas fa-bell"></i>
                         </button>
@@ -131,164 +135,117 @@
 
                     <!-- Campanhas Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Campanha de Exemplo -->
+                        @forelse($campanhas as $campanha)
+                        <!-- Campanha Dinâmica -->
                         <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center space-x-2">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                        <i class="fas fa-play mr-1"></i>Ativa
-                                    </span>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                        <i class="fas fa-users mr-1"></i>Leads
-                                    </span>
+                                    @if($campanha->status === 'ativa')
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            <i class="fas fa-play mr-1"></i>Ativa
+                                        </span>
+                                    @elseif($campanha->status === 'pausada')
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            <i class="fas fa-pause mr-1"></i>Pausada
+                                        </span>
+                                    @elseif($campanha->status === 'concluida')
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            <i class="fas fa-check mr-1"></i>Concluída
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                            <i class="fas fa-edit mr-1"></i>Rascunho
+                                        </span>
+                                    @endif
+                                    
+                                    @if($campanha->tipo === 'lead')
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            <i class="fas fa-users mr-1"></i>Leads
+                                        </span>
+                                    @elseif($campanha->tipo === 'licenciado')
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            <i class="fas fa-user-tie mr-1"></i>Licenciados
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                                            <i class="fas fa-globe mr-1"></i>Geral
+                                        </span>
+                                    @endif
                                 </div>
                                 <div class="flex space-x-2">
-                                    <button onclick="editCampanha(1)" class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-100 transition-colors duration-200" title="Editar">
+                                    <button onclick="editCampanha({{ $campanha->id }})" class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-100 transition-colors duration-200" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button onclick="pauseCampanha(1)" class="text-yellow-600 hover:text-yellow-900 p-1 rounded hover:bg-yellow-100 transition-colors duration-200" title="Pausar">
-                                        <i class="fas fa-pause"></i>
-                                    </button>
+                                    @if($campanha->status === 'ativa')
+                                        <button onclick="pauseCampanha({{ $campanha->id }})" class="text-yellow-600 hover:text-yellow-900 p-1 rounded hover:bg-yellow-100 transition-colors duration-200" title="Pausar">
+                                            <i class="fas fa-pause"></i>
+                                        </button>
+                                    @elseif($campanha->status === 'pausada')
+                                        <button onclick="resumeCampanha({{ $campanha->id }})" class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100 transition-colors duration-200" title="Retomar">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                    @endif
+                                    @if($campanha->status === 'rascunho')
+                                        <button onclick="activateCampanha({{ $campanha->id }})" class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100 transition-colors duration-200" title="Ativar">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                             
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">🎯 Boas-vindas DSPay</h3>
-                            <p class="text-sm text-gray-600 mb-3">Campanha de boas-vindas para novos leads</p>
-                            
-                            <div class="space-y-3 mb-4">
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Destinatários:</span>
-                                    <span class="font-medium">0 leads</span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Enviados:</span>
-                                    <span class="font-medium text-green-600">0</span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Abertos:</span>
-                                    <span class="font-medium text-blue-600">0%</span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Cliques:</span>
-                                    <span class="font-medium text-purple-600">0%</span>
-                                </div>
-                            </div>
-                            
-                            <div class="flex space-x-2">
-                                <button onclick="viewCampanha(1)" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
-                                    <i class="fas fa-eye mr-1"></i>Ver Detalhes
-                                </button>
-                                <button onclick="duplicateCampanha(1)" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
-                                    <i class="fas fa-copy mr-1"></i>Duplicar
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Campanha Pausada -->
-                        <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-2">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        <i class="fas fa-pause mr-1"></i>Pausada
-                                    </span>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                        <i class="fas fa-user-tie mr-1"></i>Licenciados
-                                    </span>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button onclick="editCampanha(2)" class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-100 transition-colors duration-200" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button onclick="resumeCampanha(2)" class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100 transition-colors duration-200" title="Retomar">
-                                        <i class="fas fa-play"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">🚀 Oportunidades de Negócio</h3>
-                            <p class="text-sm text-gray-600 mb-3">Campanha para licenciados ativos</p>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $campanha->nome }}</h3>
+                            <p class="text-sm text-gray-600 mb-3">{{ $campanha->descricao ?: 'Sem descrição' }}</p>
                             
                             <div class="space-y-3 mb-4">
                                 <div class="flex justify-between text-sm">
                                     <span class="text-gray-500">Destinatários:</span>
-                                    <span class="font-medium">0 licenciados</span>
+                                    <span class="font-medium">{{ $campanha->total_destinatarios }} {{ $campanha->tipo === 'lead' ? 'leads' : ($campanha->tipo === 'licenciado' ? 'licenciados' : 'contatos') }}</span>
                                 </div>
                                 <div class="flex justify-between text-sm">
                                     <span class="text-gray-500">Enviados:</span>
-                                    <span class="font-medium text-green-600">0</span>
+                                    <span class="font-medium text-green-600">{{ $campanha->emails_enviados }}</span>
                                 </div>
                                 <div class="flex justify-between text-sm">
                                     <span class="text-gray-500">Abertos:</span>
-                                    <span class="font-medium text-blue-600">0%</span>
+                                    <span class="font-medium text-blue-600">{{ $campanha->taxa_abertura }}%</span>
                                 </div>
                                 <div class="flex justify-between text-sm">
                                     <span class="text-gray-500">Cliques:</span>
-                                    <span class="font-medium text-purple-600">0%</span>
+                                    <span class="font-medium text-purple-600">{{ $campanha->taxa_clique }}%</span>
                                 </div>
                             </div>
                             
                             <div class="flex space-x-2">
-                                <button onclick="viewCampanha(2)" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
+                                <button onclick="viewCampanha({{ $campanha->id }})" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
                                     <i class="fas fa-eye mr-1"></i>Ver Detalhes
                                 </button>
-                                <button onclick="duplicateCampanha(2)" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
-                                    <i class="fas fa-copy mr-1"></i>Duplicar
+                                @if($campanha->status === 'ativa')
+                                    <button onclick="enviarCampanha({{ $campanha->id }})" class="flex-1 bg-green-50 hover:bg-green-100 text-green-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
+                                        <i class="fas fa-paper-plane mr-1"></i>Enviar
+                                    </button>
+                                @else
+                                    <button onclick="duplicateCampanha({{ $campanha->id }})" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
+                                        <i class="fas fa-copy mr-1"></i>Duplicar
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                        @empty
+                        <!-- Estado vazio -->
+                        <div class="col-span-full">
+                            <div class="text-center py-12">
+                                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-bullhorn text-4xl text-gray-400"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-gray-600 mb-2">Nenhuma campanha criada</h3>
+                                <p class="text-gray-500 mb-6">Crie sua primeira campanha de marketing para começar a engajar seus leads e licenciados</p>
+                                <button onclick="openAddCampanhaModal()" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Criar Primeira Campanha
                                 </button>
                             </div>
                         </div>
-
-                        <!-- Campanha Concluída -->
-                        <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-2">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        <i class="fas fa-check mr-1"></i>Concluída
-                                    </span>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
-                                        <i class="fas fa-globe mr-1"></i>Geral
-                                    </span>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button onclick="viewCampanha(3)" class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-100 transition-colors duration-200" title="Ver Detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button onclick="duplicateCampanha(3)" class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100 transition-colors duration-200" title="Duplicar">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2">💡 Dicas e Insights</h3>
-                            <p class="text-sm text-gray-600 mb-3">Campanha educativa para todos os contatos</p>
-                            
-                            <div class="space-y-3 mb-4">
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Destinatários:</span>
-                                    <span class="font-medium">0 contatos</span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Enviados:</span>
-                                    <span class="font-medium text-green-600">0</span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Abertos:</span>
-                                    <span class="font-medium text-blue-600">0%</span>
-                                </div>
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-gray-500">Cliques:</span>
-                                    <span class="font-medium text-purple-600">0%</span>
-                                </div>
-                            </div>
-                            
-                            <div class="flex space-x-2">
-                                <button onclick="viewCampanha(3)" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
-                                    <i class="fas fa-eye mr-1"></i>Ver Detalhes
-                                </button>
-                                <button onclick="duplicateCampanha(3)" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
-                                    <i class="fas fa-copy mr-1"></i>Duplicar
-                                </button>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
 
                     <!-- Criar Primeira Campanha -->
@@ -305,6 +262,82 @@
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- Modal de Teste de E-mail -->
+    <div id="testeEmailModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-10 mx-auto p-0 border-0 w-11/12 md:w-1/2 lg:w-1/3 shadow-2xl rounded-2xl bg-white overflow-hidden">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                            <i class="fas fa-paper-plane text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Testar Envio de E-mail</h3>
+                    </div>
+                    <button onclick="closeTesteEmailModal()" class="text-white/80 hover:text-white transition-colors duration-200 p-2 hover:bg-white/20 rounded-full">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6">
+                <form id="testeEmailForm" class="space-y-6">
+                    @csrf
+                    
+                    <div class="space-y-2">
+                        <label for="email_teste" class="block text-sm font-semibold text-gray-700 mb-2">E-mail de Teste *</label>
+                        <input type="email" id="email_teste" name="email_teste" required 
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white"
+                               placeholder="seu@email.com">
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label for="modelo_teste" class="block text-sm font-semibold text-gray-700 mb-2">Modelo de E-mail *</label>
+                        <select id="modelo_teste" name="modelo_teste" required 
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white">
+                            <option value="">Selecione um modelo...</option>
+                            @foreach($modelos as $modelo)
+                                <option value="{{ $modelo->id }}">{{ $modelo->nome }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-info-circle text-blue-600 mt-1"></i>
+                            <div class="text-sm text-blue-800">
+                                <p class="font-semibold mb-1">Como funciona o teste:</p>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>O e-mail será enviado usando o servidor SMTP configurado</li>
+                                    <li>Você receberá uma cópia do e-mail no endereço informado</li>
+                                    <li>O teste usa o mesmo sistema das campanhas reais</li>
+                                    <li>Verifique sua caixa de entrada e spam</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div class="flex justify-between">
+                    <button onclick="closeTesteEmailModal()" 
+                            class="px-6 py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all duration-200 font-medium flex items-center space-x-2 shadow-lg">
+                        <i class="fas fa-times"></i>
+                        <span>Cancelar</span>
+                    </button>
+                    <button onclick="enviarEmailTeste()" 
+                            class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-200 font-medium flex items-center space-x-2 shadow-lg">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Enviar Teste</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -365,9 +398,9 @@
                             <select id="modelo_id" name="modelo_id" required 
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white">
                                 <option value="">Selecione um modelo...</option>
-                                <option value="1">🎯 Boas-vindas DSPay</option>
-                                <option value="2">🚀 Oportunidades de Negócio</option>
-                                <option value="3">💡 Dicas e Insights</option>
+                                @foreach($modelos as $modelo)
+                                    <option value="{{ $modelo->id }}">{{ $modelo->nome }}</option>
+                                @endforeach
                             </select>
                         </div>
                         
@@ -416,6 +449,9 @@
         </div>
     </div>
 
+    <!-- Sistema de Notificações -->
+    <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
     <style>
         .sidebar {
             background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
@@ -432,48 +468,267 @@
             background-color: rgba(255, 255, 255, 0.2);
             transform: translateX(4px);
         }
+        
+        /* Estilos para notificações */
+        .notification {
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            font-weight: 500;
+            max-width: 400px;
+            animation: slideInRight 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-left: 4px solid #047857;
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border-left: 4px solid #b91c1c;
+        }
+        
+        .notification.info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border-left: 4px solid #1d4ed8;
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border-left: 4px solid #b45309;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.25rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .notification-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
     </style>
 
     <script>
+        let campanhaEditando = null;
+
+        // Sistema de notificações
+        function showNotification(message, type = 'info', duration = 5000) {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icon = document.createElement('i');
+            switch (type) {
+                case 'success':
+                    icon.className = 'fas fa-check-circle text-lg';
+                    break;
+                case 'error':
+                    icon.className = 'fas fa-exclamation-circle text-lg';
+                    break;
+                case 'warning':
+                    icon.className = 'fas fa-exclamation-triangle text-lg';
+                    break;
+                default:
+                    icon.className = 'fas fa-info-circle text-lg';
+            }
+            
+            const text = document.createElement('span');
+            text.textContent = message;
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'notification-close ml-auto';
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            closeBtn.onclick = () => notification.remove();
+            
+            notification.appendChild(icon);
+            notification.appendChild(text);
+            notification.appendChild(closeBtn);
+            
+            container.appendChild(notification);
+            
+            // Auto-remove após duração
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, duration);
+        }
+
         function openAddCampanhaModal() {
             document.getElementById('modalTitle').textContent = 'Nova Campanha';
             document.getElementById('campanhaForm').reset();
             document.getElementById('campanha_id').value = '';
+            campanhaEditando = null;
             document.getElementById('campanhaModal').classList.remove('hidden');
+        }
+
+        function testarEnvioEmail() {
+            document.getElementById('testeEmailForm').reset();
+            document.getElementById('testeEmailModal').classList.remove('hidden');
+        }
+
+        function closeTesteEmailModal() {
+            document.getElementById('testeEmailModal').classList.add('hidden');
         }
 
         function closeCampanhaModal() {
             document.getElementById('campanhaModal').classList.add('hidden');
+            campanhaEditando = null;
         }
 
         function editCampanha(id) {
-            // Implementar edição da campanha
-            alert(`Editar campanha ${id} será implementado aqui!`);
+            // Buscar dados da campanha via AJAX
+            fetch(`/dashboard/marketing/campanhas/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na requisição');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const campanha = data.campanha;
+                        document.getElementById('modalTitle').textContent = 'Editar Campanha';
+                        document.getElementById('campanha_id').value = campanha.id;
+                        document.getElementById('nome').value = campanha.nome;
+                        document.getElementById('descricao').value = campanha.descricao || '';
+                        document.getElementById('tipo').value = campanha.tipo;
+                        document.getElementById('modelo_id').value = campanha.modelo_id;
+                        document.getElementById('agendamento').value = campanha.data_inicio ? campanha.data_inicio.slice(0, 16) : '';
+                        
+                        // Limpar checkboxes anteriores
+                        document.querySelectorAll('input[name="segmentacao[]"]').forEach(cb => cb.checked = false);
+                        
+                        // Marcar segmentação atual
+                        if (campanha.segmentacao) {
+                            campanha.segmentacao.forEach(segmento => {
+                                const checkbox = document.querySelector(`input[name="segmentacao[]"][value="${segmento}"]`);
+                                if (checkbox) checkbox.checked = true;
+                            });
+                        }
+                        
+                        campanhaEditando = campanha.id;
+                        document.getElementById('campanhaModal').classList.remove('hidden');
+                    } else {
+                        showNotification(data.message || 'Erro ao carregar dados da campanha', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    showNotification('Erro ao carregar dados da campanha', 'error');
+                });
         }
 
         function pauseCampanha(id) {
             if (confirm('Tem certeza que deseja pausar esta campanha?')) {
-                // Implementar pausa da campanha
-                alert(`Campanha ${id} pausada com sucesso!`);
+                changeStatus(id, 'pausada');
             }
         }
 
         function resumeCampanha(id) {
             if (confirm('Tem certeza que deseja retomar esta campanha?')) {
-                // Implementar retomada da campanha
-                alert(`Campanha ${id} retomada com sucesso!`);
+                changeStatus(id, 'ativa');
             }
         }
 
+        function activateCampanha(id) {
+            if (confirm('Tem certeza que deseja ativar esta campanha?')) {
+                changeStatus(id, 'ativa');
+            }
+        }
+
+        function changeStatus(id, status) {
+            fetch(`/dashboard/marketing/campanhas/${id}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ status: status })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na requisição');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showNotification(data.message || 'Erro ao alterar status', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showNotification('Erro ao alterar status da campanha', 'error');
+            });
+        }
+
         function viewCampanha(id) {
-            // Implementar visualização da campanha
-            alert(`Ver detalhes da campanha ${id} será implementado aqui!`);
+            // Redirecionar para a página de detalhes da campanha
+            window.location.href = `/dashboard/marketing/campanhas/${id}/detalhes`;
         }
 
         function duplicateCampanha(id) {
             if (confirm('Tem certeza que deseja duplicar esta campanha?')) {
                 // Implementar duplicação da campanha
-                alert(`Campanha ${id} duplicada com sucesso!`);
+                showNotification(`Campanha ${id} duplicada com sucesso!`, 'success');
+            }
+        }
+
+        function enviarCampanha(id) {
+            if (confirm('Tem certeza que deseja enviar esta campanha? Esta ação não pode ser desfeita.')) {
+                fetch(`/dashboard/marketing/campanhas/${id}/enviar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na requisição');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        showNotification(data.message, 'success');
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        showNotification(data.message || 'Erro ao enviar campanha', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    showNotification('Erro ao enviar campanha', 'error');
+                });
             }
         }
 
@@ -481,16 +736,112 @@
             const form = document.getElementById('campanhaForm');
             const formData = new FormData(form);
             
-            // Implementar salvamento da campanha
-            alert('Campanha salva com sucesso!');
-            closeCampanhaModal();
+            // Adicionar segmentação
+            const segmentacao = [];
+            document.querySelectorAll('input[name="segmentacao[]"]:checked').forEach(cb => {
+                segmentacao.push(cb.value);
+            });
+            formData.append('segmentacao', JSON.stringify(segmentacao));
+            
+            const url = campanhaEditando 
+                ? `/dashboard/marketing/campanhas/${campanhaEditando}`
+                : '/dashboard/marketing/campanhas';
+            
+            const method = campanhaEditando ? 'PUT' : 'POST';
+            
+            // Adicionar _method para PUT
+            if (campanhaEditando) {
+                formData.append('_method', 'PUT');
+            }
+            
+            fetch(url, {
+                method: method,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na requisição');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    closeCampanhaModal();
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showNotification(data.message || 'Erro ao salvar campanha', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showNotification('Erro ao salvar campanha. Verifique os dados e tente novamente.', 'error');
+            });
+        }
+
+        function enviarEmailTeste() {
+            const form = document.getElementById('testeEmailForm');
+            const formData = new FormData(form);
+            
+            // Validar campos
+            const email = formData.get('email_teste');
+            const modelo = formData.get('modelo_teste');
+            
+            if (!email || !modelo) {
+                showNotification('Por favor, preencha todos os campos obrigatórios.', 'warning');
+                return;
+            }
+            
+            // Mostrar loading
+            const btn = document.querySelector('button[onclick="enviarEmailTeste()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+            btn.disabled = true;
+            
+            fetch('/dashboard/marketing/testar-email', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na requisição');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    closeTesteEmailModal();
+                } else {
+                    showNotification(data.message || 'Erro ao enviar e-mail de teste', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                showNotification('Erro ao enviar e-mail de teste. Verifique a conexão e tente novamente.', 'error');
+            })
+            .finally(() => {
+                // Restaurar botão
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
         }
 
         // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('campanhaModal');
+            const testeModal = document.getElementById('testeEmailModal');
             if (event.target === modal) {
                 closeCampanhaModal();
+            }
+            if (event.target === testeModal) {
+                closeTesteEmailModal();
             }
         }
     </script>
