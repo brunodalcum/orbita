@@ -39,6 +39,32 @@ class Licenciado extends Model
         'updated_at' => 'datetime'
     ];
 
+    /**
+     * Override the getAttribute method to ensure operacoes is always an array
+     */
+    public function getAttribute($key)
+    {
+        $value = parent::getAttribute($key);
+        
+        if ($key === 'operacoes') {
+            // If it's already an array, return it
+            if (is_array($value)) {
+                return $value;
+            }
+            
+            // If it's a string, try to decode it
+            if (is_string($value)) {
+                $decoded = json_decode($value, true);
+                return is_array($decoded) ? $decoded : [];
+            }
+            
+            // If it's null or other, return empty array
+            return [];
+        }
+        
+        return $value;
+    }
+
     // Acessors
     public function getCnpjCpfFormatadoAttribute()
     {
@@ -102,6 +128,29 @@ class Licenciado extends Model
         
         $operacoes = Operacao::whereIn('id', $operacoesIds)->pluck('nome')->toArray();
         return $operacoes;
+    }
+
+    /**
+     * Get operacoes as array, handling both string and array formats
+     */
+    public function getOperacoesArrayAttribute()
+    {
+        if (!$this->operacoes) {
+            return [];
+        }
+        
+        // If it's already an array, return it
+        if (is_array($this->operacoes)) {
+            return $this->operacoes;
+        }
+        
+        // If it's a string, try to decode it
+        if (is_string($this->operacoes)) {
+            $decoded = json_decode($this->operacoes, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+        
+        return [];
     }
 
     public function getStatusBadgeAttribute()
