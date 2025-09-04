@@ -118,7 +118,7 @@
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
     'cipher' => 'AES-256-CBC',
-    'key' => 'base64:DY7LbFsxxftXRSZZbJfWUX5x8bMrFAc62VIXJSBv6Jk=',
+    'key' => 'base64:eow3+zD0LtM5UJ80rtF47eH5lUk8/eK3em5g1niBeTY=',
     'previous_keys' => 
     array (
     ),
@@ -879,7 +879,7 @@
   ),
   'session' => 
   array (
-    'driver' => 'array',
+    'driver' => 'file',
     'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
@@ -895,7 +895,7 @@
     'cookie' => 'dspay-session',
     'path' => '/',
     'domain' => NULL,
-    'secure' => NULL,
+    'secure' => false,
     'http_only' => true,
     'same_site' => 'lax',
     'partitioned' => false,
