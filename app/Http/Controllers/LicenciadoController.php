@@ -79,7 +79,7 @@ class LicenciadoController extends Controller
             'bairro' => 'required|string|max:255',
             'cidade' => 'required|string|max:255',
             'estado' => 'required|string|size:2',
-            'cep' => 'required|string|max:9',
+            'cep' => 'required|string|max:10',
             'email' => 'nullable|email|max:255',
             'telefone' => 'nullable|string|max:20',
             'cartao_cnpj' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -87,15 +87,22 @@ class LicenciadoController extends Controller
             'rg_cnh' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'comprovante_residencia' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'comprovante_atividade' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'operacoes' => 'required|json',
+            'operacoes' => 'required|string', // Mudado de json para string
         ]);
 
         if ($validator->fails()) {
             \Log::error('Erros de validação:', $validator->errors()->toArray());
+            \Log::error('Dados recebidos:', $request->all());
+            \Log::error('Arquivos recebidos:', $request->files->all());
+            
             return response()->json([
                 'success' => false,
                 'message' => 'Erro de validação',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
+                'debug' => [
+                    'received_data' => $request->all(),
+                    'files' => array_keys($request->files->all())
+                ]
             ], 422);
         }
 
@@ -132,16 +139,8 @@ class LicenciadoController extends Controller
 
             // Salvar operações selecionadas
             if ($operacoesSelecionadas) {
-                foreach ($operacoesSelecionadas as $operacaoId) {
-                    $operacao = Operacao::find($operacaoId);
-                    if ($operacao) {
-                        // Aqui você pode criar uma tabela pivot se necessário
-                        // Por enquanto, vamos salvar como JSON no campo operacoes
-                        $licenciado->operacoes = json_encode($operacoesSelecionadas);
-                        $licenciado->save();
-                        break; // Salvar apenas uma vez
-                    }
-                }
+                $licenciado->operacoes = $operacoesSelecionadas;
+                $licenciado->save();
             }
 
             return response()->json([
@@ -190,7 +189,7 @@ class LicenciadoController extends Controller
             'bairro' => 'required|string|max:255',
             'cidade' => 'required|string|max:255',
             'estado' => 'required|string|size:2',
-            'cep' => 'required|string|max:9',
+            'cep' => 'required|string|max:10',
             'email' => 'nullable|email|max:255',
             'telefone' => 'nullable|string|max:20',
             'cartao_cnpj' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -354,6 +353,17 @@ class LicenciadoController extends Controller
         }
 
         return Storage::disk('public')->download($path);
+    }
+
+    /**
+     * Página de gerenciamento completo do licenciado
+     */
+    public function gerenciar(Licenciado $licenciado)
+    {
+        $operacoes = Operacao::orderBy('nome')->get();
+        $followups = $licenciado->followUps()->with('user')->orderBy('created_at', 'desc')->get();
+        
+        return view('dashboard.licenciado-gerenciar', compact('licenciado', 'operacoes', 'followups'));
     }
 
     /**

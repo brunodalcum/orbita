@@ -47,12 +47,13 @@ Route::middleware([
     Route::post('/leads/send-marketing-email', [App\Http\Controllers\LeadController::class, 'sendMarketingEmail'])->name('leads.send-marketing-email');
     
                     Route::get('/dashboard/licenciados', [App\Http\Controllers\LicenciadoController::class, 'index'])->name('dashboard.licenciados');
-                Route::post('/dashboard/licenciados', [App\Http\Controllers\LicenciadoController::class, 'store'])->name('licenciados.store');
+                Route::post('/licenciados', [App\Http\Controllers\LicenciadoController::class, 'store'])->name('licenciados.store');
                 Route::put('/dashboard/licenciados/{licenciado}', [App\Http\Controllers\LicenciadoController::class, 'update'])->name('licenciados.update');
                 Route::delete('/dashboard/licenciados/{licenciado}', [App\Http\Controllers\LicenciadoController::class, 'destroy'])->name('licenciados.destroy');
                 Route::patch('/dashboard/licenciados/{licenciado}/status', [App\Http\Controllers\LicenciadoController::class, 'alterarStatus'])->name('licenciados.status');
                 Route::get('/dashboard/licenciados/{licenciado}/download/{tipo}', [App\Http\Controllers\LicenciadoController::class, 'downloadDocumento'])->name('licenciados.download');
                 Route::get('/dashboard/licenciados/{licenciado}/detalhes', [App\Http\Controllers\LicenciadoController::class, 'getDetalhes'])->name('licenciados.detalhes');
+                Route::get('/dashboard/licenciados/{licenciado}/gerenciar', [App\Http\Controllers\LicenciadoController::class, 'gerenciar'])->name('licenciados.gerenciar');
                 Route::get('/dashboard/licenciados/{licenciado}/followup', [App\Http\Controllers\LicenciadoController::class, 'getFollowUp'])->name('licenciados.followup');
                 Route::post('/dashboard/licenciados/{licenciado}/followup', [App\Http\Controllers\LicenciadoController::class, 'storeFollowUp'])->name('licenciados.followup.store');
     
