@@ -26,68 +26,8 @@
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="w-64 bg-gradient-to-b from-blue-500 to-purple-600 flex-shrink-0">
-            <div class="p-6">
-                <!-- Logo -->
-                <div class="flex items-center mb-8">
-                    <img src="{{ asset('images/dspay-logo.png') }}" alt="dspay" class="h-10 w-auto mx-auto">
-                </div>
-
-                <!-- Menu -->
-                <nav class="space-y-2">
-                    <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
-                        <i class="fas fa-tachometer-alt mr-3"></i>
-                        Dashboard
-                    </a>
-                    <a href="{{ route('dashboard.licenciados') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
-                        <i class="fas fa-id-card mr-3"></i>
-                        Licenciados
-                    </a>
-                    <a href="{{ route('dashboard.operacoes') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
-                        <i class="fas fa-cogs mr-3"></i>
-                        Operações
-                    </a>
-                    <a href="{{ route('dashboard.planos') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
-                        <i class="fas fa-chart-line mr-3"></i>
-                        Planos
-                    </a>
-                    <a href="{{ route('dashboard.adquirentes') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
-                        <i class="fas fa-building mr-3"></i>
-                        Adquirentes
-                    </a>
-                    <a href="{{ route('dashboard.agenda') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
-                        <i class="fas fa-calendar-alt mr-3"></i>
-                        Agenda
-                    </a>
-                    <a href="{{ route('dashboard.leads') }}" class="flex items-center px-4 py-3 text-white rounded-lg bg-white/20 border-l-4 border-white">
-                        <i class="fas fa-user-plus mr-3"></i>
-                        Leads
-                    </a>
-                    <a href="{{ route('dashboard.marketing') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
-                        <i class="fas fa-bullhorn mr-3"></i>
-                        Marketing
-                    </a>
-                    <a href="{{ route('dashboard.configuracoes') }}" class="flex items-center px-4 py-3 text-white rounded-lg hover:bg-white/10 transition-all">
-                        <i class="fas fa-cog mr-3"></i>
-                        Configurações
-                    </a>
-                </nav>
-            </div>
-
-            <!-- User Profile -->
-            <div class="absolute bottom-0 w-64 p-6">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                        <i class="fas fa-user text-white"></i>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-white font-medium">{{ Auth::user()->name ?? 'Usuário' }}</p>
-                        <p class="text-white/70 text-sm">Administrador</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Sidebar Dinâmico -->
+        <x-dynamic-sidebar />
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">

@@ -29,6 +29,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'is_active',
     ];
 
     /**
@@ -62,6 +64,109 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Relacionamento com role
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Verificar se o usuário tem uma permissão específica
+     */
+    public function hasPermission(string $permission): bool
+    {
+        if (!$this->role) {
+            return false;
+        }
+
+        return $this->role->hasPermission($permission);
+    }
+
+    /**
+     * Verificar se o usuário tem permissão em um módulo
+     */
+    public function hasModulePermission(string $module, string $action = null): bool
+    {
+        if (!$this->role) {
+            return false;
+        }
+
+        return $this->role->hasModulePermission($module, $action);
+    }
+
+    /**
+     * Verificar se o usuário é Super Admin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role && $this->role->isSuperAdmin();
+    }
+
+    /**
+     * Verificar se o usuário é Admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role && $this->role->isAdmin();
+    }
+
+    /**
+     * Verificar se o usuário é Funcionário
+     */
+    public function isFuncionario(): bool
+    {
+        return $this->role && $this->role->isFuncionario();
+    }
+
+    /**
+     * Verificar se o usuário é Licenciado
+     */
+    public function isLicenciado(): bool
+    {
+        return $this->role && $this->role->isLicenciado();
+    }
+
+    /**
+     * Verificar se o usuário está ativo
+     */
+    public function isActive(): bool
+    {
+        return $this->is_active && $this->role && $this->role->is_active;
+    }
+
+    /**
+     * Obter todas as permissões do usuário
+     */
+    public function getPermissions()
+    {
+        if (!$this->role) {
+            return collect();
+        }
+
+        return $this->role->permissions;
+    }
+
+    /**
+     * Scope para usuários ativos
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope para usuários por role
+     */
+    public function scopeByRole($query, string $roleName)
+    {
+        return $query->whereHas('role', function ($q) use ($roleName) {
+            $q->where('name', $roleName);
+        });
     }
 }

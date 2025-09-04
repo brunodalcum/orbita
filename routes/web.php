@@ -79,6 +79,27 @@ Route::middleware([
     Route::get('/dashboard/configuracoes', [App\Http\Controllers\ConfiguracaoController::class, 'index'])->name('dashboard.configuracoes');
     Route::post('/dashboard/configuracoes', [App\Http\Controllers\ConfiguracaoController::class, 'update'])->name('configuracoes.update');
     
+    // Rotas para Usuários (apenas Super Admin)
+    Route::middleware(['permission:users.view'])->group(function () {
+        Route::get('/dashboard/users', [App\Http\Controllers\UserController::class, 'index'])->name('dashboard.users');
+        Route::get('/dashboard/users/{user}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
+    });
+    
+    Route::middleware(['permission:users.create'])->group(function () {
+        Route::get('/dashboard/users/create', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');
+        Route::post('/dashboard/users', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+    });
+    
+    Route::middleware(['permission:users.update'])->group(function () {
+        Route::get('/dashboard/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
+        Route::put('/dashboard/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+        Route::patch('/dashboard/users/{user}/toggle-status', [App\Http\Controllers\UserController::class, 'toggleStatus'])->name('users.toggle-status');
+    });
+    
+    Route::middleware(['permission:users.delete'])->group(function () {
+        Route::delete('/dashboard/users/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
+    });
+    
     Route::post('/api/consultar-cnpj', function (Illuminate\Http\Request $request) {
         $documento = preg_replace('/[^0-9]/', '', $request->input('cnpj'));
         
