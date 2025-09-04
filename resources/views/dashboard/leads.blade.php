@@ -577,7 +577,7 @@
                     <i class="fas fa-times"></i>
                     <span>Cancelar</span>
                 </button>
-                <button onclick="sendEmail()" 
+                <button type="submit" onclick="sendEmail(event)" 
                         class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium flex items-center space-x-2 shadow-lg">
                     <i class="fas fa-paper-plane"></i>
                     <span>Enviar Email</span>
@@ -989,15 +989,72 @@ function closeEmailMarketingModal() {
     document.getElementById('emailMarketingModal').classList.add('hidden');
 }
 
-function sendEmail() {
+function sendEmail(event) {
+    // Prevenir o comportamento padrão do formulário
+    if (event) {
+        event.preventDefault();
+    }
+    
     const form = document.getElementById('emailMarketingForm');
     const formData = new FormData(form);
     const leadId = document.getElementById('email_lead_id').value;
     
-    // For now, just show a success message
-    // In a real implementation, you would send this to your email service
-    showToast('Email enviado com sucesso!', 'success');
-    closeEmailMarketingModal();
+    const assunto = formData.get('subject');
+    const mensagem = formData.get('content');
+    
+    console.log('Assunto:', assunto);
+    console.log('Mensagem:', mensagem);
+    console.log('Lead ID:', leadId);
+    
+    if (!assunto || !mensagem) {
+        showToast('Por favor, preencha todos os campos!', 'error');
+        return;
+    }
+    
+    // Mostrar loading
+    const submitBtn = document.querySelector('#emailMarketingModal button[type="submit"]');
+    console.log('Botão encontrado:', submitBtn);
+    if (!submitBtn) {
+        console.error('Botão de submit não encontrado!');
+        showToast('Erro: Botão não encontrado', 'error');
+        return;
+    }
+    
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+    submitBtn.disabled = true;
+    
+    // Fazer requisição para o backend
+    fetch('{{ route("leads.send-marketing-email") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            lead_id: leadId,
+            assunto: assunto,
+            mensagem: mensagem
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message, 'success');
+            closeEmailMarketingModal();
+        } else {
+            showToast(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        showToast('Erro ao enviar email. Tente novamente.', 'error');
+    })
+    .finally(() => {
+        // Restaurar botão
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    });
 }
 
 // Toast notification function
@@ -1073,98 +1130,6 @@ window.onclick = function(event) {
         </div>
     </div>
 
-<!-- Email Marketing Modal -->
-<div id="emailMarketingModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-10 mx-auto p-0 border-0 w-11/12 md:w-3/4 lg:w-2/3 shadow-2xl rounded-2xl bg-white overflow-hidden">
-        <!-- Modal Header -->
-        <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                        <i class="fas fa-envelope text-white text-lg"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white">Enviar E-mail Marketing</h3>
-                </div>
-                <button onclick="closeEmailMarketingModal()" class="text-white/80 hover:text-white transition-colors duration-200 p-2 hover:bg-white/20 rounded-full">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-        </div>
-        
-        <!-- Modal Body -->
-        <div class="p-6">
-            <form id="emailMarketingForm" class="space-y-6">
-                @csrf
-                <input type="hidden" id="email_lead_id" name="lead_id">
-                
-                <!-- Seleção do Modelo -->
-                <div class="space-y-2">
-                    <label for="email_modelo" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                        <i class="fas fa-file-alt text-purple-500 mr-2"></i>Modelo de E-mail *
-                    </label>
-                    <select id="email_modelo" name="modelo_id" required 
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white">
-                        <option value="">Selecione um modelo...</option>
-                        <option value="1">🎯 Boas-vindas DSPay</option>
-                        <option value="2">🚀 Oportunidades de Negócio</option>
-                        <option value="3">💡 Dicas e Insights</option>
-                        <option value="4">📊 Relatório de Mercado</option>
-                        <option value="5">🎉 Promoções Especiais</option>
-                    </select>
-                </div>
-                
-                <!-- Preview do E-mail -->
-                <div class="space-y-2">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                        <i class="fas fa-eye text-purple-500 mr-2"></i>Preview do E-mail
-                    </label>
-                    <div id="email_preview" class="w-full p-4 border border-gray-200 rounded-xl bg-gray-50 min-h-32">
-                        <div class="text-center text-gray-500">
-                            <i class="fas fa-envelope text-2xl mb-2"></i>
-                            <p>Selecione um modelo para visualizar o conteúdo</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Configurações Adicionais -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <label for="email_assunto" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                            <i class="fas fa-tag text-purple-500 mr-2"></i>Assunto Personalizado
-                        </label>
-                        <input type="text" id="email_assunto" name="assunto_personalizado" 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white"
-                               placeholder="Deixe em branco para usar o padrão">
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <label for="email_agendamento" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                            <i class="fas fa-clock text-purple-500 mr-2"></i>Agendar Envio
-                        </label>
-                        <input type="datetime-local" id="email_agendamento" name="agendamento" 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white">
-                    </div>
-                </div>
-            </form>
-        </div>
-        
-        <!-- Modal Footer -->
-        <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
-            <div class="flex justify-between">
-                <button onclick="closeEmailMarketingModal()" 
-                        class="px-6 py-3 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all duration-200 font-medium flex items-center space-x-2 shadow-lg">
-                    <i class="fas fa-times"></i>
-                    <span>Cancelar</span>
-                </button>
-                <button onclick="sendEmail()" 
-                        class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium flex items-center space-x-2 shadow-lg">
-                    <i class="fas fa-paper-plane"></i>
-                    <span>Enviar E-mail</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 </body>
 </html>

@@ -7,6 +7,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Rota de teste para verificar se o problema é específico do login
+Route::get('/test', function () {
+    return 'Teste funcionando!';
+});
+
+// Rota de teste com view
+Route::get('/test-view', function () {
+    return view('test');
+});
+
+
 // Rota pública para cadastro de leads
 Route::get('/cadastro-lead', function () {
     return view('leads.cadastro');
@@ -33,6 +44,7 @@ Route::middleware([
     Route::patch('/leads/{id}/toggle-status', [App\Http\Controllers\LeadController::class, 'toggleStatus'])->name('leads.toggle-status');
     Route::get('/leads/{id}/followup', [App\Http\Controllers\LeadController::class, 'getFollowUp'])->name('leads.followup');
     Route::post('/leads/{id}/followup', [App\Http\Controllers\LeadController::class, 'storeFollowUp'])->name('leads.followup.store');
+    Route::post('/leads/send-marketing-email', [App\Http\Controllers\LeadController::class, 'sendMarketingEmail'])->name('leads.send-marketing-email');
     
                     Route::get('/dashboard/licenciados', [App\Http\Controllers\LicenciadoController::class, 'index'])->name('dashboard.licenciados');
                 Route::post('/dashboard/licenciados', [App\Http\Controllers\LicenciadoController::class, 'store'])->name('licenciados.store');

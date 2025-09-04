@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeLeadEmail;
+use App\Mail\MarketingEmail;
+use App\Models\EmailModelo;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -450,5 +452,51 @@ class LeadController extends Controller
         
         // Salvar arquivo
         file_put_contents($filePath, $dompdf->output());
+    }
+
+    /**
+     * Send marketing email to a specific lead
+     */
+    public function sendMarketingEmail(Request $request): JsonResponse
+    {
+        $request->validate([
+            'lead_id' => 'required|exists:leads,id',
+            'assunto' => 'required|string|max:255',
+            'mensagem' => 'required|string'
+        ]);
+
+        try {
+            $lead = Lead::findOrFail($request->lead_id);
+            
+            if (!$lead->email) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Lead não possui email cadastrado.'
+                ], 400);
+            }
+
+            // Criar um modelo temporário para o email
+            $modelo = new EmailModelo([
+                'nome' => 'Email Marketing Individual',
+                'assunto' => $request->assunto,
+                'conteudo' => $request->mensagem,
+                'tipo' => 'lead',
+                'user_id' => auth()->id()
+            ]);
+
+            // Enviar o email
+            Mail::to($lead->email)->send(new MarketingEmail($modelo));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Email enviado com sucesso para ' . $lead->email . '!'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao enviar email: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

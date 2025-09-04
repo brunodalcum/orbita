@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - dspay</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
-    <link href="{{ asset('app.css') }}" rel="stylesheet">
+    <title>Teste Login - dspay</title>
+    <link rel="icon" type="image/png" href="http://127.0.0.1:8000/images/dspay-logo.png">
+    <link href="http://127.0.0.1:8000/app.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="login-container">
@@ -15,34 +14,14 @@
         <div class="text-center mb-8">
             <!-- Logo dspay PNG -->
             <div class="mb-6">
-                <img src="{{ asset('images/dspay-logo.png') }}" alt="dspay">
+                <img src="http://127.0.0.1:8000/images/dspay-logo.png" alt="dspay">
             </div>
             
             <h1>Acesso Dspay</h1>
         </div>
 
-        <!-- Mensagens de erro -->
-        @if ($errors->any())
-            <div class="mb-6" style="padding: 0.75rem; background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 0.375rem;">
-                <div class="text-red-600">
-                    @foreach ($errors->all() as $error)
-                        <p>{{ $error }}</p>
-                    @endforeach
-                </div>
-            </div>
-        @endif
-
-        <!-- Mensagem de status -->
-        @if (session('status'))
-            <div class="mb-6" style="padding: 0.75rem; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.375rem;">
-                <p class="text-green-600">{{ session('status') }}</p>
-            </div>
-        @endif
-
         <!-- Formulário -->
-        <form method="POST" action="{{ route('login') }}" class="space-y-4">
-            @csrf
-
+        <form method="POST" action="#" class="space-y-4">
             <!-- Email -->
             <div>
                 <label for="email">
@@ -52,7 +31,6 @@
                     id="email" 
                     type="email" 
                     name="email" 
-                    value="{{ old('email') }}"
                     required 
                     autofocus 
                     autocomplete="username"
@@ -79,11 +57,9 @@
 
             <!-- Esqueceu a senha -->
             <div style="text-align: right;">
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}">
-                        Esqueceu a senha?
-                    </a>
-                @endif
+                <a href="#">
+                    Esqueceu a senha?
+                </a>
             </div>
 
             <!-- Botão de Login -->
