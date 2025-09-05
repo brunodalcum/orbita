@@ -1,9 +1,9 @@
 <?php
 
-// Script para recriar sidebar em produção
-// Execute: php recreate-sidebar-production.php
+// Script simples para recriar sidebar em produção
+// Execute: php recreate-sidebar-simple.php
 
-echo "🔧 Recriando sidebar em PRODUÇÃO...\n";
+echo "🔧 Recriando sidebar em PRODUÇÃO (método simples)...\n";
 
 // 1. Verificar se estamos no diretório correto
 if (!file_exists('artisan')) {
@@ -11,41 +11,24 @@ if (!file_exists('artisan')) {
     exit(1);
 }
 
-// 2. Bootstrap Laravel
-require_once 'vendor/autoload.php';
-$app = require_once 'bootstrap/app.php';
-$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+// 2. Comandos para executar
+$commands = [
+    'php artisan view:clear',
+    'php artisan config:clear',
+    'php artisan route:clear'
+];
 
-// 3. Importar classes
-use App\Models\User;
-use App\Models\Role;
-use App\Models\Permission;
+// 3. Executar comandos de limpeza
+foreach ($commands as $command) {
+    echo "\n🔄 Executando: $command\n";
+    $output = shell_exec($command . ' 2>&1');
+    echo "Resultado: $output\n";
+}
 
-try {
-    // 4. Verificar ambiente
-    echo "🌍 Ambiente: " . config('app.env') . "\n";
-    echo "🔗 Banco: " . config('database.connections.mysql.database') . "\n";
-    
-    // 5. Verificar usuário
-    echo "\n👤 Verificando usuário...\n";
-    $adminUser = User::where('email', 'admin@dspay.com.br')->with('role')->first();
-    
-    if (!$adminUser) {
-        echo "❌ Usuário admin@dspay.com.br não encontrado!\n";
-        exit(1);
-    }
-    
-    echo "✅ Usuário encontrado: {$adminUser->name}\n";
-    echo "Role: " . ($adminUser->role ? $adminUser->role->display_name : 'Nenhum') . "\n";
-    
-    // 6. Verificar permissões
-    $permissions = $adminUser->getPermissions();
-    echo "Permissões: " . $permissions->count() . "\n";
-    
-    // 7. Recriar componente DynamicSidebar
-    echo "\n🔧 Recriando componente DynamicSidebar...\n";
-    
-    $componentContent = '<?php
+// 4. Recriar componente DynamicSidebar
+echo "\n🔧 Recriando componente DynamicSidebar...\n";
+
+$componentContent = '<?php
 
 namespace App\View\Components;
 
@@ -150,15 +133,15 @@ class DynamicSidebar extends Component
     }
 }';
 
-    // Salvar componente
-    $componentFile = 'app/View/Components/DynamicSidebar.php';
-    file_put_contents($componentFile, $componentContent);
-    echo "✅ Componente DynamicSidebar recriado\n";
-    
-    // 8. Recriar view do sidebar
-    echo "\n🔧 Recriando view do sidebar...\n";
-    
-    $viewContent = '<div class="bg-gray-900 text-white w-64 min-h-screen p-4">
+// Salvar componente
+$componentFile = 'app/View/Components/DynamicSidebar.php';
+file_put_contents($componentFile, $componentContent);
+echo "✅ Componente DynamicSidebar recriado\n";
+
+// 5. Recriar view do sidebar
+echo "\n🔧 Recriando view do sidebar...\n";
+
+$viewContent = '<div class="bg-gray-900 text-white w-64 min-h-screen p-4">
     <!-- Logo -->
     <div class="mb-8">
         <div class="flex items-center">
@@ -210,48 +193,64 @@ class DynamicSidebar extends Component
     </div>
 </div>';
 
-    // Salvar view
-    $viewFile = 'resources/views/components/dynamic-sidebar.blade.php';
-    file_put_contents($viewFile, $viewContent);
-    echo "✅ View do sidebar recriada\n";
-    
-    // 9. Limpar cache
-    echo "\n🗂️ Limpando cache...\n";
-    $output = shell_exec('php artisan view:clear 2>&1');
-    echo "Resultado: $output\n";
-    
-    // 10. Testar componente
-    echo "\n🧪 Testando componente...\n";
+// Salvar view
+$viewFile = 'resources/views/components/dynamic-sidebar.blade.php';
+file_put_contents($viewFile, $viewContent);
+echo "✅ View do sidebar recriada\n";
+
+// 6. Recriar cache
+echo "\n🗂️ Recriando cache...\n";
+$output = shell_exec('php artisan config:cache 2>&1');
+echo "Resultado: $output\n";
+
+$output = shell_exec('php artisan route:cache 2>&1');
+echo "Resultado: $output\n";
+
+$output = shell_exec('php artisan view:cache 2>&1');
+echo "Resultado: $output\n";
+
+// 7. Testar componente
+echo "\n🧪 Testando componente...\n";
+
+$testCommand = '
+use App\Models\User;
+use App\View\Components\DynamicSidebar;
+
+$user = User::where("email", "admin@dspay.com.br")->with("role")->first();
+if ($user) {
+    echo "Usuário encontrado: " . $user->name . PHP_EOL;
+    echo "Role: " . ($user->role ? $user->role->display_name : "Nenhum") . PHP_EOL;
     
     try {
-        $component = new \App\View\Components\DynamicSidebar($adminUser);
+        $component = new DynamicSidebar($user);
         $view = $component->render();
-        echo "✅ Componente funcionando\n";
+        echo "✅ Componente funcionando!" . PHP_EOL;
         
-        // Verificar se a view tem conteúdo
         $html = $view->render();
-        echo "Tamanho do HTML: " . strlen($html) . " caracteres\n";
+        echo "Tamanho do HTML: " . strlen($html) . " caracteres" . PHP_EOL;
         
-        if (strpos($html, 'dashboard') !== false) {
-            echo "✅ HTML contém \'dashboard\'\n";
+        if (strpos($html, "dashboard") !== false) {
+            echo "✅ HTML contém \'dashboard\'" . PHP_EOL;
         } else {
-            echo "❌ HTML NÃO contém \'dashboard\'\n";
+            echo "❌ HTML NÃO contém \'dashboard\'" . PHP_EOL;
         }
         
-        if (strpos($html, 'licenciados') !== false) {
-            echo "✅ HTML contém \'licenciados\'\n";
+        if (strpos($html, "licenciados") !== false) {
+            echo "✅ HTML contém \'licenciados\'" . PHP_EOL;
         } else {
-            echo "❌ HTML NÃO contém \'licenciados\'\n";
+            echo "❌ HTML NÃO contém \'licenciados\'" . PHP_EOL;
         }
         
     } catch (Exception $e) {
-        echo "❌ Erro no componente: " . $e->getMessage() . "\n";
+        echo "❌ Erro no componente: " . $e->getMessage() . PHP_EOL;
     }
-    
-    echo "\n🎉 Sidebar recriado com sucesso!\n";
-    echo "✅ Teste o sidebar em: https://srv971263.hstgr.cloud/dashboard\n";
-    
-} catch (Exception $e) {
-    echo "❌ ERRO: " . $e->getMessage() . "\n";
-    echo "Stack: " . $e->getTraceAsString() . "\n";
+} else {
+    echo "❌ Usuário não encontrado!" . PHP_EOL;
 }
+';
+
+$output = shell_exec("php artisan tinker --execute=\"$testCommand\" 2>&1");
+echo "Resultado: $output\n";
+
+echo "\n🎉 Sidebar recriado com sucesso!\n";
+echo "✅ Teste o sidebar em: https://srv971263.hstgr.cloud/dashboard\n";
