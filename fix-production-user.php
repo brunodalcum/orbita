@@ -16,11 +16,12 @@ require_once 'vendor/autoload.php';
 $app = require_once 'bootstrap/app.php';
 $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
+// 3. Importar classes
+use App\Models\User;
+use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
+
 try {
-    // 3. Importar classes
-    use App\Models\User;
-    use App\Models\Role;
-    use Illuminate\Support\Facades\Hash;
     
     // 4. Verificar usuário existente
     echo "🔍 Verificando usuário test@example.com...\n";
