@@ -16,15 +16,15 @@ require_once 'vendor/autoload.php';
 $app = require_once 'bootstrap/app.php';
 $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
+// 3. Importar classes
+use App\Models\User;
+use App\Models\Role;
+use App\Models\Permission;
+
 try {
-    // 3. Verificar ambiente
+    // 4. Verificar ambiente
     echo "🌍 Ambiente: " . config('app.env') . "\n";
     echo "🔗 Banco: " . config('database.connections.mysql.database') . "\n";
-    
-    // 4. Importar classes
-    use App\Models\User;
-    use App\Models\Role;
-    use App\Models\Permission;
     
     // 5. Verificar usuário
     echo "\n👤 Verificando usuário...\n";
