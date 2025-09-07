@@ -11,8 +11,18 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <!-- Scripts com fallback -->
+        @if (file_exists(public_path('build/manifest.json')))
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @else
+            <!-- Fallback CDN para produção -->
+            <script src="https://cdn.tailwindcss.com"></script>
+            <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+            <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+            <style>
+                body { font-family: 'Figtree', sans-serif; }
+            </style>
+        @endif
 
         <!-- Styles -->
         @livewireStyles

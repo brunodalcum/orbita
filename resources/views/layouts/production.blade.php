@@ -18,8 +18,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
           onerror="this.onerror=null;this.href='{{ asset('css/fontawesome-fallback.css') }}';">
     
-    <!-- Assets do Vite -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Assets do Vite com fallback -->
+    @if (file_exists(public_path('build/manifest.json')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <!-- Fallback para produção quando Vite não está disponível -->
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+            body { font-family: 'Inter', sans-serif; }
+            .card { 
+                background: white; 
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+                transition: all 0.3s ease; 
+            }
+            .card:hover { 
+                transform: translateY(-2px); 
+                box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+            }
+        </style>
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    @endif
     
     <style>
         body {
