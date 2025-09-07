@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Licenciado;
+use App\Models\Lead;
 use App\Models\Operacao;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,11 @@ class DashboardController extends Controller
         // Operações
         $operacoes = Operacao::orderBy('nome')->get();
 
-        return view('dashboard', compact('stats', 'licenciadosRecentes', 'operacoes'));
+        // Últimos leads cadastrados
+        $leadsRecentes = Lead::orderBy('created_at', 'desc')
+            ->limit(8)
+            ->get();
+
+        return view('dashboard', compact('stats', 'licenciadosRecentes', 'operacoes', 'leadsRecentes'));
     }
 }

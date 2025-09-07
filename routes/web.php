@@ -18,6 +18,10 @@ Route::get('/test-view', function () {
 });
 
 
+// Rotas de criação de usuários movidas para dentro do middleware
+
+
+
 // Rota pública para cadastro de leads
 Route::get('/cadastro-lead', function () {
     return view('leads.cadastro');
@@ -31,8 +35,25 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    'redirect.role',
 ])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    
+    // Dashboard específico para Licenciados
+    Route::prefix('licenciado')->name('licenciado.')->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\LicenciadoDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/estabelecimentos', [App\Http\Controllers\LicenciadoDashboardController::class, 'estabelecimentos'])->name('estabelecimentos');
+        Route::get('/estabelecimentos/create', [App\Http\Controllers\LicenciadoDashboardController::class, 'createEstabelecimento'])->name('estabelecimentos.create');
+        Route::post('/estabelecimentos', [App\Http\Controllers\LicenciadoDashboardController::class, 'storeEstabelecimento'])->name('estabelecimentos.store');
+        Route::get('/estabelecimentos/{estabelecimento}', [App\Http\Controllers\LicenciadoDashboardController::class, 'showEstabelecimento'])->name('estabelecimentos.show');
+        Route::get('/estabelecimentos/{estabelecimento}/edit', [App\Http\Controllers\LicenciadoDashboardController::class, 'editEstabelecimento'])->name('estabelecimentos.edit');
+        Route::put('/estabelecimentos/{estabelecimento}', [App\Http\Controllers\LicenciadoDashboardController::class, 'updateEstabelecimento'])->name('estabelecimentos.update');
+        Route::get('/vendas', [App\Http\Controllers\LicenciadoDashboardController::class, 'vendas'])->name('vendas');
+        Route::get('/comissoes', [App\Http\Controllers\LicenciadoDashboardController::class, 'comissoes'])->name('comissoes');
+        Route::get('/relatorios', [App\Http\Controllers\LicenciadoDashboardController::class, 'relatorios'])->name('relatorios');
+        Route::get('/perfil', [App\Http\Controllers\LicenciadoDashboardController::class, 'perfil'])->name('perfil');
+        Route::get('/suporte', [App\Http\Controllers\LicenciadoDashboardController::class, 'suporte'])->name('suporte');
+    });
     
     // Rotas para Leads
     Route::get('/leads', [App\Http\Controllers\LeadController::class, 'index'])->name('dashboard.leads');
@@ -85,11 +106,14 @@ Route::middleware([
         Route::get('/dashboard/users', [App\Http\Controllers\UserController::class, 'index'])->name('dashboard.users');
         Route::get('/dashboard/users/{user}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
     });
-    
+
+    // Rotas para criação de usuários
     Route::middleware(['permission:users.create'])->group(function () {
         Route::get('/dashboard/users/create', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');
         Route::post('/dashboard/users', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
     });
+    
+    // Rotas para criação de usuários (movidas para fora do middleware)
     
     Route::middleware(['permission:users.update'])->group(function () {
         Route::get('/dashboard/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
@@ -303,6 +327,21 @@ Route::delete('/planos/{id}', [App\Http\Controllers\PlanoController::class, 'des
 Route::patch('/planos/{id}/toggle-status', [App\Http\Controllers\PlanoController::class, 'toggleStatus'])->name('planos.toggle-status');
 Route::get('/planos/operacoes/list', [App\Http\Controllers\PlanoController::class, 'getOperacoes'])->name('planos.operacoes.list');
 Route::get('/planos/adquirentes/list', [App\Http\Controllers\PlanoController::class, 'getAdquirentes'])->name('planos.adquirentes.list');
+Route::get('/planos/bandeiras/list', [App\Http\Controllers\PlanoController::class, 'getBandeiras'])->name('planos.bandeiras.list');
+Route::post('/planos/filter', [App\Http\Controllers\PlanoController::class, 'filter'])->name('planos.filter');
+
+// Rotas para Contratos
+Route::prefix('contracts')->name('contracts.')->group(function () {
+    Route::get('/', [App\Http\Controllers\ContractController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\ContractController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\ContractController::class, 'store'])->name('store');
+    Route::get('/{contract}', [App\Http\Controllers\ContractController::class, 'show'])->name('show');
+    Route::post('/{contract}/review-documents', [App\Http\Controllers\ContractController::class, 'reviewDocuments'])->name('review-documents');
+    Route::post('/{contract}/generate', [App\Http\Controllers\ContractController::class, 'generateContract'])->name('generate');
+    Route::get('/{contract}/preview', [App\Http\Controllers\ContractController::class, 'previewContract'])->name('preview');
+    Route::get('/{contract}/download', [App\Http\Controllers\ContractController::class, 'downloadContract'])->name('download');
+    Route::get('/documents/{document}/download', [App\Http\Controllers\ContractController::class, 'downloadDocument'])->name('download-document');
+});
 
 // Rotas para Adquirentes
 Route::get('/adquirentes', [App\Http\Controllers\AdquirenteController::class, 'index'])->name('dashboard.adquirentes');

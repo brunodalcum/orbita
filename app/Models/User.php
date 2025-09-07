@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -91,7 +93,7 @@ class User extends Authenticatable
     /**
      * Verificar se o usuário tem permissão em um módulo
      */
-    public function hasModulePermission(string $module, string $action = null): bool
+    public function hasModulePermission(string $module, ?string $action = null): bool
     {
         if (!$this->role) {
             return false;
@@ -168,5 +170,36 @@ class User extends Authenticatable
         return $query->whereHas('role', function ($q) use ($roleName) {
             $q->where('name', $roleName);
         });
+    }
+
+    /**
+     * Relacionamento com estabelecimentos (para licenciados)
+     */
+    public function estabelecimentos(): HasMany
+    {
+        return $this->hasMany(Estabelecimento::class, 'licenciado_id');
+    }
+
+    /**
+     * Obter estabelecimentos ativos do licenciado
+     */
+    public function estabelecimentosAtivos(): HasMany
+    {
+        return $this->estabelecimentos()->where('ativo', true);
+    }
+
+    public function contract(): HasOne
+    {
+        return $this->hasOne(Contract::class, 'licenciado_id');
+    }
+
+    public function contractsApproved(): HasMany
+    {
+        return $this->hasMany(Contract::class, 'approved_by');
+    }
+
+    public function contractsSent(): HasMany
+    {
+        return $this->hasMany(Contract::class, 'contract_sent_by');
     }
 }

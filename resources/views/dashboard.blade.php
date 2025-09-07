@@ -201,39 +201,68 @@
                         </div>
                     </div>
 
-                    <!-- System Status -->
+                    <!-- Últimos Leads Cadastrados -->
                     <div class="card rounded-xl p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Status do Sistema</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                                    <span class="text-gray-700">Servidor Principal</span>
-                                </div>
-                                <span class="text-green-600 text-sm font-medium">Online</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                                    <span class="text-gray-700">Banco de Dados</span>
-                                </div>
-                                <span class="text-green-600 text-sm font-medium">Online</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
-                                    <span class="text-gray-700">API Externa</span>
-                                </div>
-                                <span class="text-yellow-600 text-sm font-medium">Lento</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                                    <span class="text-gray-700">Backup</span>
-                                </div>
-                                <span class="text-green-600 text-sm font-medium">Atualizado</span>
-                            </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Últimos Leads Cadastrados</h3>
+                            <a href="{{ route('dashboard.leads') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                Ver todos
+                                <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
                         </div>
+                        
+                        @if($leadsRecentes->count() > 0)
+                            <div class="space-y-3">
+                                @foreach($leadsRecentes as $lead)
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                                                <i class="fas fa-user text-white text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-800 text-sm">{{ $lead->nome }}</p>
+                                                <p class="text-gray-500 text-xs">
+                                                    {{ $lead->email }} • {{ $lead->telefone }}
+                                                </p>
+                                                @if($lead->empresa)
+                                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1">
+                                                        {{ $lead->empresa }}
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="flex items-center mb-1">
+                                                @if($lead->status === 'novo')
+                                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                                    <span class="text-green-600 text-xs font-medium">Novo</span>
+                                                @elseif($lead->status === 'em_contato')
+                                                    <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                                                    <span class="text-yellow-600 text-xs font-medium">Em Contato</span>
+                                                @elseif($lead->status === 'convertido')
+                                                    <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                                                    <span class="text-blue-600 text-xs font-medium">Convertido</span>
+                                                @else
+                                                    <div class="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                                                    <span class="text-gray-600 text-xs font-medium">{{ ucfirst($lead->status) }}</span>
+                                                @endif
+                                            </div>
+                                            <p class="text-gray-400 text-xs">
+                                                {{ $lead->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center py-8">
+                                <i class="fas fa-users text-gray-300 text-4xl mb-3"></i>
+                                <p class="text-gray-500">Nenhum lead cadastrado ainda</p>
+                                <a href="{{ route('dashboard.leads') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium mt-2 inline-block">
+                                    Gerenciar leads
+                                </a>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </main>

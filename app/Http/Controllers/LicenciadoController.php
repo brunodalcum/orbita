@@ -17,6 +17,25 @@ class LicenciadoController extends Controller
     {
         $query = Licenciado::query();
 
+        // Filtro por nome/razão social
+        if ($request->filled('nome')) {
+            $nome = $request->nome;
+            $query->where(function($q) use ($nome) {
+                $q->where('razao_social', 'like', "%{$nome}%")
+                  ->orWhere('nome_fantasia', 'like', "%{$nome}%");
+            });
+        }
+
+        // Filtro por cidade
+        if ($request->filled('cidade')) {
+            $query->where('cidade', 'like', "%{$request->cidade}%");
+        }
+
+        // Filtro por estado
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
         // Filtro por data de cadastro
         if ($request->filled('data_inicial')) {
             $query->whereDate('created_at', '>=', $request->data_inicial);
@@ -36,11 +55,6 @@ class LicenciadoController extends Controller
             $query->whereJsonContains('operacoes', $operacaoId);
         }
 
-        // Filtro por estado
-        if ($request->filled('estado')) {
-            $query->where('estado', $request->estado);
-        }
-
         $licenciados = $query->orderBy('created_at', 'desc')->get();
         
         $stats = [
@@ -51,8 +65,24 @@ class LicenciadoController extends Controller
         ];
 
         $operacoes = Operacao::orderBy('nome')->get();
+        
+        // Buscar cidades únicas para o filtro
+        $cidades = Licenciado::select('cidade')
+            ->distinct()
+            ->whereNotNull('cidade')
+            ->where('cidade', '!=', '')
+            ->orderBy('cidade')
+            ->pluck('cidade');
 
-        return view('dashboard.licenciados', compact('licenciados', 'stats', 'operacoes'));
+        // Buscar estados únicos para o filtro
+        $estados = Licenciado::select('estado')
+            ->distinct()
+            ->whereNotNull('estado')
+            ->where('estado', '!=', '')
+            ->orderBy('estado')
+            ->pluck('estado');
+
+        return view('dashboard.licenciados', compact('licenciados', 'stats', 'operacoes', 'cidades', 'estados'));
     }
 
     /**

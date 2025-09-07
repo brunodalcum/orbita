@@ -48,7 +48,7 @@ class Role extends Model
     /**
      * Verificar se o role tem permissão em um módulo
      */
-    public function hasModulePermission(string $module, string $action = null): bool
+    public function hasModulePermission(string $module, ?string $action = null): bool
     {
         $query = $this->permissions()->where('module', $module);
         

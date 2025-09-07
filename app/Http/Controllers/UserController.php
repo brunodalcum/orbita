@@ -26,6 +26,13 @@ class UserController extends Controller
      */
     public function create()
     {
+        // Verificar se o usuário atual é admin (opcional para teste)
+        $currentUser = auth()->user();
+        if ($currentUser && (!$currentUser->isAdmin() && !$currentUser->isSuperAdmin())) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Apenas administradores podem acessar esta página!');
+        }
+
         $roles = Role::active()->get();
         return view('dashboard.users.create', compact('roles'));
     }
@@ -40,9 +47,58 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role_id' => 'required|exists:roles,id',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'admin_email' => 'required|email',
+            'admin_password' => 'required|string'
         ]);
 
+        // Verificar se o usuário atual é admin
+        $currentUser = auth()->user();
+        if (!$currentUser || (!$currentUser->isAdmin() && !$currentUser->isSuperAdmin())) {
+            return redirect()->route('users.create')
+                ->with('error', 'Apenas administradores podem cadastrar usuários!');
+        }
+
+        // Validar credenciais do admin
+        $adminEmail = $request->admin_email;
+        $adminPassword = $request->admin_password;
+
+        // Buscar o admin pelo email
+        $admin = User::where('email', $adminEmail)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$admin) {
+            return redirect()->route('users.create')
+                ->with('error', 'Email de administrador não encontrado ou usuário inativo!');
+        }
+
+        // Verificar se o admin tem permissão para cadastrar usuários
+        if (!$admin->isAdmin() && !$admin->isSuperAdmin()) {
+            return redirect()->route('users.create')
+                ->with('error', 'O usuário informado não possui permissões de administrador!');
+        }
+
+        // Verificar a senha do admin
+        if (!Hash::check($adminPassword, $admin->password)) {
+            return redirect()->route('users.create')
+                ->with('error', 'Senha do administrador incorreta!');
+        }
+
+        // Verificar se o admin pode cadastrar o tipo de usuário solicitado
+        $role = Role::find($request->role_id);
+        if (!$role) {
+            return redirect()->route('users.create')
+                ->with('error', 'Role selecionado não encontrado!');
+        }
+
+        // Apenas Super Admin pode cadastrar outros Super Admins
+        if ($role->isSuperAdmin() && !$admin->isSuperAdmin()) {
+            return redirect()->route('users.create')
+                ->with('error', 'Apenas Super Administradores podem cadastrar outros Super Administradores!');
+        }
+
+        // Criar o usuário
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

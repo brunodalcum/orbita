@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Operacao;
 
 class Licenciado extends Model
@@ -244,4 +245,12 @@ class Licenciado extends Model
     // {
     //     return $this->hasMany(Transacao::class);
     // }
+
+    /**
+     * Relacionamento com Contract
+     */
+    public function contract(): HasOne
+    {
+        return $this->hasOne(Contract::class, 'licenciado_table_id');
+    }
 }

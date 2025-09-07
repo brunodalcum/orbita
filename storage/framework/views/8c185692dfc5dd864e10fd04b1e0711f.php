@@ -11,6 +11,47 @@
     <link href="<?php echo e(asset('app.css')); ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Estilos para os filtros */
+        #filter-chevron {
+            transition: transform 0.3s ease;
+        }
+        
+        .filter-card {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Animação para os campos de filtro */
+        .filter-input {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-input:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        
+        /* Estilo para o contador de resultados */
+        .results-counter {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        
+        /* Responsividade para filtros */
+        @media (max-width: 768px) {
+            .filter-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
@@ -123,15 +164,159 @@
                     </div>
                 </div>
 
+                <!-- Filtros -->
+                <div class="bg-white rounded-lg shadow-sm border mb-6 filter-card">
+                    <div class="p-6 border-b">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                <i class="fas fa-filter mr-2 text-blue-500"></i>
+                                Filtros
+                            </h3>
+                            <button onclick="toggleFilters()" class="text-blue-500 hover:text-blue-600 transition-colors">
+                                <i class="fas fa-chevron-down" id="filter-chevron"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="filters-content" class="p-6">
+                        <form method="GET" action="<?php echo e(route('dashboard.licenciados')); ?>" id="filters-form">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 filter-grid">
+                                <!-- Filtro por Nome -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-user mr-1"></i>
+                                        Nome/Razão Social
+                                    </label>
+                                    <input type="text" 
+                                           name="nome" 
+                                           value="<?php echo e(request('nome')); ?>"
+                                           placeholder="Digite o nome..."
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
+                                </div>
+
+                                <!-- Filtro por Cidade -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>
+                                        Cidade
+                                    </label>
+                                    <select name="cidade" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
+                                        <option value="">Todas as cidades</option>
+                                        <?php $__currentLoopData = $cidades; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cidade): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($cidade); ?>" <?php echo e(request('cidade') == $cidade ? 'selected' : ''); ?>>
+                                                <?php echo e($cidade); ?>
+
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
+
+                                <!-- Filtro por Estado -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-map mr-1"></i>
+                                        Estado
+                                    </label>
+                                    <select name="estado" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
+                                        <option value="">Todos os estados</option>
+                                        <?php $__currentLoopData = $estados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $estado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($estado); ?>" <?php echo e(request('estado') == $estado ? 'selected' : ''); ?>>
+                                                <?php echo e($estado); ?>
+
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
+
+                                <!-- Filtro por Operação -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-cogs mr-1"></i>
+                                        Operação
+                                    </label>
+                                    <select name="operacao" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
+                                        <option value="">Todas as operações</option>
+                                        <?php $__currentLoopData = $operacoes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $operacao): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($operacao->id); ?>" <?php echo e(request('operacao') == $operacao->id ? 'selected' : ''); ?>>
+                                                <?php echo e($operacao->nome); ?>
+
+                                            </option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
+
+                                <!-- Filtro por Status -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-flag mr-1"></i>
+                                        Status
+                                    </label>
+                                    <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
+                                        <option value="">Todos os status</option>
+                                        <option value="aprovado" <?php echo e(request('status') == 'aprovado' ? 'selected' : ''); ?>>Aprovado</option>
+                                        <option value="em_analise" <?php echo e(request('status') == 'em_analise' ? 'selected' : ''); ?>>Em Análise</option>
+                                        <option value="recusado" <?php echo e(request('status') == 'recusado' ? 'selected' : ''); ?>>Recusado</option>
+                                        <option value="ativo" <?php echo e(request('status') == 'ativo' ? 'selected' : ''); ?>>Ativo</option>
+                                        <option value="inativo" <?php echo e(request('status') == 'inativo' ? 'selected' : ''); ?>>Inativo</option>
+                                        <option value="pendente" <?php echo e(request('status') == 'pendente' ? 'selected' : ''); ?>>Pendente</option>
+                                        <option value="risco" <?php echo e(request('status') == 'risco' ? 'selected' : ''); ?>>Risco</option>
+                                        <option value="vencendo" <?php echo e(request('status') == 'vencendo' ? 'selected' : ''); ?>>Vencendo</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Filtros de Data -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-calendar-alt mr-1"></i>
+                                        Data Inicial
+                                    </label>
+                                    <input type="date" 
+                                           name="data_inicial" 
+                                           value="<?php echo e(request('data_inicial')); ?>"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-calendar-alt mr-1"></i>
+                                        Data Final
+                                    </label>
+                                    <input type="date" 
+                                           name="data_final" 
+                                           value="<?php echo e(request('data_final')); ?>"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
+                                </div>
+                            </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
+                                <div class="flex items-center space-x-4">
+                                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
+                                        <i class="fas fa-search mr-2"></i>
+                                        Aplicar Filtros
+                                    </button>
+                                    <a href="<?php echo e(route('dashboard.licenciados')); ?>" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
+                                        <i class="fas fa-times mr-2"></i>
+                                        Limpar Filtros
+                                    </a>
+                                </div>
+                                
+                                <div class="text-sm text-gray-500">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    <span class="results-counter"><?php echo e($licenciados->count()); ?></span> licenciado(s) encontrado(s)
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Tabela de Licenciados -->
                 <div class="bg-white rounded-lg shadow-sm border">
                     <div class="flex items-center justify-between p-6 border-b">
                         <h3 class="text-lg font-semibold text-gray-800">Lista de Licenciados</h3>
                         <div class="flex items-center space-x-4">
-                            <div class="relative">
-                                <input type="text" placeholder="Buscar licenciados..." class="w-80 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                            </div>
                             <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                                 <i class="fas fa-download mr-2"></i>
                                 Exportar
@@ -802,6 +987,35 @@
     </div>
 
     <script>
+        // Função para toggle dos filtros
+        function toggleFilters() {
+            const content = document.getElementById('filters-content');
+            const chevron = document.getElementById('filter-chevron');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Auto-submit do formulário de filtros quando campos mudam
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('filters-form');
+            const selects = form.querySelectorAll('select');
+            
+            selects.forEach(select => {
+                select.addEventListener('change', function() {
+                    // Auto-submit apenas para selects (não para inputs de texto)
+                    if (this.tagName === 'SELECT') {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
         let currentStep = 1;
         const totalSteps = 4;
         let operacoes = [];

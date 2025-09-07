@@ -97,6 +97,36 @@ class DynamicSidebar extends Component
             ];
         }
 
+        // Contratos
+        if ($this->user->hasModulePermission('contratos')) {
+            $submenu = [];
+            
+            if ($this->user->hasPermission('contratos.view')) {
+                $submenu[] = [
+                    'name' => 'Listar Contratos',
+                    'route' => 'contracts.index',
+                    'permission' => 'contratos.view'
+                ];
+            }
+            
+            if ($this->user->hasPermission('contratos.create')) {
+                $submenu[] = [
+                    'name' => 'Novo Contrato',
+                    'route' => 'contracts.create',
+                    'permission' => 'contratos.create'
+                ];
+            }
+
+            $menuItems[] = [
+                'name' => 'Contratos',
+                'icon' => 'fas fa-file-contract',
+                'route' => 'contracts.index',
+                'permissions' => ['contratos.view', 'contratos.create', 'contratos.manage'],
+                'is_active' => request()->routeIs('contracts.*'),
+                'submenu' => $submenu
+            ];
+        }
+
         // Leads
         if ($this->user->hasModulePermission('leads')) {
             $submenu = [];

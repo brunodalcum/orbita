@@ -26,6 +26,15 @@ class PermissionSeeder extends Seeder
             ['name' => 'licenciados.manage', 'display_name' => 'Gerenciar Licenciados', 'module' => 'licenciados', 'action' => 'manage'],
             ['name' => 'licenciados.approve', 'display_name' => 'Aprovar Licenciados', 'module' => 'licenciados', 'action' => 'approve'],
             
+            // Contratos
+            ['name' => 'contratos.view', 'display_name' => 'Visualizar Contratos', 'module' => 'contratos', 'action' => 'view'],
+            ['name' => 'contratos.create', 'display_name' => 'Criar Contratos', 'module' => 'contratos', 'action' => 'create'],
+            ['name' => 'contratos.update', 'display_name' => 'Editar Contratos', 'module' => 'contratos', 'action' => 'update'],
+            ['name' => 'contratos.delete', 'display_name' => 'Excluir Contratos', 'module' => 'contratos', 'action' => 'delete'],
+            ['name' => 'contratos.manage', 'display_name' => 'Gerenciar Contratos', 'module' => 'contratos', 'action' => 'manage'],
+            ['name' => 'contratos.approve', 'display_name' => 'Aprovar Documentos', 'module' => 'contratos', 'action' => 'approve'],
+            ['name' => 'contratos.send', 'display_name' => 'Enviar Contratos', 'module' => 'contratos', 'action' => 'send'],
+            
             // Operações
             ['name' => 'operacoes.view', 'display_name' => 'Visualizar Operações', 'module' => 'operacoes', 'action' => 'view'],
             ['name' => 'operacoes.create', 'display_name' => 'Criar Operações', 'module' => 'operacoes', 'action' => 'create'],

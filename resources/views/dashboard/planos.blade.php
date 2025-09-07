@@ -177,20 +177,195 @@
                                 <i class="fas fa-plus mr-2"></i>
                                 Criar Plano
                             </button>
+                    </div>
+                </div>
+
+                <!-- Filtros -->
+                <div class="bg-white rounded-xl shadow-sm border mb-6">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-800">Filtros</h3>
+                            <button 
+                                onclick="clearFilters()" 
+                                class="text-sm text-gray-500 hover:text-gray-700 flex items-center"
+                            >
+                                <i class="fas fa-times mr-1"></i>
+                                Limpar Filtros
+                            </button>
                         </div>
                     </div>
+                    
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                            <!-- Filtro por Adquirente -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Adquirente</label>
+                                <select 
+                                    id="filterAdquirente" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onchange="applyFilters()"
+                                >
+                                    <option value="">Todos os adquirentes</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por Tipo de Taxa -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Taxa</label>
+                                <select 
+                                    id="filterTipoTaxa" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onchange="applyFilters()"
+                                >
+                                    <option value="">Todos os tipos</option>
+                                    <option value="debito">Débito</option>
+                                    <option value="credito_vista">Crédito à Vista</option>
+                                    <option value="parcelado">Parcelado</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por Percentual de Taxa -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Taxa (%)</label>
+                                <div class="flex space-x-2">
+                                    <input 
+                                        type="number" 
+                                        id="filterTaxaMin" 
+                                        placeholder="Mín" 
+                                        step="0.01" 
+                                        min="0" 
+                                        max="100"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        onchange="applyFilters()"
+                                    >
+                                    <input 
+                                        type="number" 
+                                        id="filterTaxaMax" 
+                                        placeholder="Máx" 
+                                        step="0.01" 
+                                        min="0" 
+                                        max="100"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        onchange="applyFilters()"
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Filtro por Percentual de Comissão -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Comissão (%)</label>
+                                <div class="flex space-x-2">
+                                    <input 
+                                        type="number" 
+                                        id="filterComissaoMin" 
+                                        placeholder="Mín" 
+                                        step="0.01" 
+                                        min="0" 
+                                        max="100"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        onchange="applyFilters()"
+                                    >
+                                    <input 
+                                        type="number" 
+                                        id="filterComissaoMax" 
+                                        placeholder="Máx" 
+                                        step="0.01" 
+                                        min="0" 
+                                        max="100"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        onchange="applyFilters()"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Filtros Adicionais -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                            <!-- Filtro por Bandeira -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Bandeira</label>
+                                <select 
+                                    id="filterBandeira" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onchange="applyFilters()"
+                                >
+                                    <option value="">Todas as bandeiras</option>
+                                    <option value="visa_master">Visa/Master</option>
+                                    <option value="elo">Elo</option>
+                                    <option value="demais">Demais</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro por Nome do Plano -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Plano</label>
+                                <input 
+                                    type="text" 
+                                    id="filterNome" 
+                                    placeholder="Digite o nome do plano..."
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onkeyup="applyFilters()"
+                                >
+                            </div>
+
+                            <!-- Filtro por Operação -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Operação</label>
+                                <select 
+                                    id="filterParceiro" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onchange="applyFilters()"
+                                >
+                                    <option value="">Todas as operações</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Resultados dos Filtros -->
+                        <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">
+                                    <span id="filterResults">Mostrando todos os {{ $planos->count() }} planos</span>
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm text-gray-500">Ordenar por:</span>
+                                    <select 
+                                        id="sortBy" 
+                                        class="text-sm border border-gray-300 rounded px-2 py-1"
+                                        onchange="applyFilters()"
+                                    >
+                                        <option value="nome">Nome</option>
+                                        <option value="operacao">Operação</option>
+                                        <option value="adquirente">Adquirente</option>
+                                        <option value="parceiro">Parceiro</option>
+                                        <option value="comissao_media">Comissão Média</option>
+                                    </select>
+                                    <select 
+                                        id="sortOrder" 
+                                        class="text-sm border border-gray-300 rounded px-2 py-1"
+                                        onchange="applyFilters()"
+                                    >
+                                        <option value="asc">Crescente</option>
+                                        <option value="desc">Decrescente</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                                          <!-- Lista de Planos em Tabela -->
                      <div class="p-6">
                          @if($planos->count() > 0)
                              <div class="overflow-x-auto">
-                                 <table class="w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+                                 <table id="planosTable" class="w-full bg-white border border-gray-200 rounded-lg shadow-sm">
                                      <thead class="bg-gray-50 border-b border-gray-200">
                                          <tr>
                                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome do Plano</th>
                                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
                                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taxa Média</th>
+                                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comissão Média</th>
                                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Criação</th>
                                              <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
@@ -198,7 +373,25 @@
                                      </thead>
                                      <tbody class="bg-white divide-y divide-gray-200">
                                          @foreach($planos as $plano)
-                                             <tr class="hover:bg-gray-50 transition-colors duration-200">
+                                             <tr class="hover:bg-gray-50 transition-colors duration-200 plan-row" 
+                                                 data-id="{{ $plano->id }}"
+                                                 data-nome="{{ strtolower($plano->nome) }}"
+                                                 data-operacao="{{ $plano->operacao }}"
+                                                 data-adquirente="{{ strtolower($plano->adquirente) }}"
+                                                 data-parceiro="{{ strtolower($plano->parceiro) }}"
+                                                 data-comissao-media="{{ $plano->comissao_media ?? 0 }}"
+                                                 data-taxa-debito-visa="{{ $plano->taxas_detalhadas['debito']['visa_master'] ?? 0 }}"
+                                                 data-taxa-debito-elo="{{ $plano->taxas_detalhadas['debito']['elo'] ?? 0 }}"
+                                                 data-taxa-debito-demais="{{ $plano->taxas_detalhadas['debito']['demais'] ?? 0 }}"
+                                                 data-taxa-credito-visa="{{ $plano->taxas_detalhadas['credito_vista']['visa_master'] ?? 0 }}"
+                                                 data-taxa-credito-elo="{{ $plano->taxas_detalhadas['credito_vista']['elo'] ?? 0 }}"
+                                                 data-taxa-credito-demais="{{ $plano->taxas_detalhadas['credito_vista']['demais'] ?? 0 }}"
+                                                 data-comissao-debito-visa="{{ $plano->comissoes_detalhadas['debito']['visa_master'] ?? 0 }}"
+                                                 data-comissao-debito-elo="{{ $plano->comissoes_detalhadas['debito']['elo'] ?? 0 }}"
+                                                 data-comissao-debito-demais="{{ $plano->comissoes_detalhadas['debito']['demais'] ?? 0 }}"
+                                                 data-comissao-credito-visa="{{ $plano->comissoes_detalhadas['credito_vista']['visa_master'] ?? 0 }}"
+                                                 data-comissao-credito-elo="{{ $plano->comissoes_detalhadas['credito_vista']['elo'] ?? 0 }}"
+                                                 data-comissao-credito-demais="{{ $plano->comissoes_detalhadas['credito_vista']['demais'] ?? 0 }}">
                                                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                      #{{ $plano->id }}
                                                  </td>
@@ -220,6 +413,11 @@
                                                  <td class="px-6 py-4 whitespace-nowrap">
                                                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                          {{ number_format($plano->taxa, 2) }}%
+                                                     </span>
+                                                 </td>
+                                                 <td class="px-6 py-4 whitespace-nowrap">
+                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                         {{ number_format($plano->comissao_media ?? 0, 2) }}%
                                                      </span>
                                                  </td>
                                                  <td class="px-6 py-4 whitespace-nowrap">
@@ -481,6 +679,77 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- Seção de Comissões -->
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                            <i class="fas fa-percentage mr-2 text-green-600"></i>
+                            Comissões do Licenciado
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-4">
+                            Defina o percentual de comissão que o licenciado receberá para cada modalidade de transação.
+                        </p>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase border-b">Modalidade</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase border-b">Visa/Master</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase border-b">Elo</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase border-b">Demais Bandeiras</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Comissões de Débito à Vista -->
+                                    <tr>
+                                        <td class="px-3 py-2 text-sm font-medium text-gray-700 border-b">Débito à Vista</td>
+                                        <td class="px-3 py-2 border-b">
+                                            <input type="number" name="comissoes[debito][visa_master]" step="0.01" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="0.00">
+                                        </td>
+                                        <td class="px-3 py-2 border-b">
+                                            <input type="number" name="comissoes[debito][elo]" step="0.01" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="0.00">
+                                        </td>
+                                        <td class="px-3 py-2 border-b">
+                                            <input type="number" name="comissoes[debito][demais]" step="0.01" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="0.00">
+                                        </td>
+                                    </tr>
+                                    <!-- Comissões de Crédito à Vista -->
+                                    <tr>
+                                        <td class="px-3 py-2 text-sm font-medium text-gray-700 border-b">Crédito à Vista</td>
+                                        <td class="px-3 py-2 border-b">
+                                            <input type="number" name="comissoes[credito_vista][visa_master]" step="0.01" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="0.00">
+                                        </td>
+                                        <td class="px-3 py-2 border-b">
+                                            <input type="number" name="comissoes[credito_vista][elo]" step="0.01" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="0.00">
+                                        </td>
+                                        <td class="px-3 py-2 border-b">
+                                            <input type="number" name="comissoes[credito_vista][demais]" step="0.01" min="0" max="100" class="w-full px-2 py-1 border border-gray-300 rounded text-sm" placeholder="0.00">
+                                        </td>
+                                    </tr>
+                                    <!-- Comissões Parceladas -->
+                                    <tr id="comissoes-parcelado-row">
+                                        <td class="px-3 py-2 text-sm font-medium text-gray-700 border-b">Parcelado</td>
+                                        <td class="px-3 py-2 border-b">
+                                            <div id="comissoes-parcelado-visa_master" class="space-y-1">
+                                                <!-- Comissões parceladas serão geradas dinamicamente -->
+                                            </div>
+                                        </td>
+                                        <td class="px-3 py-2 border-b">
+                                            <div id="comissoes-parcelado-elo" class="space-y-1">
+                                                <!-- Comissões parceladas serão geradas dinamicamente -->
+                                            </div>
+                                        </td>
+                                        <td class="px-3 py-2 border-b">
+                                            <div id="comissoes-parcelado-demais" class="space-y-1">
+                                                <!-- Comissões parceladas serão geradas dinamicamente -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between pt-4 border-t">
@@ -552,11 +821,304 @@
     let currentStep = 1;
     const totalSteps = 4;
 
+    // ==================== SISTEMA DE FILTROS ====================
+    
+    // Carregar dados dos filtros ao inicializar a página
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM carregado, iniciando loadFilterData...');
+        loadFilterData();
+    });
+
+    // Carregar dados para os filtros (adquirentes, parceiros, operações, etc.)
+    async function loadFilterData() {
+        try {
+            console.log('Carregando dados dos filtros...');
+            
+            // Carregar adquirentes
+            const adquirentesResponse = await fetch('/planos/adquirentes/list');
+            const adquirentesData = await adquirentesResponse.json();
+            console.log('Dados de adquirentes:', adquirentesData);
+            
+            const adquirenteSelect = document.getElementById('filterAdquirente');
+            if (adquirentesData.success && adquirentesData.adquirentes) {
+                adquirentesData.adquirentes.forEach(adquirente => {
+                    const option = document.createElement('option');
+                    option.value = adquirente.nome.toLowerCase();
+                    option.textContent = adquirente.nome;
+                    adquirenteSelect.appendChild(option);
+                });
+                console.log('Adquirentes carregados:', adquirentesData.adquirentes.length);
+            }
+
+            // Carregar operações
+            const operacoesResponse = await fetch('/planos/operacoes/list');
+            const operacoesData = await operacoesResponse.json();
+            console.log('Dados de operações:', operacoesData);
+            
+            const operacaoSelect = document.getElementById('filterParceiro');
+            if (operacoesData.success && operacoesData.operacoes) {
+                operacoesData.operacoes.forEach(operacao => {
+                    const option = document.createElement('option');
+                    option.value = operacao.nome.toLowerCase();
+                    option.textContent = operacao.nome;
+                    operacaoSelect.appendChild(option);
+                });
+                console.log('Operações carregadas:', operacoesData.operacoes.length);
+            }
+
+        } catch (error) {
+            console.error('Erro ao carregar dados dos filtros:', error);
+            showToast('Erro ao carregar dados dos filtros: ' + error.message, 'error');
+        }
+    }
+
+    // Aplicar filtros via AJAX
+    async function applyFilters() {
+        const adquirente = document.getElementById('filterAdquirente').value;
+        const tipoTaxa = document.getElementById('filterTipoTaxa').value;
+        const taxaMin = document.getElementById('filterTaxaMin').value;
+        const taxaMax = document.getElementById('filterTaxaMax').value;
+        const comissaoMin = document.getElementById('filterComissaoMin').value;
+        const comissaoMax = document.getElementById('filterComissaoMax').value;
+        const bandeira = document.getElementById('filterBandeira').value;
+        const nome = document.getElementById('filterNome').value;
+        const operacao = document.getElementById('filterParceiro').value;
+        const sortBy = document.getElementById('sortBy').value;
+        const sortOrder = document.getElementById('sortOrder').value;
+
+        // Mostrar loading
+        showLoading();
+
+        try {
+            const formData = new FormData();
+            if (adquirente) formData.append('adquirente', adquirente);
+            if (tipoTaxa) formData.append('tipo_taxa', tipoTaxa);
+            if (taxaMin) formData.append('taxa_min', taxaMin);
+            if (taxaMax) formData.append('taxa_max', taxaMax);
+            if (comissaoMin) formData.append('comissao_min', comissaoMin);
+            if (comissaoMax) formData.append('comissao_max', comissaoMax);
+            if (bandeira) formData.append('bandeira', bandeira);
+            if (nome) formData.append('nome', nome);
+            if (operacao) formData.append('parceiro', operacao);
+            if (sortBy) formData.append('sort_by', sortBy);
+            if (sortOrder) formData.append('sort_order', sortOrder);
+
+            const response = await fetch('/planos/filter', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                updateTableWithFilteredData(data.planos);
+                updateFilterResults(data.total);
+            } else {
+                showToast('Erro ao filtrar planos: ' + data.message, 'error');
+            }
+        } catch (error) {
+            console.error('Erro ao filtrar planos:', error);
+            showToast('Erro ao filtrar planos: ' + error.message, 'error');
+        } finally {
+            hideLoading();
+        }
+    }
+
+    // Atualizar tabela com dados filtrados
+    function updateTableWithFilteredData(planos) {
+        const tbody = document.querySelector('#planosTable tbody');
+        tbody.innerHTML = '';
+
+        planos.forEach(plano => {
+            const row = createPlanRow(plano);
+            tbody.appendChild(row);
+        });
+    }
+
+    // Criar linha da tabela para um plano
+    function createPlanRow(plano) {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 transition-colors duration-200 plan-row';
+        row.setAttribute('data-id', plano.id);
+        row.setAttribute('data-nome', plano.nome.toLowerCase());
+        row.setAttribute('data-operacao', plano.operacao || '');
+        row.setAttribute('data-adquirente', (plano.adquirente || '').toLowerCase());
+        row.setAttribute('data-parceiro', (plano.parceiro || '').toLowerCase());
+        row.setAttribute('data-comissao-media', plano.comissao_media || 0);
+
+        // Extrair taxas e comissões dos dados JSON
+        const taxas = plano.taxas_detalhadas || {};
+        const comissoes = plano.comissoes_detalhadas || {};
+
+        // Adicionar atributos de taxa
+        if (taxas.debito) {
+            row.setAttribute('data-taxa-debito-visa', taxas.debito.visa_master || 0);
+            row.setAttribute('data-taxa-debito-elo', taxas.debito.elo || 0);
+            row.setAttribute('data-taxa-debito-demais', taxas.debito.demais || 0);
+        }
+        if (taxas.credito_vista) {
+            row.setAttribute('data-taxa-credito-visa', taxas.credito_vista.visa_master || 0);
+            row.setAttribute('data-taxa-credito-elo', taxas.credito_vista.elo || 0);
+            row.setAttribute('data-taxa-credito-demais', taxas.credito_vista.demais || 0);
+        }
+
+        // Adicionar atributos de comissão
+        if (comissoes.debito) {
+            row.setAttribute('data-comissao-debito-visa', comissoes.debito.visa_master || 0);
+            row.setAttribute('data-comissao-debito-elo', comissoes.debito.elo || 0);
+            row.setAttribute('data-comissao-debito-demais', comissoes.debito.demais || 0);
+        }
+        if (comissoes.credito_vista) {
+            row.setAttribute('data-comissao-credito-visa', comissoes.credito_vista.visa_master || 0);
+            row.setAttribute('data-comissao-credito-elo', comissoes.credito_vista.elo || 0);
+            row.setAttribute('data-comissao-credito-demais', comissoes.credito_vista.demais || 0);
+        }
+
+        // Criar conteúdo da linha
+        row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                #${plano.id}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-chart-line text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium text-gray-900">${plano.nome}</div>
+                        <div class="text-sm text-gray-500">${plano.status}</div>
+                    </div>
+                </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ${plano.descricao || ''}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ${plano.adquirente || ''}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ${plano.parceiro || ''}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ${plano.comissao_media ? plano.comissao_media + '%' : '0%'}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${new Date(plano.created_at).toLocaleDateString('pt-BR')}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                <div class="flex items-center justify-center space-x-2">
+                    <button onclick="viewPlan(${plano.id})" class="text-blue-600 hover:text-blue-900" title="Visualizar">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button onclick="editPlan(${plano.id})" class="text-indigo-600 hover:text-indigo-900" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="deletePlan(${plano.id})" class="text-red-600 hover:text-red-900" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+
+        return row;
+    }
+
+    // Mostrar loading
+    function showLoading() {
+        const tbody = document.querySelector('#planosTable tbody');
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="px-6 py-8 text-center">
+                    <div class="flex items-center justify-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <span class="ml-2 text-gray-600">Carregando...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+
+    // Esconder loading
+    function hideLoading() {
+        // Loading será substituído pelos dados filtrados
+    }
+
+    // Atualizar contador de resultados
+    function updateFilterResults(visibleCount) {
+        const totalCount = document.querySelectorAll('.plan-row').length;
+        const resultsElement = document.getElementById('filterResults');
+        
+        if (visibleCount === totalCount) {
+            resultsElement.textContent = `Mostrando todos os ${totalCount} planos`;
+        } else {
+            resultsElement.textContent = `Mostrando ${visibleCount} de ${totalCount} planos`;
+        }
+    }
+
+    // Limpar todos os filtros
+    function clearFilters() {
+        document.getElementById('filterAdquirente').value = '';
+        document.getElementById('filterTipoTaxa').value = '';
+        document.getElementById('filterTaxaMin').value = '';
+        document.getElementById('filterTaxaMax').value = '';
+        document.getElementById('filterComissaoMin').value = '';
+        document.getElementById('filterComissaoMax').value = '';
+        document.getElementById('filterBandeira').value = '';
+        document.getElementById('filterNome').value = '';
+        document.getElementById('filterParceiro').value = '';
+        document.getElementById('sortBy').value = 'nome';
+        document.getElementById('sortOrder').value = 'asc';
+        
+        // Recarregar todos os planos
+        loadAllPlans();
+    }
+
+    // Carregar todos os planos
+    async function loadAllPlans() {
+        showLoading();
+        
+        try {
+            const response = await fetch('/planos');
+            const html = await response.text();
+            
+            // Extrair apenas o tbody da resposta
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newTbody = doc.querySelector('#planosTable tbody');
+            
+            if (newTbody) {
+                const currentTbody = document.querySelector('#planosTable tbody');
+                currentTbody.innerHTML = newTbody.innerHTML;
+                
+                // Atualizar contador
+                const totalCount = document.querySelectorAll('.plan-row').length;
+                updateFilterResults(totalCount);
+            }
+        } catch (error) {
+            console.error('Erro ao carregar planos:', error);
+            showToast('Erro ao carregar planos: ' + error.message, 'error');
+        }
+    }
+
+    // ==================== FIM SISTEMA DE FILTROS ====================
+
     function openAddPlanModal() {
         document.getElementById('modalTitle').textContent = 'Criar Plano';
         document.getElementById('planForm').reset();
         document.getElementById('planId').value = '';
         currentStep = 1;
+        
+        // Garantir que os indicadores de steps sejam mostrados no modo de criação
+        document.querySelectorAll('.step-indicator').forEach(indicator => {
+            indicator.style.display = 'flex';
+        });
+        
+        // Restaurar validação required para modo de criação
+        restoreRequiredValidation();
+        
         showStep(1);
         document.getElementById('planModal').style.display = 'block';
         
@@ -580,6 +1142,7 @@
         setTimeout(() => {
             if (currentStep === 4) {
                 generateParceladoFields();
+                generateComissoesParceladoFields();
             }
         }, 100);
     }
@@ -652,6 +1215,118 @@
         }
     }
 
+    function showEditMode() {
+        // Hide all steps
+        for (let i = 1; i <= totalSteps; i++) {
+            document.getElementById(`step${i}`).classList.add('hidden');
+        }
+        
+        // Show step 4 (taxas e comissões)
+        document.getElementById('step4').classList.remove('hidden');
+        
+        // Ocultar indicadores de steps
+        document.querySelectorAll('.step-indicator').forEach(indicator => {
+            indicator.style.display = 'none';
+        });
+        
+        // Ocultar botões de navegação
+        document.getElementById('prevBtn').classList.add('hidden');
+        document.getElementById('nextBtn').classList.add('hidden');
+        
+        // Mostrar apenas o botão de submit com texto de atualização
+        document.getElementById('submitBtn').classList.remove('hidden');
+        document.getElementById('submitBtn').textContent = 'Atualizar Plano';
+        
+        // Remover validação required dos campos não visíveis no modo de edição
+        removeRequiredFromHiddenFields();
+        
+        // Garantir que os campos dinâmicos sejam visíveis
+        setTimeout(() => {
+            // Mostrar todos os containers de parcelamento
+            const parceladoContainers = document.querySelectorAll('[id^="parcelado-"]');
+            parceladoContainers.forEach(container => {
+                container.style.display = 'block';
+                container.style.visibility = 'visible';
+                console.log('Container parcelado visível:', container.id);
+            });
+            
+            // Mostrar todos os containers de comissões
+            const comissoesContainers = document.querySelectorAll('[id^="comissoes-parcelado-"]');
+            comissoesContainers.forEach(container => {
+                container.style.display = 'block';
+                container.style.visibility = 'visible';
+                console.log('Container comissão visível:', container.id);
+            });
+            
+            // Forçar visibilidade de todos os campos de input
+            const allInputs = document.querySelectorAll('#step4 input[type="number"]');
+            allInputs.forEach(input => {
+                input.style.display = 'block';
+                input.style.visibility = 'visible';
+            });
+            
+            console.log('Total de inputs visíveis:', allInputs.length);
+        }, 100);
+    }
+
+    function removeRequiredFromHiddenFields() {
+        // Lista de campos que estão nos steps ocultos (1, 2, 3) e não devem ser obrigatórios no modo de edição
+        const hiddenFields = [
+            'nome',           // Step 1
+            'parceiro',       // Step 1
+            'adquirente',     // Step 1
+            'modalidade',     // Step 2
+            'parcelamento',   // Step 2
+            'tipo'            // Step 2
+        ];
+        
+        hiddenFields.forEach(fieldName => {
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            if (field) {
+                field.removeAttribute('required');
+                console.log(`Removido required do campo: ${fieldName}`);
+            }
+        });
+        
+        // Também remover required dos radio buttons
+        const radioGroups = ['modalidade', 'parcelamento', 'tipo'];
+        radioGroups.forEach(groupName => {
+            const radios = document.querySelectorAll(`input[name="${groupName}"]`);
+            radios.forEach(radio => {
+                radio.removeAttribute('required');
+            });
+        });
+    }
+
+    function restoreRequiredValidation() {
+        // Lista de campos que devem ser obrigatórios no modo de criação
+        const requiredFields = [
+            'nome',           // Step 1
+            'parceiro',       // Step 1
+            'adquirente',     // Step 1
+            'modalidade',     // Step 2
+            'parcelamento',   // Step 2
+            'tipo'            // Step 2
+        ];
+        
+        requiredFields.forEach(fieldName => {
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            if (field) {
+                field.setAttribute('required', 'required');
+                console.log(`Restaurado required no campo: ${fieldName}`);
+            }
+        });
+        
+        // Também restaurar required dos radio buttons
+        const radioGroups = ['modalidade', 'parcelamento', 'tipo'];
+        radioGroups.forEach(groupName => {
+            const radios = document.querySelectorAll(`input[name="${groupName}"]`);
+            radios.forEach(radio => {
+                radio.setAttribute('required', 'required');
+            });
+        });
+    }
+
     function nextStep() {
         if (validateCurrentStep()) {
             if (currentStep < totalSteps) {
@@ -662,6 +1337,7 @@
                 if (currentStep === 4) {
                     setTimeout(() => {
                         generateParceladoFields();
+                generateComissoesParceladoFields();
                     }, 100);
                 }
             }
@@ -677,6 +1353,7 @@
             if (currentStep === 4) {
                 setTimeout(() => {
                     generateParceladoFields();
+                generateComissoesParceladoFields();
                 }, 100);
             }
         }
@@ -776,6 +1453,61 @@
         });
     }
 
+    // Função para gerar campos de comissão parcelada
+    function generateComissoesParceladoFields(parcelamentoValue = null) {
+        let maxParcelas;
+        
+        if (parcelamentoValue) {
+            maxParcelas = parseInt(parcelamentoValue);
+            console.log('generateComissoesParceladoFields chamada com valor:', parcelamentoValue);
+        } else {
+            const parcelamento = document.querySelector('input[name="parcelamento"]:checked');
+            console.log('generateComissoesParceladoFields chamada, parcelamento:', parcelamento);
+            
+            if (!parcelamento) {
+                console.log('Nenhum parcelamento selecionado para comissões');
+                const bandeiras = ['visa_master', 'elo', 'demais'];
+                bandeiras.forEach(bandeira => {
+                    const container = document.getElementById(`comissoes-parcelado-${bandeira}`);
+                    if (container) {
+                        container.innerHTML = '<p class="text-xs text-gray-500">Selecione o parcelamento no Step 2</p>';
+                    }
+                });
+                return;
+            }
+            
+            maxParcelas = parseInt(parcelamento.value);
+        }
+        
+        console.log('Gerando campos de comissão para até', maxParcelas, 'parcelas');
+        const bandeiras = ['visa_master', 'elo', 'demais'];
+        
+        bandeiras.forEach(bandeira => {
+            const container = document.getElementById(`comissoes-parcelado-${bandeira}`);
+            if (!container) {
+                console.log(`Container de comissão não encontrado para ${bandeira}`);
+                return;
+            }
+            
+            container.innerHTML = '';
+            console.log(`Gerando campos de comissão para ${bandeira}`);
+            
+            for (let i = 2; i <= maxParcelas; i++) {
+                const div = document.createElement('div');
+                div.className = 'flex items-center space-x-2 mb-1';
+                div.innerHTML = `
+                    <span class="text-xs text-gray-600 w-8 font-medium">${i}x</span>
+                    <input type="number" name="comissoes[parcelado][${bandeira}][${i}]" step="0.01" min="0" max="100"
+                           class="flex-1 px-2 py-1 border border-gray-300 rounded text-xs" placeholder="0.00">
+                    <span class="text-xs text-gray-500">%</span>
+                `;
+                container.appendChild(div);
+                console.log(`Campo de comissão gerado: comissoes[parcelado][${bandeira}][${i}]`);
+            }
+            console.log(`Campos de comissão gerados para ${bandeira}: 2x até ${maxParcelas}x`);
+        });
+    }
+
     // Adicionar listeners para mudanças no Step 2
     function addStep2Listeners() {
         const parcelamentoInputs = document.querySelectorAll('input[name="parcelamento"]');
@@ -783,6 +1515,8 @@
             input.addEventListener('change', function() {
                 if (currentStep === 4) {
                     generateParceladoFields();
+                generateComissoesParceladoFields();
+                    generateComissoesParceladoFields();
                 }
             });
         });
@@ -919,6 +1653,21 @@
                             ${plan.taxas_detalhadas ? generateTaxasTable(plan.taxas_detalhadas) : '<p class="text-sm text-gray-500 italic">Nenhuma taxa detalhada disponível</p>'}
                         </div>
 
+                        <!-- Comissões do Licenciado -->
+                        <div class="bg-white rounded-lg border border-gray-200 p-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-hand-holding-usd text-blue-500 mr-2"></i>
+                                Comissões do Licenciado
+                            </h4>
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-600">Comissão Média:</span>
+                                    <span class="text-lg font-bold text-blue-600">${parseFloat(plan.comissao_media || 0).toFixed(2)}%</span>
+                                </div>
+                            </div>
+                            ${plan.comissoes_detalhadas ? generateComissoesTable(plan.comissoes_detalhadas) : '<p class="text-sm text-gray-500 italic">Nenhuma comissão definida para este plano</p>'}
+                        </div>
+
                         <!-- Ações -->
                         <div class="bg-white rounded-lg border border-gray-200 p-6">
                             <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
@@ -1035,45 +1784,90 @@
                 // Preencher taxas se existirem
                 if (plan.taxas_detalhadas) {
                     console.log('Preenchendo taxas detalhadas:', plan.taxas_detalhadas);
-                    fillTaxasFields(plan.taxas_detalhadas);
+                    fillTaxasFields(plan.taxas_detalhadas, plan);
                 } else {
                     console.log('Nenhuma taxa detalhada encontrada');
                 }
                 
-                // Abrir modal
-                currentStep = 1;
-                showStep(1);
-                document.getElementById('planModal').style.display = 'block';
-                
-                // Carregar operações e adquirentes
+                // Carregar operações e adquirentes primeiro
                 loadOperacoes();
                 loadAdquirentes();
                 
                 // Adicionar listeners
                 addStep2Listeners();
                 
-                // Gerar campos de parcelamento se necessário
+                // Abrir modal primeiro
+                currentStep = 4;
+                showEditMode();
+                document.getElementById('planModal').style.display = 'block';
+                
+                // Gerar campos de parcelamento APÓS abrir o modal
                 setTimeout(() => {
-                    if (planData.parcelamento) {
-                        console.log('Gerando campos para parcelamento:', planData.parcelamento);
-                        generateParceladoFields(planData.parcelamento);
-                        
-                        // Preencher taxas parceladas após gerar os campos
-                        setTimeout(() => {
-                            console.log('Verificando taxas detalhadas:', plan.taxas_detalhadas);
-                            if (plan.taxas_detalhadas && plan.taxas_detalhadas.parcelado) {
-                                console.log('Preenchendo taxas parceladas:', plan.taxas_detalhadas.parcelado);
-                                console.log('Estrutura das taxas parceladas:', JSON.stringify(plan.taxas_detalhadas.parcelado, null, 2));
-                                fillParceladoTaxas(plan.taxas_detalhadas.parcelado);
-                            } else {
-                                console.log('Nenhuma taxa parcelada encontrada');
-                                console.log('Taxas detalhadas disponíveis:', Object.keys(plan.taxas_detalhadas || {}));
+                    // Detectar parcelamento baseado nos dados existentes
+                    let maxParcelas = 12; // Default
+                    
+                    if (plan.taxas_detalhadas && plan.taxas_detalhadas.parcelado) {
+                        // Encontrar o maior número de parcelas nos dados existentes
+                        const bandeiras = ['visa_master', 'elo', 'demais'];
+                        bandeiras.forEach(bandeira => {
+                            if (plan.taxas_detalhadas.parcelado[bandeira]) {
+                                const parcelas = Object.keys(plan.taxas_detalhadas.parcelado[bandeira]).map(Number);
+                                const maxBandeira = Math.max(...parcelas);
+                                if (maxBandeira > maxParcelas) {
+                                    maxParcelas = maxBandeira;
+                                }
                             }
-                        }, 500); // Aumentei o timeout para dar mais tempo
+                        });
+                        console.log('Parcelamento detectado automaticamente:', maxParcelas);
+                    } else if (planData.parcelamento) {
+                        maxParcelas = parseInt(planData.parcelamento);
+                        console.log('Parcelamento do campo:', maxParcelas);
                     } else {
-                        console.log('Nenhum parcelamento encontrado nos dados');
+                        console.log('Usando parcelamento padrão:', maxParcelas);
                     }
-                }, 200);
+                    
+                    // Forçar geração dos campos com o parcelamento detectado
+                    generateParceladoFields(maxParcelas);
+                    generateComissoesParceladoFields(maxParcelas);
+                    
+                    // Garantir que os containers sejam visíveis
+                    const bandeiras = ['visa_master', 'elo', 'demais'];
+                    bandeiras.forEach(bandeira => {
+                        const container = document.getElementById(`parcelado-${bandeira}`);
+                        if (container) {
+                            container.style.display = 'block';
+                            container.style.visibility = 'visible';
+                        }
+                        
+                        const comissaoContainer = document.getElementById(`comissoes-parcelado-${bandeira}`);
+                        if (comissaoContainer) {
+                            comissaoContainer.style.display = 'block';
+                            comissaoContainer.style.visibility = 'visible';
+                        }
+                    });
+                    
+                    // Preencher taxas parceladas após gerar os campos
+                    setTimeout(() => {
+                        console.log('Verificando taxas detalhadas:', plan.taxas_detalhadas);
+                        if (plan.taxas_detalhadas && plan.taxas_detalhadas.parcelado) {
+                            console.log('Preenchendo taxas parceladas:', plan.taxas_detalhadas.parcelado);
+                            fillParceladoTaxas(plan.taxas_detalhadas.parcelado);
+                        } else {
+                            console.log('Nenhuma taxa parcelada encontrada');
+                        }
+                    }, 200);
+
+                    // Preencher comissões parceladas após gerar os campos
+                    setTimeout(() => {
+                        console.log('Verificando comissões detalhadas:', plan.comissoes_detalhadas);
+                        if (plan.comissoes_detalhadas && plan.comissoes_detalhadas.parcelado) {
+                            console.log('Preenchendo comissões parceladas:', plan.comissoes_detalhadas.parcelado);
+                            fillParceladoComissoes(plan.comissoes_detalhadas.parcelado);
+                        } else {
+                            console.log('Nenhuma comissão parcelada encontrada');
+                        }
+                    }, 300);
+                }, 100);
                 
             } else {
                 showToast('Erro ao carregar dados do plano', 'error');
@@ -1172,7 +1966,25 @@
         
         // Configurar URL e método
         const url = isEdit ? `/planos/${planId}` : '/planos';
-        const method = isEdit ? 'PUT' : 'POST';
+        const method = isEdit ? 'POST' : 'POST'; // Laravel simula PUT via POST
+        
+        // Adicionar _method para simular PUT
+        if (isEdit) {
+            formData.append('_method', 'PUT');
+        }
+        
+        // Debug: mostrar dados sendo enviados
+        console.log('=== DEBUG FORM SUBMISSION ===');
+        console.log('URL:', url);
+        console.log('Method:', method);
+        console.log('Is Edit:', isEdit);
+        console.log('Plan ID:', planId);
+        
+        // Mostrar todos os dados do FormData
+        console.log('FormData contents:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+        }
         
         // Enviar para o servidor
         fetch(url, {
@@ -1182,7 +1994,13 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+        })
         .then(data => {
             if (data.success) {
                 showToast(data.message, 'success');
@@ -1194,7 +2012,7 @@
         })
         .catch(error => {
             console.error('Erro ao salvar plano:', error);
-            showToast('Erro ao salvar plano', 'error');
+            showToast(`Erro ao salvar plano: ${error.message}`, 'error');
         });
     });
 
@@ -1314,6 +2132,96 @@
         return html;
     }
 
+    function generateComissoesTable(comissoes) {
+        if (!comissoes || typeof comissoes !== 'object') {
+            return '<p class="text-sm text-gray-500 italic">Nenhuma comissão detalhada disponível</p>';
+        }
+        
+        let html = '<div class="space-y-4">';
+        
+        // Comissões de Débito
+        if (comissoes.debito && Object.keys(comissoes.debito).length > 0) {
+            html += `
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h5 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                        <i class="fas fa-credit-card text-blue-500 mr-2"></i>
+                        Comissões de Débito
+                    </h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            `;
+            Object.entries(comissoes.debito).forEach(([bandeira, comissao]) => {
+                const bandeiraNome = getBandeiraNome(bandeira);
+                html += `
+                    <div class="bg-white rounded-lg p-3 border border-blue-200">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-700">${bandeiraNome}</span>
+                            <span class="text-sm font-bold text-blue-600">${parseFloat(comissao).toFixed(2)}%</span>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div></div>';
+        }
+        
+        // Comissões de Crédito à Vista
+        if (comissoes.credito_vista && Object.keys(comissoes.credito_vista).length > 0) {
+            html += `
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h5 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                        <i class="fas fa-credit-card text-green-500 mr-2"></i>
+                        Comissões de Crédito à Vista
+                    </h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            `;
+            Object.entries(comissoes.credito_vista).forEach(([bandeira, comissao]) => {
+                const bandeiraNome = getBandeiraNome(bandeira);
+                html += `
+                    <div class="bg-white rounded-lg p-3 border border-blue-200">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-700">${bandeiraNome}</span>
+                            <span class="text-sm font-bold text-blue-600">${parseFloat(comissao).toFixed(2)}%</span>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div></div>';
+        }
+        
+        // Comissões de Crédito Parcelado
+        if (comissoes.parcelado && Object.keys(comissoes.parcelado).length > 0) {
+            html += `
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h5 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                        <i class="fas fa-credit-card text-purple-500 mr-2"></i>
+                        Comissões de Crédito Parcelado
+                    </h5>
+            `;
+            Object.entries(comissoes.parcelado).forEach(([bandeira, parcelas]) => {
+                const bandeiraNome = getBandeiraNome(bandeira);
+                html += `
+                    <div class="mb-4">
+                        <h6 class="text-sm font-semibold text-gray-700 mb-2">${bandeiraNome}</h6>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                `;
+                Object.entries(parcelas).forEach(([parcela, comissao]) => {
+                    html += `
+                        <div class="bg-white rounded-lg p-2 border border-blue-200">
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500">${parcela}x</div>
+                                <div class="text-sm font-bold text-blue-600">${parseFloat(comissao).toFixed(2)}%</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div></div>';
+            });
+            html += '</div>';
+        }
+        
+        html += '</div>';
+        return html;
+    }
+
     function getBandeiraNome(bandeira) {
         const nomes = {
             'visa_master': 'Visa e Master',
@@ -1401,7 +2309,7 @@
         });
     }
 
-    function fillTaxasFields(taxas) {
+    function fillTaxasFields(taxas, plan) {
         // Preencher taxas de débito
         if (taxas.debito) {
             Object.entries(taxas.debito).forEach(([bandeira, valor]) => {
@@ -1414,6 +2322,22 @@
         if (taxas.credito_vista) {
             Object.entries(taxas.credito_vista).forEach(([bandeira, valor]) => {
                 const input = document.querySelector(`input[name="taxas[credito_vista][${bandeira}]"]`);
+                if (input) input.value = valor;
+            });
+        }
+
+        // Preencher comissões de débito
+        if (plan && plan.comissoes_detalhadas && plan.comissoes_detalhadas.debito) {
+            Object.entries(plan.comissoes_detalhadas.debito).forEach(([bandeira, valor]) => {
+                const input = document.querySelector(`input[name="comissoes[debito][${bandeira}]"]`);
+                if (input) input.value = valor;
+            });
+        }
+        
+        // Preencher comissões de crédito à vista
+        if (plan && plan.comissoes_detalhadas && plan.comissoes_detalhadas.credito_vista) {
+            Object.entries(plan.comissoes_detalhadas.credito_vista).forEach(([bandeira, valor]) => {
+                const input = document.querySelector(`input[name="comissoes[credito_vista][${bandeira}]"]`);
                 if (input) input.value = valor;
             });
         }
@@ -1464,6 +2388,59 @@
                 console.log('Não foi possível preencher todos os campos após 5 tentativas');
             } else {
                 console.log('Todos os campos foram preenchidos com sucesso!');
+            }
+        };
+        
+        // Iniciar tentativas
+        tryFillFields();
+     }
+
+    // Função para preencher comissões parceladas
+    function fillParceladoComissoes(parceladoComissoes) {
+        console.log('Iniciando preenchimento de comissões parceladas');
+        console.log('Dados recebidos:', parceladoComissoes);
+        
+        // Função para tentar preencher os campos
+        const tryFillFields = (attempt = 1) => {
+            let filledCount = 0;
+            let totalFields = 0;
+            
+            // Verificar se os containers existem
+            const containers = ['visa_master', 'elo', 'demais'];
+            containers.forEach(bandeira => {
+                const container = document.getElementById(`comissoes-parcelado-${bandeira}`);
+                console.log(`Container de comissão ${bandeira}:`, container);
+            });
+            
+            Object.entries(parceladoComissoes).forEach(([bandeira, parcelas]) => {
+                console.log(`Processando comissões da bandeira: ${bandeira}`);
+                Object.entries(parcelas).forEach(([parcela, valor]) => {
+                    totalFields++;
+                    const selector = `input[name="comissoes[parcelado][${bandeira}][${parcela}]"]`;
+                    const input = document.querySelector(selector);
+                    console.log(`Tentativa ${attempt} - Procurando campo de comissão: ${selector}`);
+                    if (input) {
+                        input.value = valor;
+                        filledCount++;
+                        console.log(`Comissão preenchida: ${bandeira} ${parcela}x = ${valor}%`);
+                    } else {
+                        console.log(`Campo de comissão não encontrado: ${selector}`);
+                        // Listar todos os campos de comissão disponíveis para debug
+                        const allInputs = document.querySelectorAll('input[name*="comissoes[parcelado]"]');
+                        console.log(`Campos de comissão disponíveis (${allInputs.length}):`, Array.from(allInputs).map(input => input.name));
+                    }
+                });
+            });
+            
+            console.log(`Tentativa ${attempt} de comissões: ${filledCount}/${totalFields} campos preenchidos`);
+            
+            // Se não preencheu todos os campos e ainda não tentou 5 vezes, tentar novamente
+            if (filledCount < totalFields && attempt < 5) {
+                setTimeout(() => tryFillFields(attempt + 1), 200);
+            } else if (filledCount < totalFields) {
+                console.log('Não foi possível preencher todos os campos de comissão após 5 tentativas');
+            } else {
+                console.log('Todos os campos de comissão foram preenchidos com sucesso!');
             }
         };
         
