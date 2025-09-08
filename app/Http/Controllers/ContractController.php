@@ -419,9 +419,19 @@ class ContractController extends Controller
                 'html_length' => strlen($cleanHtml)
             ]);
             
-            // Gerar PDF
+            // Gerar PDF com opções avançadas
             $pdf = Pdf::loadHTML($cleanHtml);
             $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'dpi' => 150,
+                'defaultFont' => 'Times-Roman',
+                'isRemoteEnabled' => false,
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => false,
+                'isFontSubsettingEnabled' => true,
+                'defaultPaperSize' => 'A4',
+                'defaultPaperOrientation' => 'portrait'
+            ]);
             
             // Definir caminho do arquivo
             $fileName = 'contract_' . $contract->id . '_' . time() . '.pdf';
@@ -816,14 +826,21 @@ class ContractController extends Controller
             return redirect()->back()->withErrors(['error' => 'Arquivo não encontrado.']);
         }
         
-        // Caminho completo do arquivo
-        $fullPath = storage_path('app/' . $filePath);
+        // Determinar o caminho completo baseado no tipo de arquivo
+        if ($contract->signed_contract_path) {
+            // Contrato assinado está no disco 'private'
+            $fullPath = storage_path('app/private/' . $filePath);
+        } else {
+            // Contrato original está no disco padrão 
+            $fullPath = storage_path('app/' . $filePath);
+        }
         
         if (!file_exists($fullPath)) {
             \Log::error('📥 Erro no download - arquivo não existe', [
                 'contract_id' => $contract->id,
                 'file_path' => $filePath,
                 'full_path' => $fullPath,
+                'is_signed' => (bool) $contract->signed_contract_path,
                 'user_id' => auth()->id()
             ]);
             return redirect()->back()->withErrors(['error' => 'Arquivo não encontrado no servidor.']);
@@ -835,6 +852,7 @@ class ContractController extends Controller
             'contract_id' => $contract->id,
             'licenciado' => $contract->licenciado->razao_social ?? $contract->licenciado->nome_fantasia,
             'file_name' => $fileName,
+            'is_signed' => (bool) $contract->signed_contract_path,
             'user_id' => auth()->id()
         ]);
         
@@ -1251,7 +1269,7 @@ class ContractController extends Controller
     {
         $contract = Contract::where('signature_token', $token)->first();
         
-        if (!$contract || $contract->status !== 'contrato_assinado') {
+        if (!$contract || !in_array($contract->status, ['contrato_assinado', 'licenciado_aprovado'])) {
             abort(404);
         }
 

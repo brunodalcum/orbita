@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrato de Licenciamento - {{ $contratante['nome'] ?? 'N/A' }}</title>
+    <title>Contrato de Licenciamento - <?php echo e($contratante['nome'] ?? 'N/A'); ?></title>
     <style>
         * {
             margin: 0;
@@ -239,8 +239,8 @@
         <div class="header">
             <h1>Contrato de Licenciamento de Sistema de Pagamentos</h1>
             <div class="contract-info">
-                <p>Contrato nº {{ str_pad($contrato['id'] ?? 0, 6, '0', STR_PAD_LEFT) }}</p>
-                <p>Data: {{ $contrato['data'] ?? date('d/m/Y') }}</p>
+                <p>Contrato nº <?php echo e(str_pad($contrato['id'] ?? 0, 6, '0', STR_PAD_LEFT)); ?></p>
+                <p>Data: <?php echo e($contrato['data'] ?? date('d/m/Y')); ?></p>
             </div>
         </div>
 
@@ -249,35 +249,35 @@
         
         <div class="party">
             <div class="party-title">Contratada:</div>
-            <div class="party-info"><strong>{{ $contratada['nome'] ?? 'DSPAY TECNOLOGIA LTDA' }}</strong></div>
-            <div class="party-info">CNPJ: {{ $contratada['cnpj'] ?? '00.000.000/0001-00' }}</div>
-            <div class="party-info">Endereço: {{ $contratada['endereco'] ?? 'Endereço não informado' }}, {{ $contratada['cidade'] ?? 'Cidade' }}/{{ $contratada['uf'] ?? 'UF' }}</div>
-            <div class="party-info">CEP: {{ $contratada['cep'] ?? '00000-000' }}</div>
+            <div class="party-info"><strong><?php echo e($contratada['nome'] ?? 'DSPAY TECNOLOGIA LTDA'); ?></strong></div>
+            <div class="party-info">CNPJ: <?php echo e($contratada['cnpj'] ?? '00.000.000/0001-00'); ?></div>
+            <div class="party-info">Endereço: <?php echo e($contratada['endereco'] ?? 'Endereço não informado'); ?>, <?php echo e($contratada['cidade'] ?? 'Cidade'); ?>/<?php echo e($contratada['uf'] ?? 'UF'); ?></div>
+            <div class="party-info">CEP: <?php echo e($contratada['cep'] ?? '00000-000'); ?></div>
         </div>
 
         <div class="party">
             <div class="party-title">Contratante (Licenciado):</div>
-            <div class="party-info"><strong>{{ $contratante['nome'] ?? $licensee->razao_social ?? $licensee->nome_fantasia ?? 'Nome não informado' }}</strong></div>
-            <div class="party-info">CNPJ/CPF: {{ $contratante['documento'] ?? ($licensee ? $licensee->cnpj_cpf : 'Documento não informado') }}</div>
-            <div class="party-info">Endereço: {{ $contratante['endereco'] ?? ($licensee ? ($licensee->endereco . ', ' . $licensee->cidade . '/' . $licensee->estado) : 'Endereço não informado') }}</div>
-            <div class="party-info">CONCEP: {{ $contratante['concep'] ?? ($licensee->concep ?? 'CONCEP não informado') }}</div>
-            @if(!empty($contratante['email']) || !empty($licensee->email))
-            <div class="party-info">E-mail: {{ $contratante['email'] ?? $licensee->email ?? 'E-mail não informado' }}</div>
-            @endif
-            @if(!empty($contratante['telefone']) || !empty($licensee->telefone))
-            <div class="party-info">Telefone: {{ $contratante['telefone'] ?? $licensee->telefone ?? 'Telefone não informado' }}</div>
-            @endif
+            <div class="party-info"><strong><?php echo e($contratante['nome'] ?? $licensee->razao_social ?? $licensee->nome_fantasia ?? 'Nome não informado'); ?></strong></div>
+            <div class="party-info">CNPJ/CPF: <?php echo e($contratante['documento'] ?? ($licensee ? $licensee->cnpj_cpf : 'Documento não informado')); ?></div>
+            <div class="party-info">Endereço: <?php echo e($contratante['endereco'] ?? ($licensee ? ($licensee->endereco . ', ' . $licensee->cidade . '/' . $licensee->estado) : 'Endereço não informado')); ?></div>
+            <div class="party-info">CONCEP: <?php echo e($contratante['concep'] ?? ($licensee->concep ?? 'CONCEP não informado')); ?></div>
+            <?php if(!empty($contratante['email']) || !empty($licensee->email)): ?>
+            <div class="party-info">E-mail: <?php echo e($contratante['email'] ?? $licensee->email ?? 'E-mail não informado'); ?></div>
+            <?php endif; ?>
+            <?php if(!empty($contratante['telefone']) || !empty($licensee->telefone)): ?>
+            <div class="party-info">Telefone: <?php echo e($contratante['telefone'] ?? $licensee->telefone ?? 'Telefone não informado'); ?></div>
+            <?php endif; ?>
         </div>
 
-        @if(!empty($representante['nome']))
+        <?php if(!empty($representante['nome'])): ?>
         <div class="party">
             <div class="party-title">Representante Legal do Contratante:</div>
-            <div class="party-info"><strong>{{ $representante['nome'] }}</strong></div>
-            <div class="party-info">CPF: {{ $representante['cpf'] ?? 'CPF não informado' }}</div>
-            <div class="party-info">E-mail: {{ $representante['email'] ?? 'E-mail não informado' }}</div>
-            <div class="party-info">Telefone: {{ $representante['telefone'] ?? 'Telefone não informado' }}</div>
+            <div class="party-info"><strong><?php echo e($representante['nome']); ?></strong></div>
+            <div class="party-info">CPF: <?php echo e($representante['cpf'] ?? 'CPF não informado'); ?></div>
+            <div class="party-info">E-mail: <?php echo e($representante['email'] ?? 'E-mail não informado'); ?></div>
+            <div class="party-info">Telefone: <?php echo e($representante['telefone'] ?? 'Telefone não informado'); ?></div>
         </div>
-        @endif
+        <?php endif; ?>
     </div>
 
     <div class="section no-break">
@@ -347,7 +347,7 @@
         
         <div class="clause">
             <div class="clause-title">Cláusula 6ª - DO FORO</div>
-            <p>Fica eleito o foro da comarca de {{ $contratada['cidade'] ?? 'São Paulo' }}/{{ $contratada['uf'] ?? 'SP' }} para dirimir quaisquer controvérsias oriundas deste contrato, renunciando as partes a qualquer outro, por mais privilegiado que seja.</p>
+            <p>Fica eleito o foro da comarca de <?php echo e($contratada['cidade'] ?? 'São Paulo'); ?>/<?php echo e($contratada['uf'] ?? 'SP'); ?> para dirimir quaisquer controvérsias oriundas deste contrato, renunciando as partes a qualquer outro, por mais privilegiado que seja.</p>
         </div>
 
         <div class="clause">
@@ -366,23 +366,24 @@
         <div class="signature-container">
             <div class="signature-block">
                 <div class="signature-line"></div>
-                <div class="signature-name">{{ $contratada['nome'] ?? 'DSPAY TECNOLOGIA LTDA' }}</div>
-                <div class="signature-doc">CNPJ: {{ $contratada['cnpj'] ?? '00.000.000/0001-00' }}</div>
+                <div class="signature-name"><?php echo e($contratada['nome'] ?? 'DSPAY TECNOLOGIA LTDA'); ?></div>
+                <div class="signature-doc">CNPJ: <?php echo e($contratada['cnpj'] ?? '00.000.000/0001-00'); ?></div>
                 <div class="signature-role">CONTRATADA</div>
             </div>
             
             <div class="signature-block">
                 <div class="signature-line"></div>
-                <div class="signature-name">{{ $contratante['nome'] ?? $licensee->razao_social ?? $licensee->nome_fantasia ?? 'Nome não informado' }}</div>
-                <div class="signature-doc">{{ $contratante['documento'] ?? ($licensee ? $licensee->cnpj_cpf : 'Documento não informado') }}</div>
+                <div class="signature-name"><?php echo e($contratante['nome'] ?? $licensee->razao_social ?? $licensee->nome_fantasia ?? 'Nome não informado'); ?></div>
+                <div class="signature-doc"><?php echo e($contratante['documento'] ?? ($licensee ? $licensee->cnpj_cpf : 'Documento não informado')); ?></div>
                 <div class="signature-role">CONTRATANTE</div>
             </div>
         </div>
     </div>
 
         <div class="footer">
-            <p>Contrato nº {{ str_pad($contrato['id'] ?? 0, 6, '0', STR_PAD_LEFT) }} | Hash: {{ $contrato['hash'] ?? 'N/A' }} | Gerado em {{ $contrato['data'] ?? date('d/m/Y H:i') }}</p>
+            <p>Contrato nº <?php echo e(str_pad($contrato['id'] ?? 0, 6, '0', STR_PAD_LEFT)); ?> | Hash: <?php echo e($contrato['hash'] ?? 'N/A'); ?> | Gerado em <?php echo e($contrato['data'] ?? date('d/m/Y H:i')); ?></p>
         </div>
     </div>
 </body>
 </html>
+<?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/contracts/templates/default.blade.php ENDPATH**/ ?>

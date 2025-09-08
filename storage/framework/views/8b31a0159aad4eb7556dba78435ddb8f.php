@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assinatura Digital - Contrato {{ $contract->id }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
+    <title>Assinatura Digital - Contrato <?php echo e($contract->id); ?></title>
+    <link rel="icon" type="image/png" href="<?php echo e(asset('images/dspay-logo.png')); ?>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -53,10 +53,10 @@
         <div class="max-w-4xl mx-auto px-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <img src="{{ asset('images/dspay-logo.png') }}" alt="DSPAY" class="h-12 w-auto">
+                    <img src="<?php echo e(asset('images/dspay-logo.png')); ?>" alt="DSPAY" class="h-12 w-auto">
                     <div>
                         <h1 class="text-2xl font-bold">Assinatura Digital</h1>
-                        <p class="text-white/80">Contrato de Licenciamento #{{ str_pad($contract->id, 6, '0', STR_PAD_LEFT) }}</p>
+                        <p class="text-white/80">Contrato de Licenciamento #<?php echo e(str_pad($contract->id, 6, '0', STR_PAD_LEFT)); ?></p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -109,19 +109,19 @@
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Número:</span>
-                                <span class="font-medium">#{{ str_pad($contract->id, 6, '0', STR_PAD_LEFT) }}</span>
+                                <span class="font-medium">#<?php echo e(str_pad($contract->id, 6, '0', STR_PAD_LEFT)); ?></span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Data de Criação:</span>
-                                <span class="font-medium">{{ $contract->created_at->format('d/m/Y') }}</span>
+                                <span class="font-medium"><?php echo e($contract->created_at->format('d/m/Y')); ?></span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Licenciado:</span>
-                                <span class="font-medium">{{ $licenciado->name }}</span>
+                                <span class="font-medium"><?php echo e($licenciado->name); ?></span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Documento:</span>
-                                <span class="font-medium">{{ $licenciado->cnpj_cpf }}</span>
+                                <span class="font-medium"><?php echo e($licenciado->cnpj_cpf); ?></span>
                             </div>
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                         
                         <div class="space-y-4 text-sm text-gray-700 leading-relaxed">
                             <p><strong>CONTRATANTE:</strong> DSPAY LTDA, pessoa jurídica de direito privado...</p>
-                            <p><strong>CONTRATADO:</strong> {{ $licenciado->name }}, {{ $licenciado->cnpj_cpf }}</p>
+                            <p><strong>CONTRATADO:</strong> <?php echo e($licenciado->name); ?>, <?php echo e($licenciado->cnpj_cpf); ?></p>
                             
                             <h4 class="font-semibold text-gray-900 mt-6">CLÁUSULA 1ª - DO OBJETO</h4>
                             <p>O presente contrato tem por objeto o licenciamento de uso da plataforma DSPAY para processamento de pagamentos...</p>
@@ -227,7 +227,7 @@
                                 <i class="fas fa-user mr-2"></i>Nome Completo *
                             </label>
                             <input type="text" id="full_name" name="full_name" required
-                                   value="{{ $licenciado->name }}"
+                                   value="<?php echo e($licenciado->name); ?>"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
 
@@ -236,7 +236,7 @@
                                 <i class="fas fa-id-card mr-2"></i>CPF/CNPJ *
                             </label>
                             <input type="text" id="document" name="document" required
-                                   value="{{ $licenciado->cnpj_cpf }}"
+                                   value="<?php echo e($licenciado->cnpj_cpf); ?>"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
 
@@ -245,7 +245,7 @@
                                 <i class="fas fa-envelope mr-2"></i>E-mail *
                             </label>
                             <input type="email" id="email" name="email" required
-                                   value="{{ $licenciado->email }}"
+                                   value="<?php echo e($licenciado->email); ?>"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
 
@@ -254,7 +254,7 @@
                                 <i class="fas fa-calendar mr-2"></i>Data da Assinatura *
                             </label>
                             <input type="date" id="signature_date" name="signature_date" required
-                                   value="{{ date('Y-m-d') }}"
+                                   value="<?php echo e(date('Y-m-d')); ?>"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
                     </div>
@@ -267,10 +267,10 @@
                                 <strong>IP de Acesso:</strong> <span id="user-ip">Detectando...</span>
                             </div>
                             <div>
-                                <strong>Navegador:</strong> <span id="user-agent">{{ request()->userAgent() }}</span>
+                                <strong>Navegador:</strong> <span id="user-agent"><?php echo e(request()->userAgent()); ?></span>
                             </div>
                             <div>
-                                <strong>Data/Hora:</strong> <span id="current-datetime">{{ now()->format('d/m/Y H:i:s') }}</span>
+                                <strong>Data/Hora:</strong> <span id="current-datetime"><?php echo e(now()->format('d/m/Y H:i:s')); ?></span>
                             </div>
                             <div>
                                 <strong>Localização:</strong> <span id="user-location">Detectando...</span>
@@ -376,7 +376,7 @@
         // Variables
         let signaturePad;
         let currentStep = 1;
-        const contractToken = '{{ $contract->signature_token }}';
+        const contractToken = '<?php echo e($contract->signature_token); ?>';
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -591,7 +591,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify(formData)
@@ -624,3 +624,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/contracts/sign.blade.php ENDPATH**/ ?>

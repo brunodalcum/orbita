@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contrato Assinado com Sucesso!</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
+    <link rel="icon" type="image/png" href="<?php echo e(asset('images/dspay-logo.png')); ?>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -85,10 +85,10 @@
         <div class="max-w-4xl mx-auto px-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <img src="{{ asset('images/dspay-logo.png') }}" alt="DSPAY" class="h-12 w-auto">
+                    <img src="<?php echo e(asset('images/dspay-logo.png')); ?>" alt="DSPAY" class="h-12 w-auto">
                     <div>
                         <h1 class="text-2xl font-bold">Assinatura Concluída</h1>
-                        <p class="text-white/80">Contrato #{{ str_pad($contract->id, 6, '0', STR_PAD_LEFT) }}</p>
+                        <p class="text-white/80">Contrato #<?php echo e(str_pad($contract->id, 6, '0', STR_PAD_LEFT)); ?></p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -142,17 +142,17 @@
             <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                 <div class="flex items-center justify-center space-x-4 text-green-800">
                     <div class="text-center">
-                        <div class="text-2xl font-bold">{{ str_pad($contract->id, 6, '0', STR_PAD_LEFT) }}</div>
+                        <div class="text-2xl font-bold"><?php echo e(str_pad($contract->id, 6, '0', STR_PAD_LEFT)); ?></div>
                         <div class="text-sm">Número do Contrato</div>
                     </div>
                     <div class="w-px h-12 bg-green-300"></div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold">{{ $contract->contract_signed_at ? $contract->contract_signed_at->format('H:i') : now()->format('H:i') }}</div>
+                        <div class="text-2xl font-bold"><?php echo e($contract->contract_signed_at ? $contract->contract_signed_at->format('H:i') : now()->format('H:i')); ?></div>
                         <div class="text-sm">Horário da Assinatura</div>
                     </div>
                     <div class="w-px h-12 bg-green-300"></div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold">{{ $contract->contract_signed_at ? $contract->contract_signed_at->format('d/m/Y') : now()->format('d/m/Y') }}</div>
+                        <div class="text-2xl font-bold"><?php echo e($contract->contract_signed_at ? $contract->contract_signed_at->format('d/m/Y') : now()->format('d/m/Y')); ?></div>
                         <div class="text-sm">Data da Assinatura</div>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
                         <i class="fas fa-user"></i>
                         <span class="font-semibold">Assinante</span>
                     </div>
-                    <div class="mt-1 text-blue-700">{{ $contract->licenciado->name }}</div>
+                    <div class="mt-1 text-blue-700"><?php echo e($contract->licenciado->name); ?></div>
                 </div>
                 <div class="bg-purple-50 p-4 rounded-lg">
                     <div class="flex items-center space-x-2 text-purple-800">
@@ -195,7 +195,7 @@
                         <div>
                             <h4 class="font-semibold text-gray-900">Contrato Assinado</h4>
                             <p class="text-gray-600 text-sm">Sua assinatura foi registrada com sucesso</p>
-                            <span class="text-xs text-green-600">✅ Concluído - {{ $contract->contract_signed_at ? $contract->contract_signed_at->format('d/m/Y H:i') : now()->format('d/m/Y H:i') }}</span>
+                            <span class="text-xs text-green-600">✅ Concluído - <?php echo e($contract->contract_signed_at ? $contract->contract_signed_at->format('d/m/Y H:i') : now()->format('d/m/Y H:i')); ?></span>
                         </div>
                     </div>
                 </div>
@@ -251,30 +251,30 @@
                 <div class="space-y-4">
                     <div class="flex justify-between items-center py-2 border-b border-gray-100">
                         <span class="text-gray-600">Número do Contrato:</span>
-                        <span class="font-medium text-gray-900">#{{ str_pad($contract->id, 6, '0', STR_PAD_LEFT) }}</span>
+                        <span class="font-medium text-gray-900">#<?php echo e(str_pad($contract->id, 6, '0', STR_PAD_LEFT)); ?></span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-gray-100">
                         <span class="text-gray-600">Licenciado:</span>
-                        <span class="font-medium text-gray-900">{{ $contract->licenciado->name }}</span>
+                        <span class="font-medium text-gray-900"><?php echo e($contract->licenciado->name); ?></span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-gray-100">
                         <span class="text-gray-600">Documento:</span>
-                        <span class="font-medium text-gray-900">{{ $contract->licenciado->cnpj_cpf }}</span>
+                        <span class="font-medium text-gray-900"><?php echo e($contract->licenciado->cnpj_cpf); ?></span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-gray-100">
                         <span class="text-gray-600">E-mail:</span>
-                        <span class="font-medium text-gray-900">{{ $contract->licenciado->email }}</span>
+                        <span class="font-medium text-gray-900"><?php echo e($contract->licenciado->email); ?></span>
                     </div>
                 </div>
                 
                 <div class="space-y-4">
                     <div class="flex justify-between items-center py-2 border-b border-gray-100">
                         <span class="text-gray-600">Data de Criação:</span>
-                        <span class="font-medium text-gray-900">{{ $contract->created_at->format('d/m/Y H:i') }}</span>
+                        <span class="font-medium text-gray-900"><?php echo e($contract->created_at->format('d/m/Y H:i')); ?></span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-gray-100">
                         <span class="text-gray-600">Data de Assinatura:</span>
-                        <span class="font-medium text-gray-900">{{ $contract->contract_signed_at ? $contract->contract_signed_at->format('d/m/Y H:i') : now()->format('d/m/Y H:i') }}</span>
+                        <span class="font-medium text-gray-900"><?php echo e($contract->contract_signed_at ? $contract->contract_signed_at->format('d/m/Y H:i') : now()->format('d/m/Y H:i')); ?></span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-gray-100">
                         <span class="text-gray-600">Status:</span>
@@ -396,3 +396,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/contracts/sign-success.blade.php ENDPATH**/ ?>
