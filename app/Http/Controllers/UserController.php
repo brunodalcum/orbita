@@ -50,14 +50,6 @@ class UserController extends Controller
         ]);
         
         try {
-            // TESTE SIMPLES - apenas retornar sucesso por enquanto
-            \Log::info('📤 Retornando JSON response de teste');
-            return response()->json([
-                'success' => true,
-                'message' => 'Teste do controller funcionando!',
-                'data' => $request->all()
-            ]);
-            
             // Verificar se o usuário atual é admin
             $currentUser = auth()->user();
             if (!$currentUser || (!$currentUser->isAdmin() && !$currentUser->isSuperAdmin())) {
@@ -115,26 +107,67 @@ class UserController extends Controller
             }
 
             // Criar o usuário
-            \Log::info('📝 Criando usuário', [
+            \Log::info('📝 PRODUÇÃO - Iniciando criação de usuário', [
                 'name' => $request->name,
                 'email' => $request->email,
                 'role_id' => $request->role_id,
                 'is_active' => $request->has('is_active') ? (bool)$request->is_active : true,
-                'is_ajax' => $request->ajax()
+                'is_ajax' => $request->ajax(),
+                'environment' => app()->environment(),
+                'current_user_id' => $currentUser ? $currentUser->id : null,
+                'current_user_role' => $currentUser && $currentUser->role ? $currentUser->role->name : null
             ]);
             
-            $user = User::create([
+            // Verificar se a role existe
+            $role = Role::find($request->role_id);
+            \Log::info('📋 PRODUÇÃO - Role verificada', [
+                'role_id' => $request->role_id,
+                'role_found' => $role ? true : false,
+                'role_name' => $role ? $role->name : null,
+                'role_active' => $role ? $role->is_active : null
+            ]);
+            
+            // Preparar dados para criação
+            $userData = [
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role_id' => $request->role_id,
                 'is_active' => $request->has('is_active') ? (bool)$request->is_active : true,
+            ];
+            
+            \Log::info('📊 PRODUÇÃO - Dados preparados', [
+                'user_data_keys' => array_keys($userData),
+                'password_hashed' => !empty($userData['password']),
+                'email_unique_check' => User::where('email', $userData['email'])->exists() ? 'EMAIL_EXISTS' : 'EMAIL_AVAILABLE'
             ]);
-
-            \Log::info('✅ Usuário criado com sucesso', [
-                'user_id' => $user->id,
-                'is_ajax' => $request->ajax()
-            ]);
+            
+            // Tentar criar usuário
+            try {
+                $user = User::create($userData);
+                
+                \Log::info('✅ PRODUÇÃO - Usuário criado com sucesso', [
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                    'user_email' => $user->email,
+                    'user_role_id' => $user->role_id,
+                    'user_active' => $user->is_active,
+                    'created_at' => $user->created_at,
+                    'is_ajax' => $request->ajax()
+                ]);
+                
+            } catch (\Exception $createError) {
+                \Log::error('❌ PRODUÇÃO - Erro na criação do usuário', [
+                    'error_message' => $createError->getMessage(),
+                    'error_code' => $createError->getCode(),
+                    'error_file' => $createError->getFile(),
+                    'error_line' => $createError->getLine(),
+                    'user_data' => $userData,
+                    'stack_trace' => $createError->getTraceAsString()
+                ]);
+                
+                throw $createError; // Re-throw para ser capturado pelo catch externo
+            }
 
             if ($request->ajax()) {
                 \Log::info('📤 Retornando JSON response');
