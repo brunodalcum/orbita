@@ -44,11 +44,6 @@ class DynamicSidebar extends Component
         }
 
         $menuItems = [];
-        
-        // Para Super Admin, sempre mostrar todos os menus (fallback temporário)
-        if ($this->user->isSuperAdmin()) {
-            return $this->buildSuperAdminMenus();
-        }
 
         // Dashboard - sempre visível para usuários autenticados
         if ($this->user->hasPermission('dashboard.view') || $this->user->isSuperAdmin()) {
@@ -552,6 +547,12 @@ class DynamicSidebar extends Component
                         'route' => 'dashboard.licenciados',
                         'permission' => 'licenciados.create',
                         'action' => 'create'
+                    ],
+                    [
+                        'name' => 'Aprovações',
+                        'route' => 'dashboard.licenciados',
+                        'permission' => 'licenciados.approve',
+                        'action' => 'approvals'
                     ]
                 ]
             ],
@@ -568,6 +569,11 @@ class DynamicSidebar extends Component
                         'permission' => 'contratos.view'
                     ],
                     [
+                        'name' => 'Novo Contrato',
+                        'route' => 'contracts.create',
+                        'permission' => 'contratos.create'
+                    ],
+                    [
                         'name' => 'Gerar Contrato',
                         'route' => 'contracts.generate.index',
                         'permission' => 'contratos.create'
@@ -576,6 +582,136 @@ class DynamicSidebar extends Component
                         'name' => 'Modelos de Contrato',
                         'route' => 'contract-templates.index',
                         'permission' => 'contratos.manage'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Leads',
+                'icon' => 'fas fa-user-plus',
+                'route' => 'dashboard.leads',
+                'permissions' => ['leads.view'],
+                'is_active' => request()->routeIs('dashboard.leads*'),
+                'submenu' => [
+                    [
+                        'name' => 'Listar Leads',
+                        'route' => 'dashboard.leads',
+                        'permission' => 'leads.view'
+                    ],
+                    [
+                        'name' => 'Novo Lead',
+                        'route' => 'dashboard.leads',
+                        'permission' => 'leads.create',
+                        'action' => 'create'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Operações',
+                'icon' => 'fas fa-cogs',
+                'route' => 'dashboard.operacoes',
+                'permissions' => ['operacoes.view'],
+                'is_active' => request()->routeIs('dashboard.operacoes*'),
+                'submenu' => [
+                    [
+                        'name' => 'Listar Operações',
+                        'route' => 'dashboard.operacoes',
+                        'permission' => 'operacoes.view'
+                    ],
+                    [
+                        'name' => 'Nova Operação',
+                        'route' => 'dashboard.operacoes',
+                        'permission' => 'operacoes.create',
+                        'action' => 'create'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Planos',
+                'icon' => 'fas fa-chart-line',
+                'route' => 'dashboard.planos',
+                'permissions' => ['planos.view'],
+                'is_active' => request()->routeIs('dashboard.planos*'),
+                'submenu' => [
+                    [
+                        'name' => 'Listar Planos',
+                        'route' => 'dashboard.planos',
+                        'permission' => 'planos.view'
+                    ],
+                    [
+                        'name' => 'Novo Plano',
+                        'route' => 'dashboard.planos',
+                        'permission' => 'planos.create',
+                        'action' => 'create'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Adquirentes',
+                'icon' => 'fas fa-building',
+                'route' => 'dashboard.adquirentes',
+                'permissions' => ['adquirentes.view'],
+                'is_active' => request()->routeIs('dashboard.adquirentes*'),
+                'submenu' => [
+                    [
+                        'name' => 'Listar Adquirentes',
+                        'route' => 'dashboard.adquirentes',
+                        'permission' => 'adquirentes.view'
+                    ],
+                    [
+                        'name' => 'Novo Adquirente',
+                        'route' => 'dashboard.adquirentes',
+                        'permission' => 'adquirentes.create',
+                        'action' => 'create'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Agenda',
+                'icon' => 'fas fa-calendar-alt',
+                'route' => 'dashboard.agenda',
+                'permissions' => ['agenda.view'],
+                'is_active' => request()->routeIs('dashboard.agenda*'),
+                'submenu' => [
+                    [
+                        'name' => 'Ver Agenda',
+                        'route' => 'dashboard.agenda',
+                        'permission' => 'agenda.view'
+                    ],
+                    [
+                        'name' => 'Novo Compromisso',
+                        'route' => 'dashboard.agenda',
+                        'permission' => 'agenda.create',
+                        'action' => 'create'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Marketing',
+                'icon' => 'fas fa-bullhorn',
+                'route' => 'dashboard.marketing',
+                'permissions' => ['marketing.view'],
+                'is_active' => request()->routeIs('dashboard.marketing*'),
+                'submenu' => [
+                    [
+                        'name' => 'Dashboard Marketing',
+                        'route' => 'dashboard.marketing',
+                        'permission' => 'marketing.view'
+                    ],
+                    [
+                        'name' => 'Campanhas',
+                        'route' => 'dashboard.marketing.campanhas',
+                        'permission' => 'marketing.view'
+                    ],
+                    [
+                        'name' => 'Modelos de Email',
+                        'route' => 'dashboard.marketing.modelos',
+                        'permission' => 'marketing.view'
+                    ],
+                    [
+                        'name' => 'Nova Campanha',
+                        'route' => 'dashboard.marketing.campanhas',
+                        'permission' => 'marketing.create',
+                        'action' => 'create'
                     ]
                 ]
             ],
@@ -601,6 +737,20 @@ class DynamicSidebar extends Component
                         'name' => 'Perfil de Usuário',
                         'route' => 'permissions.index',
                         'permission' => 'permissoes.view'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Configurações',
+                'icon' => 'fas fa-cog',
+                'route' => 'dashboard.configuracoes',
+                'permissions' => ['configuracoes.view'],
+                'is_active' => request()->routeIs('dashboard.configuracoes*'),
+                'submenu' => [
+                    [
+                        'name' => 'Configurações Gerais',
+                        'route' => 'dashboard.configuracoes',
+                        'permission' => 'configuracoes.view'
                     ]
                 ]
             ]
