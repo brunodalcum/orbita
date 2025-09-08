@@ -243,8 +243,6 @@
             
             const form = document.getElementById('templateForm');
             form.addEventListener('submit', function(e) {
-                // e.preventDefault(); // Remover para permitir envio
-                
                 const templateId = document.getElementById('selected_template_id').value;
                 const licenciadoId = document.querySelector('input[name="licenciado_id"]').value;
                 const csrfToken = document.querySelector('input[name="_token"]').value;
@@ -254,18 +252,22 @@
                 console.log('  👤 Licenciado ID:', licenciadoId);
                 console.log('  🔐 CSRF Token:', csrfToken ? 'Presente' : 'AUSENTE');
                 console.log('  🎯 Action URL:', form.action);
+                console.log('  🔧 Method:', form.method);
                 
                 if (!templateId) {
+                    e.preventDefault();
                     alert('❌ ERRO: Nenhum template selecionado!\\nPor favor, clique em um template primeiro.');
                     return false;
                 }
                 
                 if (!licenciadoId) {
+                    e.preventDefault();
                     alert('❌ ERRO: Licenciado ID não encontrado!\\nVolte ao Step 1.');
                     return false;
                 }
                 
                 if (!csrfToken) {
+                    e.preventDefault();
                     alert('❌ ERRO: Token CSRF ausente!\\nRecarregue a página.');
                     return false;
                 }
@@ -275,7 +277,8 @@
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Gerando contrato...';
                 
-                console.log('✅ Enviando formulário...');
+                console.log('✅ Enviando formulário via POST...');
+                // Formulário enviado normalmente se chegou até aqui
             });
         });
     </script>

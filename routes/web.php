@@ -378,10 +378,10 @@ Route::prefix('contracts')->name('contracts.')->middleware(['auth', 'permission:
     // Novo fluxo de geração de contratos (DEVE VIR ANTES das rotas com parâmetros)
     Route::get('/generate', [App\Http\Controllers\ContractController::class, 'generateIndex'])->name('generate.index');
     
-    // Rotas GET para exibir as páginas
-    Route::get('/generate/step1', [App\Http\Controllers\ContractController::class, 'showStep1'])->name('generate.show-step1');
-    Route::get('/generate/step2', [App\Http\Controllers\ContractController::class, 'showStep2'])->name('generate.show-step2');
-    Route::get('/generate/step3', [App\Http\Controllers\ContractController::class, 'showStep3'])->name('generate.show-step3');
+    // Rotas GET para exibir as páginas (apenas step1, step2 e step3 são processados via POST)
+    Route::get('/generate/step1', function() { return redirect()->route('contracts.generate.index'); });
+    Route::get('/generate/step2', function() { return redirect()->route('contracts.generate.index'); });
+    Route::get('/generate/step3', function() { return redirect()->route('contracts.generate.index'); });
     
     // Rotas POST para processar os dados
     Route::post('/generate/step1', [App\Http\Controllers\ContractController::class, 'generateStep1'])->name('generate.step1');
