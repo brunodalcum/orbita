@@ -186,14 +186,16 @@ class ContractController extends Controller
     public function generateStep3(Request $request)
     {
         // DEBUG: Log dos dados recebidos
-        \Log::info('🔍 DEBUG generateStep3 - Dados recebidos:', [
+        \Log::info('🔍 DEBUG generateStep3 - MÉTODO CHAMADO!', [
+            'timestamp' => now(),
             'all_data' => $request->all(),
             'licenciado_id' => $request->get('licenciado_id'),
             'template_id' => $request->get('template_id'),
             'observacoes_admin' => $request->get('observacoes_admin'),
             'method' => $request->method(),
             'url' => $request->fullUrl(),
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'headers' => $request->headers->all()
         ]);
         
         \Log::info('🚀 Iniciando processo de geração de contrato', [
