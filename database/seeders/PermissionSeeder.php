@@ -84,11 +84,18 @@ class PermissionSeeder extends Seeder
             ['name' => 'configuracoes.manage', 'display_name' => 'Gerenciar Configurações', 'module' => 'configuracoes', 'action' => 'manage'],
             
             // Usuários e Roles
-            ['name' => 'users.view', 'display_name' => 'Visualizar Usuários', 'module' => 'users', 'action' => 'view'],
-            ['name' => 'users.create', 'display_name' => 'Criar Usuários', 'module' => 'users', 'action' => 'create'],
-            ['name' => 'users.update', 'display_name' => 'Editar Usuários', 'module' => 'users', 'action' => 'update'],
-            ['name' => 'users.delete', 'display_name' => 'Excluir Usuários', 'module' => 'users', 'action' => 'delete'],
-            ['name' => 'users.manage', 'display_name' => 'Gerenciar Usuários', 'module' => 'users', 'action' => 'manage'],
+            ['name' => 'usuarios.view', 'display_name' => 'Visualizar Usuários', 'module' => 'usuarios', 'action' => 'view'],
+            ['name' => 'usuarios.create', 'display_name' => 'Criar Usuários', 'module' => 'usuarios', 'action' => 'create'],
+            ['name' => 'usuarios.update', 'display_name' => 'Editar Usuários', 'module' => 'usuarios', 'action' => 'update'],
+            ['name' => 'usuarios.delete', 'display_name' => 'Excluir Usuários', 'module' => 'usuarios', 'action' => 'delete'],
+            ['name' => 'usuarios.manage', 'display_name' => 'Gerenciar Usuários', 'module' => 'usuarios', 'action' => 'manage'],
+            
+            // Permissões do Sistema
+            ['name' => 'permissoes.view', 'display_name' => 'Visualizar Permissões', 'module' => 'permissoes', 'action' => 'view'],
+            ['name' => 'permissoes.create', 'display_name' => 'Criar Permissões', 'module' => 'permissoes', 'action' => 'create'],
+            ['name' => 'permissoes.update', 'display_name' => 'Editar Permissões', 'module' => 'permissoes', 'action' => 'update'],
+            ['name' => 'permissoes.delete', 'display_name' => 'Excluir Permissões', 'module' => 'permissoes', 'action' => 'delete'],
+            ['name' => 'permissoes.manage', 'display_name' => 'Gerenciar Permissões', 'module' => 'permissoes', 'action' => 'manage'],
             
             // Estabelecimentos (ECs)
             ['name' => 'estabelecimentos.view', 'display_name' => 'Visualizar Estabelecimentos', 'module' => 'estabelecimentos', 'action' => 'view'],
@@ -125,7 +132,8 @@ class PermissionSeeder extends Seeder
         $admin = Role::where('name', 'admin')->first();
         if ($admin) {
             $adminPermissions = Permission::whereNotIn('name', [
-                'users.create', 'users.update', 'users.delete', 'users.manage',
+                'usuarios.create', 'usuarios.update', 'usuarios.delete', 'usuarios.manage',
+                'permissoes.create', 'permissoes.update', 'permissoes.delete', 'permissoes.manage',
                 'configuracoes.manage'
             ])->pluck('id');
             $admin->permissions()->sync($adminPermissions);

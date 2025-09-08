@@ -124,6 +124,28 @@ Route::middleware([
         Route::delete('/dashboard/users/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
     });
     
+    // Rotas de Permissões (Sistema de Perfil de Usuário)
+    Route::middleware(['permission:permissoes.view'])->group(function () {
+        Route::get('/permissions', [App\Http\Controllers\PermissionController::class, 'index'])->name('permissions.index');
+        Route::get('/permissions/{permission}', [App\Http\Controllers\PermissionController::class, 'show'])->name('permissions.show');
+        Route::get('/permissions/role/{role}/manage', [App\Http\Controllers\PermissionController::class, 'manageRolePermissions'])->name('permissions.manage-role');
+    });
+    
+    Route::middleware(['permission:permissoes.create'])->group(function () {
+        Route::get('/permissions/create', [App\Http\Controllers\PermissionController::class, 'create'])->name('permissions.create');
+        Route::post('/permissions', [App\Http\Controllers\PermissionController::class, 'store'])->name('permissions.store');
+    });
+    
+    Route::middleware(['permission:permissoes.update'])->group(function () {
+        Route::get('/permissions/{permission}/edit', [App\Http\Controllers\PermissionController::class, 'edit'])->name('permissions.edit');
+        Route::put('/permissions/{permission}', [App\Http\Controllers\PermissionController::class, 'update'])->name('permissions.update');
+        Route::put('/permissions/role/{role}/update', [App\Http\Controllers\PermissionController::class, 'updateRolePermissions'])->name('permissions.update-role');
+    });
+    
+    Route::middleware(['permission:permissoes.delete'])->group(function () {
+        Route::delete('/permissions/{permission}', [App\Http\Controllers\PermissionController::class, 'destroy'])->name('permissions.destroy');
+    });
+    
     Route::post('/api/consultar-cnpj', function (Illuminate\Http\Request $request) {
         $documento = preg_replace('/[^0-9]/', '', $request->input('cnpj'));
         

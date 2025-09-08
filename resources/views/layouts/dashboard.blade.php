@@ -32,29 +32,52 @@
         <!-- Styles -->
         @livewireStyles
     </head>
-    <body class="font-sans antialiased">
+    <body class="bg-gray-50">
         <x-banner />
-
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+        
+        <div class="flex h-screen">
+            <!-- Sidebar Dinâmico -->
+            <x-dynamic-sidebar />
+            
+            <!-- Main Content -->
+            <div class="flex-1 flex flex-col overflow-hidden ml-64">
+                <!-- Header -->
+                <header class="bg-white shadow-sm border-b">
+                    <div class="flex items-center justify-between px-6 py-4">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">@yield('title', 'Dashboard')</h1>
+                            <p class="text-gray-600">@yield('description', 'Painel de controle')</p>
+                        </div>
+                        
+                        <!-- User Menu -->
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white text-sm"></i>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name ?? 'Usuário' }}</span>
+                            </div>
+                            
+                            <!-- Logout -->
+                            <form method="POST" action="{{ route('logout') }}" class="inline">
+                                @csrf
+                                <button type="submit" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
+                                    <i class="fas fa-sign-out-alt mr-1"></i>
+                                    Sair
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                @yield('content')
-            </main>
+                
+                <!-- Page Content -->
+                <main class="flex-1 overflow-auto p-6">
+                    @yield('content')
+                </main>
+            </div>
         </div>
 
         @stack('modals')
-
         @livewireScripts
     </body>
 </html>

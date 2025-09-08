@@ -44,9 +44,14 @@ class DynamicSidebar extends Component
         }
 
         $menuItems = [];
+        
+        // Para Super Admin, sempre mostrar todos os menus (fallback temporário)
+        if ($this->user->isSuperAdmin()) {
+            return $this->buildSuperAdminMenus();
+        }
 
         // Dashboard - sempre visível para usuários autenticados
-        if ($this->user->hasPermission('dashboard.view')) {
+        if ($this->user->hasPermission('dashboard.view') || $this->user->isSuperAdmin()) {
             $menuItems[] = [
                 'name' => 'Dashboard',
                 'icon' => 'fas fa-tachometer-alt',
@@ -58,7 +63,7 @@ class DynamicSidebar extends Component
         }
 
         // Licenciados
-        if ($this->user->hasModulePermission('licenciados')) {
+        if ($this->user->hasModulePermission('licenciados') || $this->user->isSuperAdmin()) {
             $submenu = [];
             
             if ($this->user->hasPermission('licenciados.view')) {
@@ -98,7 +103,7 @@ class DynamicSidebar extends Component
         }
 
         // Contratos
-        if ($this->user->hasModulePermission('contratos')) {
+        if ($this->user->hasModulePermission('contratos') || $this->user->isSuperAdmin()) {
             $submenu = [];
             
             if ($this->user->hasPermission('contratos.view')) {
@@ -413,23 +418,33 @@ class DynamicSidebar extends Component
         //     ];
         // }
 
-        // Usuários & Permissões (apenas para Super Admin)
-        if ($this->user->hasModulePermission('users') && $this->user->isSuperAdmin()) {
+        // Usuários & Permissões (apenas para Admin e Super Admin)
+        if (($this->user->hasModulePermission('usuarios') || $this->user->isSuperAdmin()) && ($this->user->isAdmin() || $this->user->isSuperAdmin())) {
             $submenu = [];
             
-            if ($this->user->hasPermission('users.view')) {
+            if ($this->user->hasPermission('usuarios.view')) {
                 $submenu[] = [
                     'name' => 'Listar Usuários',
                     'route' => 'dashboard.users',
-                    'permission' => 'users.view'
+                    'permission' => 'usuarios.view'
                 ];
             }
             
-            if ($this->user->hasPermission('users.create')) {
+            if ($this->user->hasPermission('usuarios.create')) {
                 $submenu[] = [
                     'name' => 'Novo Usuário',
-                    'route' => 'users.create',
-                    'permission' => 'users.create'
+                    'route' => 'dashboard.users',
+                    'permission' => 'usuarios.create',
+                    'action' => 'create'
+                ];
+            }
+            
+            // Submenu Perfil de Usuário (Permissões)
+            if ($this->user->hasPermission('permissoes.view') || $this->user->hasPermission('permissoes.manage')) {
+                $submenu[] = [
+                    'name' => 'Perfil de Usuário',
+                    'route' => 'permissions.index',
+                    'permission' => 'permissoes.view'
                 ];
             }
 
@@ -437,8 +452,8 @@ class DynamicSidebar extends Component
                 'name' => 'Usuários',
                 'icon' => 'fas fa-users-cog',
                 'route' => 'dashboard.users',
-                'permissions' => ['users.view', 'users.create', 'users.manage'],
-                'is_active' => request()->routeIs('dashboard.users*') || request()->routeIs('users.*'),
+                'permissions' => ['usuarios.view', 'usuarios.create', 'usuarios.manage', 'permissoes.view'],
+                'is_active' => request()->routeIs('dashboard.users*') || request()->routeIs('permissions.*'),
                 'submenu' => $submenu
             ];
         }
@@ -504,6 +519,92 @@ class DynamicSidebar extends Component
         }
 
         return $this->user->role->display_name;
+    }
+
+    /**
+     * Build menu items specifically for Super Admin (fallback)
+     */
+    private function buildSuperAdminMenus(): array
+    {
+        return [
+            [
+                'name' => 'Dashboard',
+                'icon' => 'fas fa-tachometer-alt',
+                'route' => 'dashboard',
+                'permissions' => ['dashboard.view'],
+                'is_active' => request()->routeIs('dashboard'),
+                'submenu' => []
+            ],
+            [
+                'name' => 'Licenciados',
+                'icon' => 'fas fa-id-card',
+                'route' => 'dashboard.licenciados',
+                'permissions' => ['licenciados.view'],
+                'is_active' => request()->routeIs('dashboard.licenciados*'),
+                'submenu' => [
+                    [
+                        'name' => 'Listar Licenciados',
+                        'route' => 'dashboard.licenciados',
+                        'permission' => 'licenciados.view'
+                    ],
+                    [
+                        'name' => 'Novo Licenciado',
+                        'route' => 'dashboard.licenciados',
+                        'permission' => 'licenciados.create',
+                        'action' => 'create'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Contratos',
+                'icon' => 'fas fa-file-contract',
+                'route' => 'contracts.index',
+                'permissions' => ['contratos.view'],
+                'is_active' => request()->routeIs('contracts.*') || request()->routeIs('contract-templates.*'),
+                'submenu' => [
+                    [
+                        'name' => 'Listar Contratos',
+                        'route' => 'contracts.index',
+                        'permission' => 'contratos.view'
+                    ],
+                    [
+                        'name' => 'Gerar Contrato',
+                        'route' => 'contracts.generate.index',
+                        'permission' => 'contratos.create'
+                    ],
+                    [
+                        'name' => 'Modelos de Contrato',
+                        'route' => 'contract-templates.index',
+                        'permission' => 'contratos.manage'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Usuários',
+                'icon' => 'fas fa-users-cog',
+                'route' => 'dashboard.users',
+                'permissions' => ['usuarios.view'],
+                'is_active' => request()->routeIs('dashboard.users*') || request()->routeIs('permissions.*'),
+                'submenu' => [
+                    [
+                        'name' => 'Listar Usuários',
+                        'route' => 'dashboard.users',
+                        'permission' => 'usuarios.view'
+                    ],
+                    [
+                        'name' => 'Novo Usuário',
+                        'route' => 'dashboard.users',
+                        'permission' => 'usuarios.create',
+                        'action' => 'create'
+                    ],
+                    [
+                        'name' => 'Perfil de Usuário',
+                        'route' => 'permissions.index',
+                        'permission' => 'permissoes.view'
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
