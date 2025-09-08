@@ -331,16 +331,78 @@ Route::get('/planos/bandeiras/list', [App\Http\Controllers\PlanoController::clas
 Route::post('/planos/filter', [App\Http\Controllers\PlanoController::class, 'filter'])->name('planos.filter');
 
 // Rotas para Contratos
-Route::prefix('contracts')->name('contracts.')->group(function () {
+Route::prefix('contracts')->name('contracts.')->middleware(['auth', 'permission:contratos.view'])->group(function () {
     Route::get('/', [App\Http\Controllers\ContractController::class, 'index'])->name('index');
     Route::get('/create', [App\Http\Controllers\ContractController::class, 'create'])->name('create');
+    
+    // Novo fluxo de geração de contratos (DEVE VIR ANTES das rotas com parâmetros)
+    Route::get('/generate', [App\Http\Controllers\ContractController::class, 'generateIndex'])->name('generate.index');
+    
+    // Rotas GET para exibir as páginas
+    Route::get('/generate/step1', [App\Http\Controllers\ContractController::class, 'showStep1'])->name('generate.show-step1');
+    Route::get('/generate/step2', [App\Http\Controllers\ContractController::class, 'showStep2'])->name('generate.show-step2');
+    Route::get('/generate/step3', [App\Http\Controllers\ContractController::class, 'showStep3'])->name('generate.show-step3');
+    
+    // Rotas POST para processar os dados
+    Route::post('/generate/step1', [App\Http\Controllers\ContractController::class, 'generateStep1'])->name('generate.step1');
+    Route::post('/generate/step2', [App\Http\Controllers\ContractController::class, 'generateStep2'])->name('generate.step2');
+    Route::post('/generate/step3', [App\Http\Controllers\ContractController::class, 'generateStep3'])->name('generate.step3');
+    
     Route::post('/', [App\Http\Controllers\ContractController::class, 'store'])->name('store');
     Route::get('/{contract}', [App\Http\Controllers\ContractController::class, 'show'])->name('show');
+    Route::get('/{contract}/view-pdf', [App\Http\Controllers\ContractController::class, 'viewPdf'])->name('view-pdf');
     Route::post('/{contract}/review-documents', [App\Http\Controllers\ContractController::class, 'reviewDocuments'])->name('review-documents');
+    Route::patch('/{contract}/update-notes', [App\Http\Controllers\ContractController::class, 'updateNotes'])->name('update-notes');
+    Route::post('/{contract}/send', [App\Http\Controllers\ContractController::class, 'sendContract'])->name('send');
+    
+    // Novos endpoints para steps encadeados
+    Route::post('/{contract}/upload-template', [App\Http\Controllers\ContractController::class, 'uploadTemplate'])->name('upload-template');
+    Route::post('/{contract}/fill', [App\Http\Controllers\ContractController::class, 'fillTemplate'])->name('fill');
+    Route::post('/{contract}/generate-pdf', [App\Http\Controllers\ContractController::class, 'generatePdfFromTemplate'])->name('generate-pdf');
+    Route::post('/{contract}/send-email', [App\Http\Controllers\ContractController::class, 'sendContractEmail'])->name('send-email');
+    Route::get('/{contract}/signature-status', [App\Http\Controllers\ContractController::class, 'checkSignatureStatus'])->name('signature-status');
+    Route::post('/{contract}/approve', [App\Http\Controllers\ContractController::class, 'approveContract'])->name('approve');
     Route::post('/{contract}/generate', [App\Http\Controllers\ContractController::class, 'generateContract'])->name('generate');
     Route::get('/{contract}/preview', [App\Http\Controllers\ContractController::class, 'previewContract'])->name('preview');
     Route::get('/{contract}/download', [App\Http\Controllers\ContractController::class, 'downloadContract'])->name('download');
     Route::get('/documents/{document}/download', [App\Http\Controllers\ContractController::class, 'downloadDocument'])->name('download-document');
+    Route::delete('/{contract}', [App\Http\Controllers\ContractController::class, 'destroy'])->name('destroy');
+});
+
+// Rotas para templates de contrato
+Route::prefix('contract-templates')->name('contract-templates.')->middleware(['auth', 'permission:contratos.manage'])->group(function () {
+    Route::get('/', [App\Http\Controllers\ContractTemplateController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\ContractTemplateController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\ContractTemplateController::class, 'store'])->name('store');
+    Route::get('/{contractTemplate}', [App\Http\Controllers\ContractTemplateController::class, 'show'])->name('show');
+    Route::get('/{contractTemplate}/edit', [App\Http\Controllers\ContractTemplateController::class, 'edit'])->name('edit');
+    Route::put('/{contractTemplate}', [App\Http\Controllers\ContractTemplateController::class, 'update'])->name('update');
+    Route::delete('/{contractTemplate}', [App\Http\Controllers\ContractTemplateController::class, 'destroy'])->name('destroy');
+    Route::get('/{contractTemplate}/preview', [App\Http\Controllers\ContractTemplateController::class, 'preview'])->name('preview');
+    Route::post('/{contractTemplate}/duplicate', [App\Http\Controllers\ContractTemplateController::class, 'duplicate'])->name('duplicate');
+    Route::patch('/{contractTemplate}/toggle-status', [App\Http\Controllers\ContractTemplateController::class, 'toggleStatus'])->name('toggle-status');
+});
+
+// Rotas públicas para assinatura de contratos (sem autenticação)
+Route::get('/contracts/sign/{token}', [App\Http\Controllers\ContractController::class, 'showSignaturePage'])->name('contracts.sign.show');
+Route::post('/contracts/sign/{token}', [App\Http\Controllers\ContractController::class, 'processSignature'])->name('contracts.sign.process');
+Route::get('/contracts/sign/{token}/success', [App\Http\Controllers\ContractController::class, 'showSignatureSuccess'])->name('contracts.sign.success');
+
+// Webhook para receber notificações de assinatura
+Route::post('/contracts/signature-webhook', [App\Http\Controllers\ContractController::class, 'signatureWebhook'])->name('contracts.signature-webhook');
+
+// Rotas públicas para produtos e categorias (sem autenticação)
+Route::prefix('produtos')->name('products.')->group(function () {
+    Route::get('/', [App\Http\Controllers\ProductController::class, 'index'])->name('index');
+    Route::get('/buscar', [App\Http\Controllers\ProductController::class, 'search'])->name('search');
+    Route::get('/categoria/{categorySlug}', [App\Http\Controllers\ProductController::class, 'category'])->name('category');
+    Route::get('/{productSlug}', [App\Http\Controllers\ProductController::class, 'show'])->name('show');
+});
+
+// API Routes para produtos (sem autenticação)
+Route::prefix('api/produtos')->name('api.products.')->group(function () {
+    Route::get('/busca-rapida', [App\Http\Controllers\ProductController::class, 'quickSearch'])->name('quick-search');
+    Route::get('/categoria/{categorySlug}', [App\Http\Controllers\ProductController::class, 'categoryProducts'])->name('category');
 });
 
 // Rotas para Adquirentes

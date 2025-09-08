@@ -58,37 +58,6 @@ class ContractController extends Controller
         return view('dashboard.contracts.show', compact('contract'));
     }
 
-    /**
-     * Exibir PDF do contrato no browser
-     */
-    public function viewPdf(Contract $contract)
-    {
-        // Verificar se o contrato tem PDF
-        if (!$contract->contract_pdf_path) {
-            return back()->with('error', 'PDF do contrato não encontrado.');
-        }
-
-        // Verificar se o arquivo existe
-        $pdfPath = storage_path('app/' . $contract->contract_pdf_path);
-        if (!file_exists($pdfPath)) {
-            return back()->with('error', 'Arquivo PDF não encontrado no servidor.');
-        }
-
-        // Log da ação
-        \Log::info('📄 Visualização de contrato PDF', [
-            'contract_id' => $contract->id,
-            'licenciado' => $contract->licenciado->razao_social ?? $contract->licenciado->nome_fantasia,
-            'user_id' => auth()->id(),
-            'pdf_path' => $contract->contract_pdf_path
-        ]);
-
-        // Retornar o PDF para visualização no browser
-        return response()->file($pdfPath, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="Contrato_' . str_pad($contract->id, 6, '0', STR_PAD_LEFT) . '.pdf"'
-        ]);
-    }
-
     public function create()
     {
         // Buscar licenciados da tabela licenciados que não têm contrato
@@ -98,410 +67,6 @@ class ContractController extends Controller
             ->get();
 
         return view('dashboard.contracts.create', compact('licenciados'));
-    }
-
-    /**
-     * Página inicial do gerador de contratos - Etapa 1: Selecionar Licenciado
-     */
-    public function generateIndex()
-    {
-        // Buscar TODOS os licenciados cadastrados no banco, independente do status
-        $licenciados = Licenciado::orderBy('razao_social')
-            ->get();
-
-        return view('dashboard.contracts.generate.index', compact('licenciados'));
-    }
-
-    /**
-     * Exibir página do Step 1 (GET) - Redireciona para início se acessado diretamente
-     */
-    public function showStep1()
-    {
-        return redirect()->route('contracts.generate.index')
-            ->with('info', 'Por favor, inicie o processo de geração selecionando um licenciado.');
-    }
-
-    /**
-     * Processar Etapa 1: Licenciado selecionado, mostrar templates
-     */
-    public function generateStep1(Request $request)
-    {
-        $request->validate([
-            'licenciado_id' => 'required|exists:licenciados,id'
-        ]);
-
-        $licenciado = Licenciado::findOrFail($request->licenciado_id);
-        
-        // Buscar templates ativos
-        $templates = ContractTemplate::where('is_active', true)
-            ->orderBy('name')
-            ->get();
-
-        return view('dashboard.contracts.generate.step1', compact('licenciado', 'templates'));
-    }
-
-    /**
-     * Exibir página do Step 2 (GET) - Redireciona para início se acessado diretamente
-     */
-    public function showStep2()
-    {
-        return redirect()->route('contracts.generate.index')
-            ->with('info', 'Por favor, inicie o processo de geração selecionando um licenciado.');
-    }
-
-    /**
-     * Processar Etapa 2: Template selecionado, mostrar preview e confirmar
-     */
-    public function generateStep2(Request $request)
-    {
-        $request->validate([
-            'licenciado_id' => 'required|exists:licenciados,id',
-            'template_id' => 'required|exists:contract_templates,id'
-        ]);
-
-        $licenciado = Licenciado::findOrFail($request->licenciado_id);
-        $template = ContractTemplate::findOrFail($request->template_id);
-
-        // Preparar dados para substituição
-        $contractData = $this->prepareContractData($licenciado);
-        
-        // Gerar preview do contrato
-        $previewContent = $this->replaceTemplateVariables($template->content, $contractData);
-
-        return view('dashboard.contracts.generate.step2-simple', compact('licenciado', 'template', 'previewContent', 'contractData'));
-    }
-
-    /**
-     * Exibir página do Step 3 (GET) - Redireciona para início se acessado diretamente
-     */
-    public function showStep3()
-    {
-        return redirect()->route('contracts.generate.index')
-            ->with('info', 'Por favor, inicie o processo de geração selecionando um licenciado.');
-    }
-
-    /**
-     * Processar Etapa 3: Gerar e salvar o contrato
-     */
-    public function generateStep3(Request $request)
-    {
-        // DEBUG: Log dos dados recebidos
-        \Log::info('🔍 DEBUG generateStep3 - Dados recebidos:', [
-            'all_data' => $request->all(),
-            'licenciado_id' => $request->get('licenciado_id'),
-            'template_id' => $request->get('template_id'),
-            'observacoes_admin' => $request->get('observacoes_admin'),
-            'method' => $request->method(),
-            'url' => $request->fullUrl(),
-            'user_id' => auth()->id()
-        ]);
-        
-        \Log::info('🚀 Iniciando processo de geração de contrato', [
-            'contract_will_be_created' => 'yes',
-            'timestamp' => now()
-        ]);
-        
-        $request->validate([
-            'licenciado_id' => 'required|exists:licenciados,id',
-            'template_id' => 'required|exists:contract_templates,id',
-            'observacoes_admin' => 'nullable|string|max:1000'
-        ]);
-
-        try {
-            \Log::info('📝 Buscando licenciado e template...');
-            $licenciado = Licenciado::findOrFail($request->licenciado_id);
-            $template = ContractTemplate::findOrFail($request->template_id);
-            \Log::info('✅ Licenciado e template encontrados', [
-                'licenciado' => $licenciado->razao_social ?? $licenciado->nome_fantasia,
-                'template' => $template->name
-            ]);
-
-            // Preparar dados do contrato
-            \Log::info('🔧 Preparando dados do contrato...');
-            $contractData = $this->prepareContractData($licenciado);
-            \Log::info('✅ Dados preparados', ['data_keys' => array_keys($contractData)]);
-            
-            // Substituir variáveis no template
-            \Log::info('🔄 Substituindo variáveis no template...');
-            $filledContent = $this->replaceTemplateVariables($template->content, $contractData);
-            \Log::info('✅ Template preenchido', ['content_length' => strlen($filledContent)]);
-
-            // Criar o contrato no banco
-            \Log::info('💾 Criando contrato no banco...');
-            $contract = Contract::create([
-                'licenciado_table_id' => $licenciado->id,
-                'template_id' => $template->id,
-                'status' => 'draft',
-                'observacoes_admin' => $request->observacoes_admin,
-                'contract_data' => json_encode($contractData),
-                'meta' => json_encode([
-                    'filled_html' => $filledContent,
-                    'generated_by' => auth()->id(),
-                    'generated_at' => now()->toISOString()
-                ]),
-                'generated_at' => now(),
-                'active' => true
-            ]);
-            \Log::info('✅ Contrato criado no banco', ['contract_id' => $contract->id]);
-
-            // Gerar PDF do contrato
-            \Log::info('📄 Iniciando geração de PDF...');
-            $pdfPath = $this->generateContractPDF($contract, $filledContent);
-            \Log::info('✅ PDF gerado', ['pdf_path' => $pdfPath]);
-            
-            // Atualizar contrato com caminho do PDF
-            \Log::info('🔄 Atualizando contrato com PDF...');
-            $contract->update([
-                'contract_pdf_path' => $pdfPath,
-                'status' => 'pdf_ready',
-                'pdf_generated_at' => now()
-            ]);
-            \Log::info('✅ Contrato atualizado com sucesso');
-
-            return redirect()->route('contracts.index')
-                ->with('success', 'Contrato gerado com sucesso! ID: ' . $contract->id . '. Você pode agora enviar para assinatura.');
-
-        } catch (\Exception $e) {
-            \Log::error('❌ ERRO na geração de contrato:', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            return back()->withErrors(['error' => 'Erro ao gerar contrato: ' . $e->getMessage()]);
-        }
-    }
-
-    /**
-     * Preparar dados para substituição no template
-     */
-    private function prepareContractData($source)
-    {
-        // Se for um Contract, pegar o licenciado
-        if ($source instanceof Contract) {
-            $licenciado = $source->licenciado;
-            $contract = $source;
-        } else {
-            // Se for um Licenciado
-            $licenciado = $source;
-            $contract = null;
-        }
-
-        // Dados do licenciado
-        $data = [
-            'NOME' => $licenciado->razao_social ?: $licenciado->nome_fantasia,
-            'DOCUMENTO' => $this->formatDocument($licenciado->cnpj_cpf),
-            'CNPJ' => $this->isCNPJ($licenciado->cnpj_cpf) ? $this->formatDocument($licenciado->cnpj_cpf) : '',
-            'CPF' => $this->isCPF($licenciado->cnpj_cpf) ? $this->formatDocument($licenciado->cnpj_cpf) : '',
-            'ENDERECO' => $licenciado->endereco,
-            'BAIRRO' => $licenciado->bairro,
-            'CIDADE' => $licenciado->cidade,
-            'ESTADO' => $licenciado->estado,
-            'CEP' => $this->formatCEP($licenciado->cep),
-            'EMAIL' => $licenciado->email,
-            'TELEFONE' => $licenciado->telefone,
-        ];
-
-        // Endereço completo
-        $enderecoCompleto = collect([
-            $licenciado->endereco,
-            $licenciado->bairro,
-            $licenciado->cidade,
-            $licenciado->estado
-        ])->filter()->implode(', ');
-        
-        $data['ENDERECO_COMPLETO'] = $enderecoCompleto;
-
-        // Dados do representante (se existir)
-        if ($licenciado->representante_nome) {
-            $data['REPRESENTANTE_NOME'] = $licenciado->representante_nome;
-            $data['REPRESENTANTE_CPF'] = $this->formatDocument($licenciado->representante_cpf);
-            $data['REPRESENTANTE_RG'] = $licenciado->representante_rg;
-            $data['REPRESENTANTE_EMAIL'] = $licenciado->representante_email;
-            $data['REPRESENTANTE_CARGO'] = $licenciado->representante_cargo ?: 'Representante Legal';
-        }
-
-        // Dados da empresa contratante (configuráveis)
-        $data['EMPRESA_NOME'] = config('app.company_name', 'DSPay Soluções em Pagamento');
-        $data['EMPRESA_CNPJ'] = config('app.company_cnpj', '00.000.000/0001-00');
-        $data['EMPRESA_ENDERECO'] = config('app.company_address', 'Endereço da Empresa');
-
-        // Dados do contrato
-        $data['DATA_ATUAL'] = now()->format('d/m/Y');
-        $data['ANO_ATUAL'] = now()->format('Y');
-        
-        if ($contract) {
-            $data['NUMERO_CONTRATO'] = 'DSPAY-' . now()->format('Y') . '-' . str_pad($contract->id, 4, '0', STR_PAD_LEFT);
-        } else {
-            $data['NUMERO_CONTRATO'] = 'DSPAY-' . now()->format('Y') . '-' . str_pad(Contract::count() + 1, 4, '0', STR_PAD_LEFT);
-        }
-        
-        $data['VALOR'] = 'A definir'; // Pode ser configurado posteriormente
-
-        // Para compatibilidade com o método antigo
-        if ($contract) {
-            $operacao = Operacao::first();
-            return [
-                'contratante' => [
-                    'nome' => $licenciado->razao_social ?? '',
-                    'cnpj' => $this->formatCNPJ($licenciado->cnpj_cpf ?? ''),
-                    'cnpj_formatted' => $this->formatCNPJ($licenciado->cnpj_cpf ?? ''),
-                    'ie' => '',
-                    'endereco' => $licenciado->endereco ?? '',
-                    'cidade' => $licenciado->cidade ?? '',
-                    'uf' => $licenciado->estado ?? '',
-                    'cep' => $this->formatCEP($licenciado->cep ?? ''),
-                    'cep_formatted' => $this->formatCEP($licenciado->cep ?? '')
-                ],
-                'representante' => [
-                    'nome' => $licenciado->nome_fantasia ?? $licenciado->razao_social ?? '',
-                    'cpf' => '',
-                    'cpf_formatted' => '',
-                    'email' => $licenciado->email ?? '',
-                    'telefone' => $this->formatPhone($licenciado->telefone ?? ''),
-                    'telefone_formatted' => $this->formatPhone($licenciado->telefone ?? '')
-                ],
-                'contratada' => [
-                    'nome' => $operacao->company_name ?? 'DSPAY TECNOLOGIA LTDA',
-                    'cnpj' => $this->formatCNPJ($operacao->cnpj ?? '00.000.000/0001-00'),
-                    'cnpj_formatted' => $this->formatCNPJ($operacao->cnpj ?? '00.000.000/0001-00'),
-                    'endereco' => $operacao->address ?? 'Endereço da empresa',
-                    'cidade' => $operacao->city ?? 'São Paulo',
-                    'uf' => $operacao->state ?? 'SP',
-                    'cep' => $this->formatCEP($operacao->zipcode ?? '00000-000'),
-                    'cep_formatted' => $this->formatCEP($operacao->zipcode ?? '00000-000')
-                ],
-                'contrato' => [
-                    'data' => Carbon::now()->locale('pt_BR')->translatedFormat('j \d\e F \d\e Y'),
-                    'data_formatted' => Carbon::now()->locale('pt_BR')->translatedFormat('j \d\e F \d\e Y'),
-                    'id' => str_pad($contract->id, 6, '0', STR_PAD_LEFT),
-                    'id_formatted' => 'CONT-' . str_pad($contract->id, 6, '0', STR_PAD_LEFT),
-                    'hash' => $contract->contract_hash ?? 'PREVIEW'
-                ],
-                'licensee' => $licenciado,
-                'operation' => $operacao,
-                'contract' => $contract
-            ];
-        }
-
-        return $data;
-    }
-
-    /**
-     * Substituir variáveis no template
-     */
-    private function replaceTemplateVariables(string $content, array $data): string
-    {
-        foreach ($data as $variable => $value) {
-            $content = str_replace([
-                '{{' . $variable . '}}',
-                '{' . $variable . '}'
-            ], $value, $content);
-        }
-
-        return $content;
-    }
-
-    /**
-     * Gerar PDF do contrato
-     */
-    private function generateContractPDF(Contract $contract, string $htmlContent): string
-    {
-        try {
-            // Sanitizar HTML
-            $cleanHtml = $this->sanitizeHtml($htmlContent);
-            
-            // Log para debug
-            \Log::info('📄 Iniciando geração de PDF', [
-                'contract_id' => $contract->id,
-                'html_length' => strlen($cleanHtml)
-            ]);
-            
-            // Gerar PDF
-            $pdf = Pdf::loadHTML($cleanHtml);
-            $pdf->setPaper('A4', 'portrait');
-            
-            // Definir caminho do arquivo
-            $fileName = 'contract_' . $contract->id . '_' . time() . '.pdf';
-            $filePath = 'contracts/pdf/' . $fileName;
-            
-            // Garantir que o diretório existe
-            $fullDir = storage_path('app/contracts/pdf');
-            if (!is_dir($fullDir)) {
-                mkdir($fullDir, 0755, true);
-            }
-            
-            // Gerar conteúdo do PDF
-            $pdfContent = $pdf->output();
-            $fullPath = storage_path('app/' . $filePath);
-            
-            \Log::info('📄 Tentando salvar PDF', [
-                'file_path' => $filePath,
-                'full_path' => $fullPath,
-                'pdf_size' => strlen($pdfContent),
-                'dir_exists' => is_dir($fullDir),
-                'dir_writable' => is_writable($fullDir)
-            ]);
-            
-            // Usar file_put_contents ao invés de Storage::put para debugging
-            $bytesWritten = file_put_contents($fullPath, $pdfContent);
-            
-            \Log::info('📄 Resultado do salvamento', [
-                'bytes_written' => $bytesWritten,
-                'file_exists_after' => file_exists($fullPath),
-                'file_size_after' => file_exists($fullPath) ? filesize($fullPath) : 0
-            ]);
-            
-            if (!file_exists($fullPath) || $bytesWritten === false) {
-                throw new \Exception('PDF não foi salvo corretamente: ' . $fullPath . ' (bytes: ' . $bytesWritten . ')');
-            }
-            
-            \Log::info('✅ PDF gerado com sucesso', [
-                'contract_id' => $contract->id,
-                'file_path' => $filePath,
-                'file_size' => filesize($fullPath)
-            ]);
-            
-            return $filePath;
-            
-        } catch (\Exception $e) {
-            \Log::error('❌ Erro ao gerar PDF', [
-                'contract_id' => $contract->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            throw $e;
-        }
-    }
-
-    /**
-     * Verificar se é CNPJ
-     */
-    private function isCNPJ(string $document): bool
-    {
-        $document = preg_replace('/\D/', '', $document);
-        return strlen($document) === 14;
-    }
-
-    /**
-     * Verificar se é CPF
-     */
-    private function isCPF(string $document): bool
-    {
-        $document = preg_replace('/\D/', '', $document);
-        return strlen($document) === 11;
-    }
-
-    /**
-     * Formatar CEP
-     */
-    private function formatCEP(string $cep): string
-    {
-        $cep = preg_replace('/\D/', '', $cep);
-        if (strlen($cep) === 8) {
-            return substr($cep, 0, 5) . '-' . substr($cep, 5);
-        }
-        return $cep;
     }
 
     public function store(Request $request)
@@ -718,6 +283,53 @@ class ContractController extends Controller
         return $template->validateRequiredFields($contractData);
     }
 
+    private function prepareContractData(Contract $contract): array
+    {
+        $licenciado = $contract->licenciado;
+        $operacao = Operacao::first(); // Pegar operação padrão ou configurar
+
+        return [
+            'contratante' => [
+                'nome' => $licenciado->razao_social ?? '',
+                'cnpj' => $this->formatCNPJ($licenciado->cnpj_cpf ?? ''),
+                'cnpj_formatted' => $this->formatCNPJ($licenciado->cnpj_cpf ?? ''),
+                'ie' => '', // Campo não existe na tabela licenciados
+                'endereco' => $licenciado->endereco ?? '',
+                'cidade' => $licenciado->cidade ?? '',
+                'uf' => $licenciado->estado ?? '',
+                'cep' => $this->formatCEP($licenciado->cep ?? ''),
+                'cep_formatted' => $this->formatCEP($licenciado->cep ?? '')
+            ],
+            'representante' => [
+                'nome' => $licenciado->nome_fantasia ?? $licenciado->razao_social ?? '',
+                'cpf' => '', // Campo não existe na tabela licenciados
+                'cpf_formatted' => '',
+                'email' => $licenciado->email ?? '',
+                'telefone' => $this->formatPhone($licenciado->telefone ?? ''),
+                'telefone_formatted' => $this->formatPhone($licenciado->telefone ?? '')
+            ],
+            'contratada' => [
+                'nome' => $operacao->company_name ?? 'DSPAY TECNOLOGIA LTDA',
+                'cnpj' => $this->formatCNPJ($operacao->cnpj ?? '00.000.000/0001-00'),
+                'cnpj_formatted' => $this->formatCNPJ($operacao->cnpj ?? '00.000.000/0001-00'),
+                'endereco' => $operacao->address ?? 'Endereço da empresa',
+                'cidade' => $operacao->city ?? 'São Paulo',
+                'uf' => $operacao->state ?? 'SP',
+                'cep' => $this->formatCEP($operacao->zipcode ?? '00000-000'),
+                'cep_formatted' => $this->formatCEP($operacao->zipcode ?? '00000-000')
+            ],
+            'contrato' => [
+                'data' => Carbon::now()->locale('pt_BR')->translatedFormat('j \d\e F \d\e Y'),
+                'data_formatted' => Carbon::now()->locale('pt_BR')->translatedFormat('j \d\e F \d\e Y'),
+                'id' => str_pad($contract->id, 6, '0', STR_PAD_LEFT),
+                'id_formatted' => 'CONT-' . str_pad($contract->id, 6, '0', STR_PAD_LEFT),
+                'hash' => $contract->contract_hash ?? 'PREVIEW'
+            ],
+            'licensee' => $licenciado,
+            'operation' => $operacao,
+            'contract' => $contract
+        ];
+    }
 
     private function generatePDF(ContractTemplate $template, array $data)
     {
@@ -794,6 +406,14 @@ class ContractController extends Controller
         return $cpf;
     }
 
+    private function formatCEP(string $cep): string
+    {
+        $cep = preg_replace('/\D/', '', $cep);
+        if (strlen($cep) === 8) {
+            return preg_replace('/(\d{5})(\d{3})/', '$1-$2', $cep);
+        }
+        return $cep;
+    }
 
     private function formatPhone(string $phone): string
     {
@@ -810,33 +430,13 @@ class ContractController extends Controller
     {
         $filePath = $contract->signed_contract_path ?? $contract->contract_pdf_path;
         
-        if (!$filePath) {
+        if (!$filePath || !Storage::disk('private')->exists($filePath)) {
             return redirect()->back()->withErrors(['error' => 'Arquivo não encontrado.']);
         }
-        
-        // Caminho completo do arquivo
-        $fullPath = storage_path('app/' . $filePath);
-        
-        if (!file_exists($fullPath)) {
-            \Log::error('📥 Erro no download - arquivo não existe', [
-                'contract_id' => $contract->id,
-                'file_path' => $filePath,
-                'full_path' => $fullPath,
-                'user_id' => auth()->id()
-            ]);
-            return redirect()->back()->withErrors(['error' => 'Arquivo não encontrado no servidor.']);
-        }
 
-        $fileName = $contract->signed_contract_path ? 'Contrato_Assinado_' . str_pad($contract->id, 6, '0', STR_PAD_LEFT) . '.pdf' : 'Contrato_' . str_pad($contract->id, 6, '0', STR_PAD_LEFT) . '.pdf';
+        $fileName = $contract->signed_contract_path ? 'contrato_assinado.pdf' : 'contrato.pdf';
         
-        \Log::info('📥 Download de contrato', [
-            'contract_id' => $contract->id,
-            'licenciado' => $contract->licenciado->razao_social ?? $contract->licenciado->nome_fantasia,
-            'file_name' => $fileName,
-            'user_id' => auth()->id()
-        ]);
-        
-        return response()->download($fullPath, $fileName);
+        return Storage::disk('private')->download($filePath, $fileName);
     }
 
     public function updateNotes(Request $request, Contract $contract)
@@ -909,6 +509,29 @@ class ContractController extends Controller
         }
     }
 
+    private function generateContractPDF(Contract $contract)
+    {
+        // Preparar dados do contrato
+        $contractData = $this->prepareContractData($contract);
+        
+        // Obter template padrão
+        $template = ContractTemplate::getDefault();
+        
+        if (!$template) {
+            throw new \Exception('Template de contrato não encontrado.');
+        }
+
+        // Gerar PDF usando DomPDF
+        $pdf = $this->generatePDF($template, $contractData);
+        
+        // Salvar PDF no storage privado
+        $fileName = 'contract_' . $contract->id . '_' . time() . '.pdf';
+        $filePath = 'contracts/' . $fileName;
+        
+        Storage::disk('private')->put($filePath, $pdf->output());
+        
+        return $filePath;
+    }
 
     private function sendContractByEmail(Contract $contract)
     {
@@ -1563,53 +1186,415 @@ class ContractController extends Controller
         }
     }
 
-    /**
-     * Excluir contrato
-     */
-    public function destroy(Contract $contract)
+    // Novos endpoints para steps encadeados
+    public function uploadTemplate(Request $request, Contract $contract)
     {
         try {
-            // Log da exclusão para auditoria
-            \Log::info('🗑️ Exclusão de contrato', [
-                'contract_id' => $contract->id,
-                'licenciado' => $contract->licenciado->razao_social ?? $contract->licenciado->nome_fantasia,
-                'status' => $contract->status,
-                'user_id' => auth()->id(),
-                'user_name' => auth()->user()->name
+            $request->validate([
+                'template' => 'required|file|mimes:blade,html,docx|max:10240', // 10MB max
             ]);
 
-            // Remover arquivos físicos se existirem
-            if ($contract->contract_pdf_path) {
-                $pdfPath = storage_path('app/' . $contract->contract_pdf_path);
-                if (file_exists($pdfPath)) {
-                    unlink($pdfPath);
-                    \Log::info('📄 Arquivo PDF removido', ['path' => $contract->contract_pdf_path]);
-                }
+            if ($contract->status !== 'criado') {
+                return response()->json(['error' => 'Contrato não está no status correto para upload de template.'], 400);
             }
 
-            if ($contract->signed_contract_path) {
-                $signedPath = storage_path('app/' . $contract->signed_contract_path);
-                if (file_exists($signedPath)) {
-                    unlink($signedPath);
-                    \Log::info('📄 Arquivo assinado removido', ['path' => $contract->signed_contract_path]);
-                }
-            }
+            $file = $request->file('template');
+            $filename = 'template_' . $contract->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('contracts/templates', $filename);
 
-            // Excluir o contrato
-            $contract->delete();
+            $contract->update([
+                'status' => 'template_uploaded',
+                'template_path' => $path,
+                'meta' => json_encode(array_merge(
+                    json_decode($contract->meta ?? '{}', true),
+                    ['template_original_name' => $file->getClientOriginalName()]
+                ))
+            ]);
 
-            return redirect()->route('contracts.index')
-                ->with('success', 'Contrato excluído com sucesso!');
+            $contract->logAction(
+                'template_uploaded',
+                'Template de contrato carregado: ' . $file->getClientOriginalName(),
+                auth()->id(),
+                ['template_path' => $path, 'original_name' => $file->getClientOriginalName()]
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Template carregado com sucesso!',
+                'template_name' => $file->getClientOriginalName(),
+                'contract' => $contract->fresh()
+            ]);
 
         } catch (\Exception $e) {
-            \Log::error('❌ Erro ao excluir contrato', [
+            \Log::error('Erro ao fazer upload do template: ' . $e->getMessage(), [
                 'contract_id' => $contract->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'error' => $e->getTraceAsString()
             ]);
 
-            return redirect()->back()
-                ->with('error', 'Erro ao excluir contrato: ' . $e->getMessage());
+            $contract->update([
+                'status' => 'error',
+                'last_error' => $e->getMessage()
+            ]);
+
+            return response()->json(['error' => 'Erro ao fazer upload: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function fillTemplate(Request $request, Contract $contract)
+    {
+        try {
+            if ($contract->status !== 'template_uploaded') {
+                return response()->json(['error' => 'Template deve ser carregado antes do preenchimento.'], 400);
+            }
+
+            if (!$contract->template_path || !Storage::exists($contract->template_path)) {
+                return response()->json(['error' => 'Template não encontrado.'], 400);
+            }
+
+            // Ler template
+            $templateContent = Storage::get($contract->template_path);
+            
+            // Preparar dados do licenciado
+            $licensee = $contract->licenciado;
+            $placeholders = [
+                '{{NOME}}' => $licensee->razao_social ?? $licensee->nome_fantasia ?? 'Nome não informado',
+                '{{DOCUMENTO}}' => $this->formatDocument($licensee->cnpj_cpf ?? ''),
+                '{{ENDERECO_COMPLETO}}' => $this->buildFullAddress($licensee),
+                '{{CEP}}' => $this->formatCEP($licensee->cep ?? ''),
+            ];
+
+            // Substituir placeholders
+            $filledHtml = $templateContent;
+            foreach ($placeholders as $placeholder => $value) {
+                $filledHtml = str_replace($placeholder, $value, $filledHtml);
+            }
+
+            // Sanitizar HTML
+            $filledHtml = $this->sanitizeHtml($filledHtml);
+
+            // Salvar HTML preenchido
+            $contract->update([
+                'status' => 'filled',
+                'meta' => json_encode(array_merge(
+                    json_decode($contract->meta ?? '{}', true),
+                    [
+                        'filled_html' => $filledHtml,
+                        'placeholders_used' => $placeholders,
+                        'filled_at' => now()->toISOString()
+                    ]
+                ))
+            ]);
+
+            $contract->logAction(
+                'template_filled',
+                'Template preenchido com dados do licenciado',
+                auth()->id(),
+                ['placeholders_count' => count($placeholders)]
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Template preenchido com sucesso!',
+                'preview_html' => $this->generateSafePreview($filledHtml),
+                'contract' => $contract->fresh()
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Erro ao preencher template: ' . $e->getMessage(), [
+                'contract_id' => $contract->id,
+                'error' => $e->getTraceAsString()
+            ]);
+
+            $contract->update([
+                'status' => 'error',
+                'last_error' => $e->getMessage()
+            ]);
+
+            return response()->json(['error' => 'Erro ao preencher template: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function generatePdfFromTemplate(Request $request, Contract $contract)
+    {
+        try {
+            if ($contract->status !== 'filled') {
+                return response()->json(['error' => 'Template deve ser preenchido antes da geração do PDF.'], 400);
+            }
+
+            $meta = json_decode($contract->meta ?? '{}', true);
+            if (!isset($meta['filled_html'])) {
+                return response()->json(['error' => 'HTML preenchido não encontrado.'], 400);
+            }
+
+            // Gerar PDF usando DomPDF
+            $pdf = Pdf::loadHTML($meta['filled_html']);
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'dpi' => 150,
+                'defaultFont' => 'sans-serif',
+                'isRemoteEnabled' => false,
+                'isHtml5ParserEnabled' => true
+            ]);
+
+            // Salvar PDF
+            $pdfFilename = 'contract_' . $contract->id . '_' . time() . '.pdf';
+            $pdfPath = 'contracts/pdf/' . $pdfFilename;
+            Storage::put($pdfPath, $pdf->output());
+
+            $contract->update([
+                'status' => 'pdf_ready',
+                'pdf_path' => $pdfPath,
+                'meta' => json_encode(array_merge($meta, [
+                    'pdf_generated_at' => now()->toISOString(),
+                    'pdf_filename' => $pdfFilename
+                ]))
+            ]);
+
+            $contract->logAction(
+                'pdf_generated',
+                'PDF do contrato gerado com sucesso',
+                auth()->id(),
+                ['pdf_path' => $pdfPath, 'pdf_size' => Storage::size($pdfPath)]
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'PDF gerado com sucesso!',
+                'pdf_url' => route('contracts.download', $contract),
+                'contract' => $contract->fresh()
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Erro ao gerar PDF: ' . $e->getMessage(), [
+                'contract_id' => $contract->id,
+                'error' => $e->getTraceAsString()
+            ]);
+
+            $contract->update([
+                'status' => 'error',
+                'last_error' => $e->getMessage()
+            ]);
+
+            return response()->json(['error' => 'Erro ao gerar PDF: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function sendContractEmail(Request $request, Contract $contract)
+    {
+        try {
+            if ($contract->status !== 'pdf_ready') {
+                return response()->json(['error' => 'PDF deve ser gerado antes do envio.'], 400);
+            }
+
+            if (!$contract->pdf_path || !Storage::exists($contract->pdf_path)) {
+                return response()->json(['error' => 'PDF não encontrado.'], 400);
+            }
+
+            // Gerar token de assinatura se não existir
+            if (!$contract->signature_token) {
+                $contract->generateSignatureToken();
+            }
+
+            // Enviar email
+            $this->sendContractByEmail($contract);
+
+            $contract->update([
+                'status' => 'sent',
+                'sent_at' => now()
+            ]);
+
+            $contract->logAction(
+                'email_sent',
+                'Contrato enviado por email para assinatura',
+                auth()->id(),
+                [
+                    'email_destinatario' => $contract->licenciado->email,
+                    'signature_url' => route('contracts.sign.show', $contract->signature_token),
+                    'sent_at' => now()->toISOString()
+                ]
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Contrato enviado por email com sucesso!',
+                'sent_to' => $contract->licenciado->email,
+                'sent_at' => $contract->sent_at->format('d/m/Y H:i:s'),
+                'contract' => $contract->fresh()
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Erro ao enviar email: ' . $e->getMessage(), [
+                'contract_id' => $contract->id,
+                'error' => $e->getTraceAsString()
+            ]);
+
+            $contract->update([
+                'status' => 'error',
+                'last_error' => $e->getMessage()
+            ]);
+
+            return response()->json(['error' => 'Erro ao enviar email: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function checkSignatureStatus(Contract $contract)
+    {
+        try {
+            $status = 'pending';
+            $signatureData = null;
+
+            if ($contract->status === 'signed') {
+                $status = 'signed';
+                $signatureData = json_decode($contract->signature_data ?? '{}', true);
+            } elseif ($contract->status === 'error') {
+                $status = 'error';
+            }
+
+            return response()->json([
+                'status' => $status,
+                'contract_status' => $contract->status,
+                'signed_at' => $contract->signed_at?->format('d/m/Y H:i:s'),
+                'signature_data' => $signatureData,
+                'can_approve' => $contract->status === 'signed',
+                'contract' => $contract->fresh()
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Erro ao verificar status de assinatura: ' . $e->getMessage(), [
+                'contract_id' => $contract->id
+            ]);
+
+            return response()->json(['error' => 'Erro ao verificar status'], 500);
+        }
+    }
+
+    public function approveContract(Request $request, Contract $contract)
+    {
+        try {
+            if ($contract->status !== 'signed') {
+                return response()->json(['error' => 'Contrato deve estar assinado para aprovação.'], 400);
+            }
+
+            // Aprovar contrato
+            $contract->update([
+                'status' => 'approved',
+                'approved_at' => now()
+            ]);
+
+            // Atualizar status do licenciado
+            $licensee = $contract->licenciado;
+            if ($licensee) {
+                $licensee->update(['status' => 'ativo']);
+            }
+
+            $contract->logAction(
+                'contract_approved',
+                'Contrato aprovado e licenciado liberado',
+                auth()->id(),
+                [
+                    'approved_at' => now()->toISOString(),
+                    'licensee_status_updated' => 'ativo'
+                ]
+            );
+
+            // Enviar email de aprovação (opcional)
+            $this->sendApprovalEmail($contract);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Contrato aprovado e licenciado liberado com sucesso!',
+                'approved_at' => $contract->approved_at->format('d/m/Y H:i:s'),
+                'licensee_url' => route('licenciados.show', $contract->licenciado),
+                'contract' => $contract->fresh()
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Erro ao aprovar contrato: ' . $e->getMessage(), [
+                'contract_id' => $contract->id,
+                'error' => $e->getTraceAsString()
+            ]);
+
+            return response()->json(['error' => 'Erro ao aprovar contrato: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function signatureWebhook(Request $request)
+    {
+        try {
+            // Validar webhook (implementar conforme provedor de assinatura)
+            $contractId = $request->input('contract_id');
+            $status = $request->input('status');
+            $signatureData = $request->input('signature_data', []);
+
+            $contract = Contract::find($contractId);
+            if (!$contract) {
+                return response()->json(['error' => 'Contrato não encontrado'], 404);
+            }
+
+            if ($status === 'signed') {
+                $contract->update([
+                    'status' => 'signed',
+                    'signed_at' => now(),
+                    'signature_data' => json_encode($signatureData)
+                ]);
+
+                $contract->logAction(
+                    'signature_received',
+                    'Assinatura recebida via webhook',
+                    null,
+                    $signatureData
+                );
+            }
+
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            \Log::error('Erro no webhook de assinatura: ' . $e->getMessage(), [
+                'request_data' => $request->all(),
+                'error' => $e->getTraceAsString()
+            ]);
+
+            return response()->json(['error' => 'Erro interno'], 500);
+        }
+    }
+
+
+
+    private function sanitizeHtml(string $html): string
+    {
+        // Remover scripts e outros elementos perigosos
+        $html = preg_replace('/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/mi', '', $html);
+        $html = preg_replace('/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/mi', '', $html);
+        $html = preg_replace('/on\w+="[^"]*"/mi', '', $html);
+        $html = preg_replace('/on\w+=\'[^\']*\'/mi', '', $html);
+        
+        return $html;
+    }
+
+    private function generateSafePreview(string $html): string
+    {
+        // Truncar HTML para preview
+        $preview = strip_tags($html, '<p><br><div><span><strong><em><ul><li><h1><h2><h3><h4><h5><h6>');
+        return substr($preview, 0, 1000) . (strlen($preview) > 1000 ? '...' : '');
+    }
+
+    private function sendApprovalEmail(Contract $contract)
+    {
+        // Implementar envio de email de aprovação
+        // Usar o template de email já criado anteriormente
+        try {
+            \Mail::send('emails.licensee-approved', [
+                'licenciado' => $contract->licenciado,
+                'contract' => $contract,
+                'company_name' => config('app.name'),
+                'approval_date' => now()
+            ], function ($message) use ($contract) {
+                $message->to($contract->licenciado->email, $contract->licenciado->razao_social)
+                        ->subject('Parabéns! Seu contrato foi aprovado - ' . config('app.name'))
+                        ->from(config('mail.from.address'), config('mail.from.name'));
+            });
+        } catch (\Exception $e) {
+            \Log::error('Erro ao enviar email de aprovação: ' . $e->getMessage());
         }
     }
 

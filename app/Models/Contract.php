@@ -37,7 +37,15 @@ class Contract extends Model
         'signature_data',
         'contract_data',
         'provider_response',
-        'active'
+        'active',
+        'meta',
+        'last_error',
+        'filled_at',
+        'pdf_generated_at',
+        'approved_at',
+        'template_path',
+        'pdf_path',
+        'signed_at'
     ];
 
     protected $casts = [
@@ -51,7 +59,10 @@ class Contract extends Model
         'resent_at' => 'datetime',
         'contract_sent_at' => 'datetime',
         'contract_signed_at' => 'datetime',
-        'licenciado_released_at' => 'datetime'
+        'licenciado_released_at' => 'datetime',
+        'signed_at' => 'datetime',
+        'approved_at' => 'datetime',
+        'meta' => 'array'
     ];
 
     // Relacionamentos
@@ -100,14 +111,21 @@ class Contract extends Model
     public function getStatusLabelAttribute()
     {
         return match($this->status) {
-            'documentos_pendentes' => 'Documentos Pendentes',
-            'documentos_enviados' => 'Documentos Enviados',
-            'documentos_em_analise' => 'Documentos em Análise',
-            'documentos_aprovados' => 'Documentos Aprovados',
-            'documentos_rejeitados' => 'Documentos Rejeitados',
+            'draft' => 'Rascunho',
+            'criado' => 'Licenciado Selecionado',
+            'template_uploaded' => 'Template Carregado',
+            'filled' => 'Template Preenchido',
+            'pdf_ready' => 'PDF Gerado',
+            'sent' => 'Enviado por Email',
+            'signed' => 'Assinado',
+            'approved' => 'Aprovado',
+            'error' => 'Erro',
+            'cancelado' => 'Cancelado',
+            // Status antigos (compatibilidade)
             'contrato_enviado' => 'Contrato Enviado',
+            'aguardando_assinatura' => 'Aguardando Assinatura',
             'contrato_assinado' => 'Contrato Assinado',
-            'licenciado_liberado' => 'Licenciado Liberado',
+            'licenciado_aprovado' => 'Licenciado Aprovado',
             default => 'Status Desconhecido'
         };
     }
@@ -115,14 +133,21 @@ class Contract extends Model
     public function getStatusColorAttribute()
     {
         return match($this->status) {
-            'documentos_pendentes' => 'bg-gray-100 text-gray-800',
-            'documentos_enviados' => 'bg-blue-100 text-blue-800',
-            'documentos_em_analise' => 'bg-yellow-100 text-yellow-800',
-            'documentos_aprovados' => 'bg-green-100 text-green-800',
-            'documentos_rejeitados' => 'bg-red-100 text-red-800',
-            'contrato_enviado' => 'bg-purple-100 text-purple-800',
-            'contrato_assinado' => 'bg-indigo-100 text-indigo-800',
-            'licenciado_liberado' => 'bg-emerald-100 text-emerald-800',
+            'draft' => 'bg-gray-100 text-gray-800',
+            'criado' => 'bg-blue-100 text-blue-800',
+            'template_uploaded' => 'bg-indigo-100 text-indigo-800',
+            'filled' => 'bg-purple-100 text-purple-800',
+            'pdf_ready' => 'bg-pink-100 text-pink-800',
+            'sent' => 'bg-orange-100 text-orange-800',
+            'signed' => 'bg-green-100 text-green-800',
+            'approved' => 'bg-emerald-100 text-emerald-800',
+            'error' => 'bg-red-100 text-red-800',
+            'cancelado' => 'bg-red-100 text-red-800',
+            // Status antigos (compatibilidade)
+            'contrato_enviado' => 'bg-blue-100 text-blue-800',
+            'aguardando_assinatura' => 'bg-yellow-100 text-yellow-800',
+            'contrato_assinado' => 'bg-green-100 text-green-800',
+            'licenciado_aprovado' => 'bg-emerald-100 text-emerald-800',
             default => 'bg-gray-100 text-gray-800'
         };
     }
@@ -130,14 +155,21 @@ class Contract extends Model
     public function getProgressPercentageAttribute()
     {
         return match($this->status) {
-            'documentos_pendentes' => 10,
-            'documentos_enviados' => 20,
-            'documentos_em_analise' => 35,
-            'documentos_aprovados' => 50,
-            'documentos_rejeitados' => 25,
-            'contrato_enviado' => 70,
-            'contrato_assinado' => 85,
-            'licenciado_liberado' => 100,
+            'draft' => 0,
+            'criado' => 14,              // Step 1: Licenciado selecionado
+            'template_uploaded' => 28,   // Step 2: Template enviado
+            'filled' => 42,              // Step 3: Template preenchido
+            'pdf_ready' => 57,           // Step 4: PDF gerado
+            'sent' => 71,                // Step 5: Email enviado
+            'signed' => 85,              // Step 6: Assinado
+            'approved' => 100,           // Step 7: Aprovado
+            'error' => 0,
+            'cancelado' => 0,
+            // Status antigos (compatibilidade)
+            'contrato_enviado' => 50,
+            'aguardando_assinatura' => 75,
+            'contrato_assinado' => 90,
+            'licenciado_aprovado' => 100,
             default => 0
         };
     }
@@ -151,7 +183,7 @@ class Contract extends Model
 
     public function canSendContract()
     {
-        return $this->status === 'documentos_aprovados';
+        return $this->status === 'criado';
     }
 
     public function canApproveDocuments()

@@ -57,34 +57,14 @@
                     <div class="stat-card rounded-xl p-4 text-white">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-white/80 text-sm">Pendentes</p>
-                                <p class="text-2xl font-bold">{{ $statusStats['documentos_pendentes'] }}</p>
+                                <p class="text-white/80 text-sm">Criados</p>
+                                <p class="text-2xl font-bold">{{ $statusStats['criado'] }}</p>
                             </div>
-                            <i class="fas fa-clock text-white/60 text-2xl"></i>
+                            <i class="fas fa-plus text-white/60 text-2xl"></i>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-4 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-white/80 text-sm">Em Análise</p>
-                                <p class="text-2xl font-bold">{{ $statusStats['documentos_em_analise'] }}</p>
-                            </div>
-                            <i class="fas fa-search text-white/60 text-2xl"></i>
-                        </div>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-4 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-white/80 text-sm">Aprovados</p>
-                                <p class="text-2xl font-bold">{{ $statusStats['documentos_aprovados'] }}</p>
-                            </div>
-                            <i class="fas fa-check-circle text-white/60 text-2xl"></i>
-                        </div>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-4 text-white">
+                    <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-4 text-white">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Enviados</p>
@@ -94,7 +74,17 @@
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl p-4 text-white">
+                    <div class="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-4 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/80 text-sm">Aguardando</p>
+                                <p class="text-2xl font-bold">{{ $statusStats['aguardando_assinatura'] }}</p>
+                            </div>
+                            <i class="fas fa-clock text-white/60 text-2xl"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-4 text-white">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Assinados</p>
@@ -107,10 +97,20 @@
                     <div class="bg-gradient-to-br from-emerald-600 to-green-700 rounded-xl p-4 text-white">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-white/80 text-sm">Liberados</p>
-                                <p class="text-2xl font-bold">{{ $statusStats['licenciado_liberado'] }}</p>
+                                <p class="text-white/80 text-sm">Aprovados</p>
+                                <p class="text-2xl font-bold">{{ $statusStats['licenciado_aprovado'] }}</p>
                             </div>
-                            <i class="fas fa-unlock text-white/60 text-2xl"></i>
+                            <i class="fas fa-check-circle text-white/60 text-2xl"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-red-500 to-pink-600 rounded-xl p-4 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/80 text-sm">Cancelados</p>
+                                <p class="text-2xl font-bold">{{ $statusStats['cancelado'] }}</p>
+                            </div>
+                            <i class="fas fa-times text-white/60 text-2xl"></i>
                         </div>
                     </div>
                 </div>
@@ -128,13 +128,12 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                             <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                 <option value="">Todos os status</option>
-                                <option value="documentos_pendentes" {{ request('status') === 'documentos_pendentes' ? 'selected' : '' }}>Documentos Pendentes</option>
-                                <option value="documentos_enviados" {{ request('status') === 'documentos_enviados' ? 'selected' : '' }}>Documentos Enviados</option>
-                                <option value="documentos_em_analise" {{ request('status') === 'documentos_em_analise' ? 'selected' : '' }}>Em Análise</option>
-                                <option value="documentos_aprovados" {{ request('status') === 'documentos_aprovados' ? 'selected' : '' }}>Documentos Aprovados</option>
+                                <option value="criado" {{ request('status') === 'criado' ? 'selected' : '' }}>Contrato Criado</option>
                                 <option value="contrato_enviado" {{ request('status') === 'contrato_enviado' ? 'selected' : '' }}>Contrato Enviado</option>
+                                <option value="aguardando_assinatura" {{ request('status') === 'aguardando_assinatura' ? 'selected' : '' }}>Aguardando Assinatura</option>
                                 <option value="contrato_assinado" {{ request('status') === 'contrato_assinado' ? 'selected' : '' }}>Contrato Assinado</option>
-                                <option value="licenciado_liberado" {{ request('status') === 'licenciado_liberado' ? 'selected' : '' }}>Licenciado Liberado</option>
+                                <option value="licenciado_aprovado" {{ request('status') === 'licenciado_aprovado' ? 'selected' : '' }}>Licenciado Aprovado</option>
+                                <option value="cancelado" {{ request('status') === 'cancelado' ? 'selected' : '' }}>Cancelado</option>
                             </select>
                         </div>
                         <div class="flex items-end">
@@ -203,6 +202,12 @@
                                                         <i class="fas fa-check mr-1"></i>Pronto
                                                     </span>
                                                 @endif
+                                                
+                                                <!-- Botão de Excluir -->
+                                                <button onclick="confirmDelete({{ $contract->id }}, '{{ $contract->licenciado->name }}')" 
+                                                        class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg text-sm transition-colors">
+                                                    <i class="fas fa-trash mr-1"></i>Excluir
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -233,5 +238,77 @@
             </main>
         </div>
     </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl max-w-md w-full p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-exclamation-triangle text-red-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Confirmar Exclusão</h3>
+                </div>
+                
+                <p class="text-gray-600 mb-6">
+                    Tem certeza que deseja excluir o contrato do licenciado <strong id="contractLicensee"></strong>?
+                    <br><br>
+                    <span class="text-red-600 font-medium">Esta ação não pode ser desfeita e removerá todos os arquivos relacionados.</span>
+                </p>
+                
+                <div class="flex justify-end space-x-3">
+                    <button onclick="closeDeleteModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors">
+                        Cancelar
+                    </button>
+                    <button onclick="executeDelete()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-trash mr-2"></i>Excluir Contrato
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulário oculto para DELETE -->
+    <form id="deleteForm" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    <script>
+        let contractToDelete = null;
+
+        function confirmDelete(contractId, licenseeName) {
+            contractToDelete = contractId;
+            document.getElementById('contractLicensee').textContent = licenseeName;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            contractToDelete = null;
+        }
+
+        function executeDelete() {
+            if (contractToDelete) {
+                const form = document.getElementById('deleteForm');
+                form.action = `/contracts/${contractToDelete}`;
+                form.submit();
+            }
+        }
+
+        // Fechar modal ao clicar fora
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+    </script>
 </body>
 </html>

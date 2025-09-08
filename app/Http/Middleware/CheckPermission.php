@@ -13,7 +13,7 @@ class CheckPermission
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $permission = null, string $module = null, string $action = null): Response
+    public function handle(Request $request, Closure $next, ?string $permission = null, ?string $module = null, ?string $action = null): Response
     {
         $user = $request->user();
 

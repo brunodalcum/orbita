@@ -18,11 +18,15 @@ class ContractTemplate extends Model
         'placeholders_json',
         'content',
         'is_active',
-        'description'
+        'description',
+        'variables',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
         'placeholders_json' => 'array',
+        'variables' => 'array',
         'is_active' => 'boolean'
     ];
 
@@ -30,6 +34,16 @@ class ContractTemplate extends Model
     public function contracts(): HasMany
     {
         return $this->hasMany(Contract::class, 'template_id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     // Scopes

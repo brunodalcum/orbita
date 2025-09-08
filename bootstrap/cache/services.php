@@ -40,6 +40,7 @@
     36 => 'App\\Providers\\FortifyServiceProvider',
     37 => 'App\\Providers\\GoogleServiceProvider',
     38 => 'App\\Providers\\JetstreamServiceProvider',
+    39 => 'App\\Providers\\ViteServiceProvider',
   ),
   'eager' => 
   array (
@@ -67,6 +68,7 @@
     21 => 'App\\Providers\\FortifyServiceProvider',
     22 => 'App\\Providers\\GoogleServiceProvider',
     23 => 'App\\Providers\\JetstreamServiceProvider',
+    24 => 'App\\Providers\\ViteServiceProvider',
   ),
   'deferred' => 
   array (

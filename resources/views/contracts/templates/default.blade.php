@@ -120,14 +120,16 @@
 
         <div class="party">
             <div class="party-title">Contratante (Licenciado):</div>
-            <div class="party-info"><strong>{{ $contratante['nome'] ?? 'Nome não informado' }}</strong></div>
-            <div class="party-info">CNPJ: {{ $contratante['cnpj'] ?? 'CNPJ não informado' }}</div>
-            @if(!empty($contratante['ie']))
-            <div class="party-info">Inscrição Estadual: {{ $contratante['ie'] }}</div>
+            <div class="party-info"><strong>{{NOME}}</strong></div>
+            <div class="party-info">CNPJ/CPF: {{CNPJ}}</div>
+            <div class="party-info">Endereço: {{ENDERECO}}</div>
+            <div class="party-info">CONCEP: {{CONCEP}}</div>
+            @if(!empty($contratante['email']))
+            <div class="party-info">E-mail: {{ $contratante['email'] }}</div>
             @endif
-            <div class="party-info">Endereço: {{ $contratante['endereco'] ?? 'Endereço não informado' }}</div>
-            <div class="party-info">Cidade: {{ $contratante['cidade'] ?? 'Cidade não informada' }}/{{ $contratante['uf'] ?? 'UF' }}</div>
-            <div class="party-info">CEP: {{ $contratante['cep'] ?? 'CEP não informado' }}</div>
+            @if(!empty($contratante['telefone']))
+            <div class="party-info">Telefone: {{ $contratante['telefone'] }}</div>
+            @endif
         </div>
 
         @if(!empty($representante['nome']))
@@ -231,10 +233,8 @@
             
             <div class="signature-block" style="width: 45%;">
                 <div class="signature-line"></div>
-                <div><strong>{{ $contratante['nome'] ?? 'CONTRATANTE' }}</strong></div>
-                @if(!empty($representante['nome']))
-                <div>{{ $representante['nome'] }}</div>
-                @endif
+                <div><strong>{{NOME}}</strong></div>
+                <div>{{CNPJ}}</div>
                 <div>CONTRATANTE</div>
             </div>
         </div>

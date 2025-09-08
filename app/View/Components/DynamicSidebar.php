@@ -115,6 +115,21 @@ class DynamicSidebar extends Component
                     'route' => 'contracts.create',
                     'permission' => 'contratos.create'
                 ];
+                
+                $submenu[] = [
+                    'name' => 'Gerar Contrato',
+                    'route' => 'contracts.generate.index',
+                    'permission' => 'contratos.create'
+                ];
+            }
+
+            // Adicionar Templates de Contrato no submenu de Contratos
+            if ($this->user->hasPermission('contratos.manage')) {
+                $submenu[] = [
+                    'name' => 'Modelos de Contrato',
+                    'route' => 'contract-templates.index',
+                    'permission' => 'contratos.manage'
+                ];
             }
 
             $menuItems[] = [
@@ -122,7 +137,7 @@ class DynamicSidebar extends Component
                 'icon' => 'fas fa-file-contract',
                 'route' => 'contracts.index',
                 'permissions' => ['contratos.view', 'contratos.create', 'contratos.manage'],
-                'is_active' => request()->routeIs('contracts.*'),
+                'is_active' => request()->routeIs('contracts.*') || request()->routeIs('contract-templates.*'),
                 'submenu' => $submenu
             ];
         }
