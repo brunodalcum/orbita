@@ -185,9 +185,10 @@ class ContractController extends Controller
      */
     public function generateStep3(Request $request)
     {
-        // DEBUG: Log dos dados recebidos
-        \Log::info('🔍 DEBUG generateStep3 - MÉTODO CHAMADO!', [
+        // DEBUG: Log dos dados recebidos - VERSÃO PRODUÇÃO
+        \Log::info('🔍 [PRODUÇÃO] DEBUG generateStep3 - MÉTODO CHAMADO!', [
             'timestamp' => now(),
+            'environment' => app()->environment(),
             'all_data' => $request->all(),
             'licenciado_id' => $request->get('licenciado_id'),
             'template_id' => $request->get('template_id'),
@@ -195,19 +196,33 @@ class ContractController extends Controller
             'method' => $request->method(),
             'url' => $request->fullUrl(),
             'user_id' => auth()->id(),
+            'user_authenticated' => auth()->check(),
             'headers' => $request->headers->all()
         ]);
         
-        \Log::info('🚀 Iniciando processo de geração de contrato', [
+        \Log::info('🚀 [PRODUÇÃO] Iniciando processo de geração de contrato', [
             'contract_will_be_created' => 'yes',
-            'timestamp' => now()
+            'timestamp' => now(),
+            'environment' => app()->environment()
         ]);
         
-        $request->validate([
-            'licenciado_id' => 'required|exists:licenciados,id',
-            'template_id' => 'required|exists:contract_templates,id',
-            'observacoes_admin' => 'nullable|string|max:1000'
-        ]);
+        // Log antes da validação
+        \Log::info('🔍 [PRODUÇÃO] Iniciando validação dos dados...');
+        
+        try {
+            $request->validate([
+                'licenciado_id' => 'required|exists:licenciados,id',
+                'template_id' => 'required|exists:contract_templates,id',
+                'observacoes_admin' => 'nullable|string|max:1000'
+            ]);
+            \Log::info('✅ [PRODUÇÃO] Validação passou com sucesso');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('❌ [PRODUÇÃO] Erro de validação:', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+            throw $e;
+        }
 
         try {
             \Log::info('📝 Buscando licenciado e template...');
