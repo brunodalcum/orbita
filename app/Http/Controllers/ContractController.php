@@ -1360,8 +1360,39 @@ class ContractController extends Controller
     public function sendEmail(Request $request, Contract $contract)
     {
         try {
-            if ($contract->status !== 'pdf_ready') {
-                return response()->json(['error' => 'PDF deve ser gerado antes do envio.'], 400);
+            \Log::info('Iniciando envio de e-mail do contrato', [
+                'contract_id' => $contract->id,
+                'licensee_name' => $contract->licenciado->name,
+                'licensee_email' => $contract->licenciado->email,
+                'current_status' => $contract->status
+            ]);
+
+            // Verificar se o contrato tem PDF gerado (aceitar vários status)
+            $hasValidPdf = false;
+            
+            // Verificar se tem PDF do novo sistema
+            if ($contract->contract_pdf_path && file_exists(storage_path('app/' . $contract->contract_pdf_path))) {
+                $hasValidPdf = true;
+            }
+            
+            // Verificar se tem PDF do sistema antigo
+            if ($contract->status === 'pdf_ready' || $contract->pdf_path) {
+                $hasValidPdf = true;
+            }
+            
+            if (!$hasValidPdf) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'PDF do contrato não encontrado. Gere o PDF antes de enviar por e-mail.'
+                ], 400);
+            }
+
+            // Verificar se o licenciado tem e-mail
+            if (!$contract->licenciado->email) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Licenciado não possui e-mail cadastrado.'
+                ], 400);
             }
 
             // Gerar token de assinatura se não existir
@@ -1369,36 +1400,79 @@ class ContractController extends Controller
                 $contract->generateSignatureToken();
             }
 
-            // Enviar email
-            $this->sendContractByEmail($contract);
+            // Dados para o template de e-mail
+            $emailData = [
+                'licensee_name' => $contract->licenciado->name,
+                'contract_id' => $contract->id,
+                'contract_created_at' => $contract->created_at->format('d/m/Y'),
+                'company_name' => config('app.name', 'DSPAY')
+            ];
 
+            // Determinar o caminho do PDF
+            $pdfPath = null;
+            if ($contract->contract_pdf_path && file_exists(storage_path('app/' . $contract->contract_pdf_path))) {
+                $pdfPath = storage_path('app/' . $contract->contract_pdf_path);
+            } elseif ($contract->pdf_path && file_exists(storage_path('app/' . $contract->pdf_path))) {
+                $pdfPath = storage_path('app/' . $contract->pdf_path);
+            }
+
+            if (!$pdfPath) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Arquivo PDF não encontrado no servidor.'
+                ], 400);
+            }
+
+            // Enviar e-mail
+            Mail::send('emails.contract', $emailData, function ($message) use ($contract, $pdfPath) {
+                $message->to($contract->licenciado->email, $contract->licenciado->name)
+                        ->subject('Contrato de Licenciamento - ' . config('app.name'))
+                        ->attach($pdfPath, [
+                            'as' => 'Contrato_' . $contract->id . '.pdf',
+                            'mime' => 'application/pdf'
+                        ]);
+            });
+
+            // Atualizar status do contrato
+            $newStatus = $contract->status === 'pdf_ready' ? 'sent' : 'contrato_enviado';
             $contract->update([
-                'status' => 'sent',
-                'sent_at' => now()
+                'status' => $newStatus,
+                'contract_sent_at' => now(),
+                'contract_sent_by' => auth()->id()
             ]);
 
-            $contract->logAction(
-                'email_sent',
-                'Contrato enviado por email para assinatura',
-                auth()->id(),
-                [
-                    'email_destinatario' => $contract->licenciado->email,
-                    'signature_url' => route('contracts.sign.show', $contract->signature_token)
-                ]
-            );
+            // Log da ação
+            if (method_exists($contract, 'logAction')) {
+                $contract->logAction(
+                    'email_sent',
+                    'Contrato enviado por email',
+                    auth()->id(),
+                    [
+                        'email_destinatario' => $contract->licenciado->email,
+                        'pdf_path' => $pdfPath
+                    ]
+                );
+            }
+
+            \Log::info('E-mail do contrato enviado com sucesso', [
+                'contract_id' => $contract->id,
+                'sent_to' => $contract->licenciado->email,
+                'new_status' => $newStatus
+            ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Contrato enviado por email!',
+                'message' => 'Contrato enviado com sucesso para ' . $contract->licenciado->email,
                 'sent_to' => $contract->licenciado->email,
-                'sent_at' => $contract->sent_at->format('d/m/Y H:i:s'),
+                'sent_at' => $contract->contract_sent_at->format('d/m/Y H:i:s'),
                 'contract' => $contract->fresh()
             ]);
 
         } catch (\Exception $e) {
-            \Log::error('Erro ao enviar email: ' . $e->getMessage(), [
+            \Log::error('Erro ao enviar e-mail do contrato', [
                 'contract_id' => $contract->id,
-                'error' => $e->getTraceAsString()
+                'error' => $e->getMessage(),
+                'stack' => $e->getTraceAsString()
             ]);
 
             $contract->update([
@@ -1406,7 +1480,10 @@ class ContractController extends Controller
                 'last_error' => $e->getMessage()
             ]);
 
-            return response()->json(['error' => 'Erro ao enviar email: ' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao enviar e-mail: ' . $e->getMessage()
+            ], 500);
         }
     }
 
@@ -1612,5 +1689,6 @@ class ContractController extends Controller
                 ->with('error', 'Erro ao excluir contrato: ' . $e->getMessage());
         }
     }
+
 
 }

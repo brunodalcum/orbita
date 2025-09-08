@@ -399,7 +399,7 @@ Route::prefix('contracts')->name('contracts.')->middleware(['auth', 'permission:
     Route::post('/{contract}/upload-template', [App\Http\Controllers\ContractController::class, 'uploadTemplate'])->name('upload-template');
     Route::post('/{contract}/fill', [App\Http\Controllers\ContractController::class, 'fillTemplate'])->name('fill');
     Route::post('/{contract}/generate-pdf', [App\Http\Controllers\ContractController::class, 'generatePdfFromTemplate'])->name('generate-pdf');
-    Route::post('/{contract}/send-email', [App\Http\Controllers\ContractController::class, 'sendContractEmail'])->name('send-email');
+    Route::post('/{contract}/send-email', [App\Http\Controllers\ContractController::class, 'sendEmail'])->name('send-email');
     Route::get('/{contract}/signature-status', [App\Http\Controllers\ContractController::class, 'checkSignatureStatus'])->name('signature-status');
     Route::post('/{contract}/approve', [App\Http\Controllers\ContractController::class, 'approveContract'])->name('approve');
     Route::post('/{contract}/generate', [App\Http\Controllers\ContractController::class, 'generateContract'])->name('generate');
