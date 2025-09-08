@@ -233,7 +233,7 @@ class ContractController extends Controller
             $contract = Contract::create([
                 'licenciado_table_id' => $request->licenciado_id,  // Corrigido: usar request ao invés de $licenciado->id
                 'template_id' => $request->template_id,
-                'status' => 'draft',
+                'status' => 'criado',  // Usar status válido do enum
                 'observacoes_admin' => $request->observacoes_admin,
                 'contract_data' => json_encode($contractData),
                 'meta' => json_encode([
@@ -255,7 +255,7 @@ class ContractController extends Controller
             \Log::info('🔄 Atualizando contrato com PDF...');
             $contract->update([
                 'contract_pdf_path' => $pdfPath,
-                'status' => 'pdf_ready',
+                'status' => 'pdf_ready',  // Status válido do enum
                 'pdf_generated_at' => now()
             ]);
             \Log::info('✅ Contrato atualizado com sucesso');
