@@ -996,9 +996,12 @@ class ContractController extends Controller
             'full_name' => 'required|string|max:255',
             'document' => 'required|string|max:20',
             'email' => 'required|email|max:255',
-            'ip_address' => 'nullable|ip',
+            'ip_address' => 'nullable|string',
             'signature_date' => 'required|date',
-            'accept_terms' => 'required|accepted'
+            'signature_data' => 'nullable|string',
+            'user_agent' => 'nullable|string',
+            'location' => 'nullable|string',
+            'timestamp' => 'nullable|string'
         ]);
 
         // Buscar contrato pelo token
@@ -1009,7 +1012,7 @@ class ContractController extends Controller
         }
 
         // Verificar se o contrato está no status correto
-        if ($contract->status !== 'aguardando_assinatura') {
+        if (!in_array($contract->status, ['contrato_enviado', 'aguardando_assinatura'])) {
             return response()->json(['error' => 'Contrato não está disponível para assinatura.'], 400);
         }
 
@@ -1021,7 +1024,10 @@ class ContractController extends Controller
                 'signer_email' => $request->email,
                 'signed_at' => $request->signature_date,
                 'ip_address' => $request->ip() ?? $request->ip_address,
-                'user_agent' => $request->userAgent(),
+                'user_agent' => $request->user_agent ?? $request->userAgent(),
+                'location' => $request->location,
+                'signature_data' => $request->signature_data, // Base64 da assinatura
+                'timestamp' => $request->timestamp ?? now()->toISOString(),
                 'signature_hash' => hash('sha256', $contract->id . $request->full_name . $request->document . now())
             ];
 
@@ -1071,26 +1077,129 @@ class ContractController extends Controller
 
     private function generateSignedContractPDF(Contract $contract, array $signatureData)
     {
-        // Preparar dados do contrato incluindo assinatura
-        $contractData = $this->prepareContractData($contract);
-        $contractData['signature'] = $signatureData;
-        
-        // Obter template padrão
-        $template = ContractTemplate::getDefault();
-        
-        // Gerar PDF com dados de assinatura
-        $pdf = $this->generatePDF($template, $contractData);
-        
-        // Salvar PDF assinado no storage privado
-        $fileName = 'contract_signed_' . $contract->id . '_' . time() . '.pdf';
-        $filePath = 'contracts/signed/' . $fileName;
-        
-        Storage::disk('private')->put($filePath, $pdf->output());
-        
-        // Atualizar caminho do contrato assinado
-        $contract->update(['signed_contract_path' => $filePath]);
-        
-        return $filePath;
+        try {
+            \Log::info('Gerando PDF do contrato assinado', [
+                'contract_id' => $contract->id,
+                'signer_name' => $signatureData['signer_name'] ?? 'N/A'
+            ]);
+
+            // Preparar dados do contrato incluindo assinatura
+            $contractData = $this->prepareContractData($contract);
+            $contractData['signature'] = $signatureData;
+            
+            // Adicionar dados específicos da assinatura
+            $contractData['signature_info'] = [
+                'signed_at' => now()->format('d/m/Y H:i:s'),
+                'signer_name' => $signatureData['signer_name'],
+                'signer_document' => $signatureData['signer_document'],
+                'signer_ip' => $signatureData['ip_address'],
+                'signature_hash' => $signatureData['signature_hash'],
+                'has_signature_image' => !empty($signatureData['signature_data'])
+            ];
+            
+            // Salvar imagem da assinatura temporariamente se existir
+            $signatureImagePath = null;
+            if (!empty($signatureData['signature_data'])) {
+                $signatureImagePath = $this->saveSignatureImage($signatureData['signature_data'], $contract->id);
+                $contractData['signature_image_path'] = $signatureImagePath;
+            }
+            
+            // Obter template padrão ou usar template básico
+            $template = ContractTemplate::getDefault();
+            if (!$template) {
+                $template = $this->getDefaultSignedContractTemplate();
+            }
+            
+            // Gerar PDF com dados de assinatura
+            $pdf = $this->generatePDF($template, $contractData);
+            
+            // Criar diretório se não existir
+            $signedDir = 'contracts/signed';
+            if (!Storage::disk('private')->exists($signedDir)) {
+                Storage::disk('private')->makeDirectory($signedDir);
+            }
+            
+            // Salvar PDF assinado no storage privado
+            $fileName = 'contract_signed_' . $contract->id . '_' . time() . '.pdf';
+            $filePath = $signedDir . '/' . $fileName;
+            
+            Storage::disk('private')->put($filePath, $pdf->output());
+            
+            // Limpar imagem temporária da assinatura
+            if ($signatureImagePath && file_exists($signatureImagePath)) {
+                unlink($signatureImagePath);
+            }
+            
+            // Atualizar caminho do contrato assinado
+            $contract->update(['signed_contract_path' => $filePath]);
+            
+            \Log::info('PDF do contrato assinado gerado com sucesso', [
+                'contract_id' => $contract->id,
+                'file_path' => $filePath
+            ]);
+            
+            return $filePath;
+            
+        } catch (\Exception $e) {
+            \Log::error('Erro ao gerar PDF do contrato assinado', [
+                'contract_id' => $contract->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            throw $e;
+        }
+    }
+
+    private function saveSignatureImage($signatureDataUrl, $contractId)
+    {
+        try {
+            // Extrair dados da imagem base64
+            if (preg_match('/^data:image\/(\w+);base64,/', $signatureDataUrl, $type)) {
+                $data = substr($signatureDataUrl, strpos($signatureDataUrl, ',') + 1);
+                $type = strtolower($type[1]);
+                
+                if (!in_array($type, ['jpg', 'jpeg', 'png'])) {
+                    throw new \Exception('Formato de imagem não suportado');
+                }
+                
+                $data = base64_decode($data);
+                if ($data === false) {
+                    throw new \Exception('Erro ao decodificar imagem base64');
+                }
+                
+                // Salvar temporariamente
+                $tempPath = storage_path('app/temp/signature_' . $contractId . '_' . time() . '.' . $type);
+                
+                // Criar diretório temp se não existir
+                $tempDir = dirname($tempPath);
+                if (!is_dir($tempDir)) {
+                    mkdir($tempDir, 0755, true);
+                }
+                
+                file_put_contents($tempPath, $data);
+                
+                return $tempPath;
+            }
+            
+            return null;
+            
+        } catch (\Exception $e) {
+            \Log::error('Erro ao salvar imagem da assinatura', [
+                'contract_id' => $contractId,
+                'error' => $e->getMessage()
+            ]);
+            
+            return null;
+        }
+    }
+
+    private function getDefaultSignedContractTemplate()
+    {
+        // Template básico caso não exista um padrão
+        $template = new \stdClass();
+        $template->content = view('contracts.templates.signed-default')->render();
+        return $template;
     }
 
     private function sendSignatureConfirmationEmail(Contract $contract)

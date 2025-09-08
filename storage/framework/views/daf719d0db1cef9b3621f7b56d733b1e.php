@@ -214,6 +214,15 @@
                                                    class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded-lg text-sm transition-colors">
                                                     <i class="fas fa-eye mr-1"></i>Ver
                                                 </a>
+                                                
+                                                <!-- Botão de Enviar por E-mail -->
+                                                <?php if($contract->contract_pdf_path && file_exists(storage_path('app/' . $contract->contract_pdf_path))): ?>
+                                                    <button onclick="openEmailModal(<?php echo e($contract->id); ?>, '<?php echo e($contract->licenciado->name); ?>', '<?php echo e($contract->licenciado->email); ?>')" 
+                                                            class="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm transition-colors">
+                                                        <i class="fas fa-envelope mr-1"></i>E-mail
+                                                    </button>
+                                                <?php endif; ?>
+                                                
                                                 <?php if($contract->canApproveDocuments()): ?>
                                                     <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-lg text-sm">
                                                         <i class="fas fa-clock mr-1"></i>Aguardando
@@ -261,6 +270,45 @@
         </div>
     </div>
 
+    <!-- Modal de Envio por E-mail -->
+    <div id="emailModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl max-w-md w-full p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-envelope text-green-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Enviar Contrato por E-mail</h3>
+                </div>
+                
+                <div class="mb-4">
+                    <p class="text-gray-600 mb-3">
+                        Deseja enviar o contrato do licenciado <strong id="emailLicenseeName"></strong> para o e-mail:
+                    </p>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-gray-400 mr-2"></i>
+                            <span id="emailLicenseeEmail" class="font-medium text-gray-900"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="emailStatus" class="hidden mb-4">
+                    <!-- Status será inserido dinamicamente -->
+                </div>
+                
+                <div class="flex justify-end space-x-3">
+                    <button onclick="closeEmailModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors">
+                        Cancelar
+                    </button>
+                    <button id="sendEmailBtn" onclick="sendContractEmail()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-paper-plane mr-2"></i>Enviar E-mail
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de Confirmação de Exclusão -->
     <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen p-4">
@@ -298,7 +346,98 @@
 
     <script>
         let contractToDelete = null;
+        let contractToEmail = null;
 
+        // Funções do Modal de E-mail
+        function openEmailModal(contractId, licenseeName, licenseeEmail) {
+            contractToEmail = contractId;
+            document.getElementById('emailLicenseeName').textContent = licenseeName;
+            document.getElementById('emailLicenseeEmail').textContent = licenseeEmail;
+            document.getElementById('emailStatus').classList.add('hidden');
+            document.getElementById('emailModal').classList.remove('hidden');
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').classList.add('hidden');
+            contractToEmail = null;
+            // Reset button state
+            const btn = document.getElementById('sendEmailBtn');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Enviar E-mail';
+        }
+
+        function sendContractEmail() {
+            if (!contractToEmail) return;
+
+            const btn = document.getElementById('sendEmailBtn');
+            const statusDiv = document.getElementById('emailStatus');
+            
+            // Desabilitar botão e mostrar loading
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+            
+            // Fazer requisição AJAX
+            fetch(`/contracts/${contractToEmail}/send-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                statusDiv.classList.remove('hidden');
+                
+                if (data.success) {
+                    statusDiv.innerHTML = `
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle mr-2"></i>
+                                <span>${data.message}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Fechar modal após 2 segundos
+                    setTimeout(() => {
+                        closeEmailModal();
+                        location.reload(); // Recarregar para atualizar status
+                    }, 2000);
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                <span>${data.message || 'Erro ao enviar e-mail'}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Reabilitar botão
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Enviar E-mail';
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                statusDiv.classList.remove('hidden');
+                statusDiv.innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            <span>Erro de conexão. Tente novamente.</span>
+                        </div>
+                    </div>
+                `;
+                
+                // Reabilitar botão
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Enviar E-mail';
+            });
+        }
+
+        // Funções do Modal de Exclusão
         function confirmDelete(contractId, licenseeName) {
             contractToDelete = contractId;
             document.getElementById('contractLicensee').textContent = licenseeName;
@@ -318,16 +457,22 @@
             }
         }
 
-        // Fechar modal ao clicar fora
+        // Event Listeners
+        document.getElementById('emailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEmailModal();
+            }
+        });
+
         document.getElementById('deleteModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeDeleteModal();
             }
         });
 
-        // Fechar modal com ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
+                closeEmailModal();
                 closeDeleteModal();
             }
         });
