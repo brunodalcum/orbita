@@ -26,7 +26,6 @@ class UserController extends Controller
      */
     public function create()
     {
-        // Verificar se o usuário atual é admin (opcional para teste)
         $currentUser = auth()->user();
         if ($currentUser && (!$currentUser->isAdmin() && !$currentUser->isSuperAdmin())) {
             return redirect()->route('dashboard')
@@ -42,73 +41,125 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role_id' => 'required|exists:roles,id',
-            'is_active' => 'boolean',
-            'admin_email' => 'required|email',
-            'admin_password' => 'required|string'
+        \Log::info('🔍 DEBUG UserController@store iniciado', [
+            'is_ajax' => $request->ajax(),
+            'accept_header' => $request->header('Accept'),
+            'x_requested_with' => $request->header('X-Requested-With'),
+            'content_type' => $request->header('Content-Type'),
+            'user_id' => auth()->id()
         ]);
+        
+        try {
+            // TESTE SIMPLES - apenas retornar sucesso por enquanto
+            \Log::info('📤 Retornando JSON response de teste');
+            return response()->json([
+                'success' => true,
+                'message' => 'Teste do controller funcionando!',
+                'data' => $request->all()
+            ]);
+            
+            // Verificar se o usuário atual é admin
+            $currentUser = auth()->user();
+            if (!$currentUser || (!$currentUser->isAdmin() && !$currentUser->isSuperAdmin())) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Apenas administradores podem cadastrar usuários!'
+                    ], 403);
+                }
+                return redirect()->route('users.create')
+                    ->with('error', 'Apenas administradores podem cadastrar usuários!');
+            }
 
-        // Verificar se o usuário atual é admin
-        $currentUser = auth()->user();
-        if (!$currentUser || (!$currentUser->isAdmin() && !$currentUser->isSuperAdmin())) {
-            return redirect()->route('users.create')
-                ->with('error', 'Apenas administradores podem cadastrar usuários!');
+            $validationRules = [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8|confirmed',
+                'role_id' => 'required|exists:roles,id',
+                'is_active' => 'boolean',
+            ];
+
+            $validator = \Validator::make($request->all(), $validationRules);
+            
+            if ($validator->fails()) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            // Verificar se o admin pode cadastrar o tipo de usuário solicitado
+            $role = Role::find($request->role_id);
+            if (!$role) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Role selecionado não encontrado!'
+                    ], 400);
+                }
+                return redirect()->back()->with('error', 'Role selecionado não encontrado!');
+            }
+
+            // Apenas Super Admin pode cadastrar outros Super Admins
+            if ($role->isSuperAdmin() && !$currentUser->isSuperAdmin()) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Apenas Super Administradores podem cadastrar outros Super Administradores!'
+                    ], 403);
+                }
+                return redirect()->back()->with('error', 'Apenas Super Administradores podem cadastrar outros Super Administradores!');
+            }
+
+            // Criar o usuário
+            \Log::info('📝 Criando usuário', [
+                'name' => $request->name,
+                'email' => $request->email,
+                'role_id' => $request->role_id,
+                'is_active' => $request->has('is_active') ? (bool)$request->is_active : true,
+                'is_ajax' => $request->ajax()
+            ]);
+            
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role_id' => $request->role_id,
+                'is_active' => $request->has('is_active') ? (bool)$request->is_active : true,
+            ]);
+
+            \Log::info('✅ Usuário criado com sucesso', [
+                'user_id' => $user->id,
+                'is_ajax' => $request->ajax()
+            ]);
+
+            if ($request->ajax()) {
+                \Log::info('📤 Retornando JSON response');
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Usuário criado com sucesso!',
+                    'user' => $user->load('role')
+                ]);
+            }
+
+            return redirect()->route('dashboard.users')
+                ->with('success', 'Usuário criado com sucesso!');
+
+        } catch (\Exception $e) {
+            \Log::error('Erro ao criar usuário: ' . $e->getMessage());
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erro interno do servidor'
+                ], 500);
+            }
+            
+            return redirect()->back()->with('error', 'Erro ao criar usuário: ' . $e->getMessage());
         }
-
-        // Validar credenciais do admin
-        $adminEmail = $request->admin_email;
-        $adminPassword = $request->admin_password;
-
-        // Buscar o admin pelo email
-        $admin = User::where('email', $adminEmail)
-            ->where('is_active', true)
-            ->first();
-
-        if (!$admin) {
-            return redirect()->route('users.create')
-                ->with('error', 'Email de administrador não encontrado ou usuário inativo!');
-        }
-
-        // Verificar se o admin tem permissão para cadastrar usuários
-        if (!$admin->isAdmin() && !$admin->isSuperAdmin()) {
-            return redirect()->route('users.create')
-                ->with('error', 'O usuário informado não possui permissões de administrador!');
-        }
-
-        // Verificar a senha do admin
-        if (!Hash::check($adminPassword, $admin->password)) {
-            return redirect()->route('users.create')
-                ->with('error', 'Senha do administrador incorreta!');
-        }
-
-        // Verificar se o admin pode cadastrar o tipo de usuário solicitado
-        $role = Role::find($request->role_id);
-        if (!$role) {
-            return redirect()->route('users.create')
-                ->with('error', 'Role selecionado não encontrado!');
-        }
-
-        // Apenas Super Admin pode cadastrar outros Super Admins
-        if ($role->isSuperAdmin() && !$admin->isSuperAdmin()) {
-            return redirect()->route('users.create')
-                ->with('error', 'Apenas Super Administradores podem cadastrar outros Super Administradores!');
-        }
-
-        // Criar o usuário
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role_id' => $request->role_id,
-            'is_active' => $request->has('is_active') ? true : false,
-        ]);
-
-        return redirect()->route('dashboard.users')
-            ->with('success', 'Usuário criado com sucesso!');
     }
 
     /**

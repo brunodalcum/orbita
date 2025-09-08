@@ -3,16 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Gestão de Usuários - DSPay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar Dinâmico -->
-        <x-dynamic-sidebar />
+        <?php if (isset($component)) { $__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec = $attributes; } ?>
+<?php $component = App\View\Components\DynamicSidebar::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('dynamic-sidebar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\DynamicSidebar::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec)): ?>
+<?php $attributes = $__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec; ?>
+<?php unset($__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec)): ?>
+<?php $component = $__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec; ?>
+<?php unset($__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec); ?>
+<?php endif; ?>
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
@@ -25,13 +44,13 @@
                             <p class="text-gray-600 mt-1">Gerencie usuários e permissões do sistema</p>
                         </div>
                         <div class="flex items-center space-x-4">
-                            @if(auth()->user()->hasPermission('users.create'))
+                            <?php if(auth()->user()->hasPermission('users.create')): ?>
                                 <button onclick="openCreateModal()" 
                                         class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2">
                                     <i class="fas fa-plus"></i>
                                     <span>Novo Usuário</span>
                                 </button>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -40,19 +59,21 @@
             <!-- Content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
                 <!-- Alertas -->
-                @if(session('success'))
+                <?php if(session('success')): ?>
                     <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center">
                         <i class="fas fa-check-circle mr-2"></i>
-                        {{ session('success') }}
-                    </div>
-                @endif
+                        <?php echo e(session('success')); ?>
 
-                @if(session('error'))
+                    </div>
+                <?php endif; ?>
+
+                <?php if(session('error')): ?>
                     <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center">
                         <i class="fas fa-exclamation-circle mr-2"></i>
-                        {{ session('error') }}
+                        <?php echo e(session('error')); ?>
+
                     </div>
-                @endif
+                <?php endif; ?>
 
                 <!-- Filtros -->
                 <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -65,9 +86,9 @@
                         <div class="flex items-center space-x-4">
                             <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                 <option value="">Todos os Roles</option>
-                                @foreach($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->display_name }}</option>
-                                @endforeach
+                                <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($role->id); ?>"><?php echo e($role->display_name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                             <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                 <option value="">Todos os Status</option>
@@ -102,92 +123,95 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @forelse($users as $user)
+                                <?php $__empty_1 = true; $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="flex-shrink-0 h-10 w-10">
                                                     <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                                                         <span class="text-white font-medium text-sm">
-                                                            {{ strtoupper(substr($user->name, 0, 2)) }}
+                                                            <?php echo e(strtoupper(substr($user->name, 0, 2))); ?>
+
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
-                                                    <div class="text-sm text-gray-500">{{ $user->email }}</div>
+                                                    <div class="text-sm font-medium text-gray-900"><?php echo e($user->name); ?></div>
+                                                    <div class="text-sm text-gray-500"><?php echo e($user->email); ?></div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($user->role)
+                                            <?php if($user->role): ?>
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                                    @if($user->role->name === 'super_admin') bg-red-100 text-red-800
-                                                    @elseif($user->role->name === 'admin') bg-blue-100 text-blue-800
-                                                    @elseif($user->role->name === 'funcionario') bg-green-100 text-green-800
-                                                    @else bg-gray-100 text-gray-800
-                                                    @endif">
-                                                    {{ $user->role->display_name }}
+                                                    <?php if($user->role->name === 'super_admin'): ?> bg-red-100 text-red-800
+                                                    <?php elseif($user->role->name === 'admin'): ?> bg-blue-100 text-blue-800
+                                                    <?php elseif($user->role->name === 'funcionario'): ?> bg-green-100 text-green-800
+                                                    <?php else: ?> bg-gray-100 text-gray-800
+                                                    <?php endif; ?>">
+                                                    <?php echo e($user->role->display_name); ?>
+
                                                 </span>
-                                            @else
+                                            <?php else: ?>
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                                     Sem Role
                                                 </span>
-                                            @endif
+                                            <?php endif; ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($user->is_active)
+                                            <?php if($user->is_active): ?>
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                     <i class="fas fa-check-circle mr-1"></i>
                                                     Ativo
                                                 </span>
-                                            @else
+                                            <?php else: ?>
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                                     <i class="fas fa-times-circle mr-1"></i>
                                                     Inativo
                                                 </span>
-                                            @endif
+                                            <?php endif; ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $user->updated_at ? $user->updated_at->format('d/m/Y H:i') : 'Nunca' }}
+                                            <?php echo e($user->updated_at ? $user->updated_at->format('d/m/Y H:i') : 'Nunca'); ?>
+
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex items-center space-x-2">
-                                                @if(auth()->user()->hasPermission('users.view'))
-                                                    <a href="{{ route('users.show', $user) }}" 
+                                                <?php if(auth()->user()->hasPermission('users.view')): ?>
+                                                    <a href="<?php echo e(route('users.show', $user)); ?>" 
                                                        class="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-colors"
                                                        title="Visualizar">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                @endif
+                                                <?php endif; ?>
                                                 
-                                                @if(auth()->user()->hasPermission('users.update'))
-                                                    <a href="{{ route('users.edit', $user) }}" 
+                                                <?php if(auth()->user()->hasPermission('users.update')): ?>
+                                                    <a href="<?php echo e(route('users.edit', $user)); ?>" 
                                                        class="text-green-600 hover:text-green-900 p-2 rounded-lg hover:bg-green-50 transition-colors"
                                                        title="Editar">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                @endif
+                                                <?php endif; ?>
                                                 
-                                                @if(auth()->user()->hasPermission('users.update') && $user->id !== auth()->id())
-                                                    <button onclick="toggleUserStatus({{ $user->id }}, {{ $user->is_active ? 'false' : 'true' }})"
+                                                <?php if(auth()->user()->hasPermission('users.update') && $user->id !== auth()->id()): ?>
+                                                    <button onclick="toggleUserStatus(<?php echo e($user->id); ?>, <?php echo e($user->is_active ? 'false' : 'true'); ?>)"
                                                             class="text-yellow-600 hover:text-yellow-900 p-2 rounded-lg hover:bg-yellow-50 transition-colors"
-                                                            title="{{ $user->is_active ? 'Desativar' : 'Ativar' }}">
-                                                        <i class="fas fa-{{ $user->is_active ? 'pause' : 'play' }}"></i>
+                                                            title="<?php echo e($user->is_active ? 'Desativar' : 'Ativar'); ?>">
+                                                        <i class="fas fa-<?php echo e($user->is_active ? 'pause' : 'play'); ?>"></i>
                                                     </button>
-                                                @endif
+                                                <?php endif; ?>
                                                 
-                                                @if(auth()->user()->hasPermission('users.delete') && $user->id !== auth()->id())
-                                                    <button onclick="deleteUser({{ $user->id }}, '{{ $user->name }}')"
+                                                <?php if(auth()->user()->hasPermission('users.delete') && $user->id !== auth()->id()): ?>
+                                                    <button onclick="deleteUser(<?php echo e($user->id); ?>, '<?php echo e($user->name); ?>')"
                                                             class="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors"
                                                             title="Excluir">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </td>
                                     </tr>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <tr>
                                         <td colspan="5" class="px-6 py-12 text-center">
                                             <div class="text-gray-500">
@@ -197,17 +221,18 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforelse
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
 
                     <!-- Paginação -->
-                    @if($users->hasPages())
+                    <?php if($users->hasPages()): ?>
                         <div class="px-6 py-4 border-t border-gray-200">
-                            {{ $users->links() }}
+                            <?php echo e($users->links()); ?>
+
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </main>
         </div>
@@ -226,7 +251,7 @@
                     </div>
                     
                     <form id="createUserForm">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Nome -->
                             <div class="md:col-span-2">
@@ -305,9 +330,9 @@
                                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         required>
                                     <option value="">Selecione um perfil</option>
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->display_name }}</option>
-                                    @endforeach
+                                    <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($role->id); ?>"><?php echo e($role->display_name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                                 <div id="error_role_id" class="text-red-500 text-sm mt-1 hidden"></div>
                             </div>
@@ -447,7 +472,7 @@
             
             const formData = new FormData(this);
             
-            fetch('{{ route("users.store") }}', {
+            fetch('<?php echo e(route("users.store")); ?>', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -566,3 +591,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/dashboard/users/index.blade.php ENDPATH**/ ?>

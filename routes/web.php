@@ -107,13 +107,12 @@ Route::middleware([
         Route::get('/dashboard/users/{user}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
     });
 
+    
     // Rotas para criação de usuários
     Route::middleware(['permission:users.create'])->group(function () {
         Route::get('/dashboard/users/create', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');
         Route::post('/dashboard/users', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
     });
-    
-    // Rotas para criação de usuários (movidas para fora do middleware)
     
     Route::middleware(['permission:users.update'])->group(function () {
         Route::get('/dashboard/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
@@ -302,6 +301,25 @@ Route::middleware([
             return response()->json(['error' => 'Erro na consulta: ' . $e->getMessage()], 500);
         }
     })->name('api.consultar-cnpj');
+});
+
+
+
+
+// Rota de teste para criação de usuário (TEMPORÁRIA)
+Route::post('/test-user-create', function(\Illuminate\Http\Request $request) {
+    \Log::info('🧪 TESTE - Criação de usuário', [
+        'is_ajax' => $request->ajax(),
+        'accept_header' => $request->header('Accept'),
+        'x_requested_with' => $request->header('X-Requested-With'),
+        'data' => $request->all()
+    ]);
+    
+    return response()->json([
+        'success' => true,
+        'message' => 'Teste funcionando!',
+        'data' => $request->all()
+    ]);
 });
 
 // Rota personalizada para logout
