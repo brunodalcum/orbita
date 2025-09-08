@@ -117,7 +117,7 @@
                         </div>
                         
                         <!-- Logout -->
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                        <form method="POST" action="{{ route('logout.custom') }}" class="inline">
                             @csrf
                             <button type="submit" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
                                 <i class="fas fa-sign-out-alt mr-1"></i>
