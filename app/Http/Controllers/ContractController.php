@@ -967,7 +967,7 @@ class ContractController extends Controller
         }
 
         // Verificar se o contrato está no status correto
-        if (!in_array($contract->status, ['contrato_enviado', 'aguardando_assinatura'])) {
+        if (!in_array($contract->status, ['contrato_enviado', 'aguardando_assinatura', 'sent'])) {
             return view('contracts.sign-error', [
                 'message' => 'Este contrato não está disponível para assinatura.',
                 'contract' => $contract
@@ -975,7 +975,7 @@ class ContractController extends Controller
         }
 
         // Atualizar status para "aguardando assinatura" se ainda não estiver
-        if ($contract->status === 'contrato_enviado') {
+        if (in_array($contract->status, ['contrato_enviado', 'sent'])) {
             $contract->update(['status' => 'aguardando_assinatura']);
         }
 
@@ -1012,7 +1012,7 @@ class ContractController extends Controller
         }
 
         // Verificar se o contrato está no status correto
-        if (!in_array($contract->status, ['contrato_enviado', 'aguardando_assinatura'])) {
+        if (!in_array($contract->status, ['contrato_enviado', 'aguardando_assinatura', 'sent'])) {
             return response()->json(['error' => 'Contrato não está disponível para assinatura.'], 400);
         }
 
