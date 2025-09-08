@@ -229,8 +229,8 @@ class ContractController extends Controller
             // Criar o contrato no banco
             \Log::info('💾 Criando contrato no banco...');
             $contract = Contract::create([
-                'licenciado_table_id' => $licenciado->id,
-                'template_id' => $template->id,
+                'licenciado_table_id' => $request->licenciado_id,  // Corrigido: usar request ao invés de $licenciado->id
+                'template_id' => $request->template_id,
                 'status' => 'draft',
                 'observacoes_admin' => $request->observacoes_admin,
                 'contract_data' => json_encode($contractData),
