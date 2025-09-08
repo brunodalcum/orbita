@@ -1514,7 +1514,9 @@ class ContractController extends Controller
                 'licensee_name' => $contract->licenciado->name,
                 'contract_id' => $contract->id,
                 'contract_created_at' => $contract->created_at->format('d/m/Y'),
-                'company_name' => config('app.name', 'DSPAY')
+                'company_name' => config('app.name', 'DSPAY'),
+                'signature_url' => route('contracts.sign.show', $contract->signature_token),
+                'signature_token' => $contract->signature_token
             ];
 
             // Determinar o caminho do PDF

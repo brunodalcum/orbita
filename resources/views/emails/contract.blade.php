@@ -197,15 +197,51 @@
                 O contrato completo está anexado a este e-mail em formato PDF.
             </div>
 
-            <!-- Next Steps -->
-            <div class="next-steps">
-                <h3>🚀 Próximos Passos</h3>
-                <ol>
-                    <li><strong>Análise:</strong> Leia atentamente todo o conteúdo do contrato anexado</li>
-                    <li><strong>Dúvidas:</strong> Entre em contato conosco caso tenha alguma dúvida</li>
-                    <li><strong>Assinatura:</strong> Aguarde as instruções para assinatura digital</li>
-                    <li><strong>Ativação:</strong> Após a assinatura, seu licenciamento será ativado</li>
-                </ol>
+                <!-- Signature Button -->
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{{ $signature_url }}" 
+                       style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 18px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                        ✍️ ASSINAR CONTRATO DIGITALMENTE
+                    </a>
+                    <p style="margin-top: 15px; color: #4a5568; font-size: 14px;">
+                        <i class="fas fa-shield-alt" style="color: #10b981;"></i>
+                        Assinatura segura e com validade jurídica
+                    </p>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="next-steps">
+                    <h3>🚀 Como Assinar</h3>
+                    <ol>
+                        <li><strong>Clique no botão acima</strong> para acessar a página de assinatura</li>
+                        <li><strong>Revise o contrato</strong> e confirme todos os dados</li>
+                        <li><strong>Desenhe sua assinatura</strong> no campo digital</li>
+                        <li><strong>Confirme a assinatura</strong> - você receberá uma confirmação por e-mail</li>
+                    </ol>
+                </div>
+
+                <!-- Security Info -->
+                <div style="background: #e6fffa; border: 1px solid #81e6d9; border-radius: 8px; padding: 20px; margin: 25px 0;">
+                    <h3 style="color: #234e52; margin: 0 0 15px 0; font-size: 16px;">
+                        🔒 Informações de Segurança
+                    </h3>
+                    <ul style="margin: 0; padding-left: 20px; color: #2d3748;">
+                        <li style="margin-bottom: 8px;">Sua assinatura será protegida por criptografia SHA-256</li>
+                        <li style="margin-bottom: 8px;">O processo registra IP, data/hora e dispositivo usado</li>
+                        <li style="margin-bottom: 8px;">A assinatura digital tem validade jurídica conforme Lei 14.063/2020</li>
+                        <li style="margin-bottom: 8px;">Você receberá o contrato assinado por e-mail após a confirmação</li>
+                    </ul>
+                </div>
+
+            <!-- Important Notice -->
+            <div style="background: #fef3cd; border: 1px solid #fbbf24; border-radius: 8px; padding: 20px; margin: 25px 0;">
+                <h3 style="color: #92400e; margin: 0 0 10px 0; font-size: 16px;">
+                    ⚠️ Importante - Link de Assinatura
+                </h3>
+                <p style="color: #92400e; margin: 0; font-size: 14px; line-height: 1.6;">
+                    Este link de assinatura é <strong>único e pessoal</strong>. Não compartilhe com terceiros. 
+                    O link permanecerá ativo até a assinatura do contrato.
+                </p>
             </div>
 
             <div class="message">
