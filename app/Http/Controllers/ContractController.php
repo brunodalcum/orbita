@@ -268,9 +268,17 @@ class ContractController extends Controller
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
+                'licenciado_id' => $request->licenciado_id,
+                'template_id' => $request->template_id,
+                'user_id' => auth()->id(),
+                'request_data' => $request->all()
             ]);
-            return back()->withErrors(['error' => 'Erro ao gerar contrato: ' . $e->getMessage()]);
+            
+            // Em vez de back() que pode levar ao step1, redirecionar especificamente para contracts.index com erro
+            return redirect()->route('contracts.index')
+                ->withErrors(['error' => 'Erro ao gerar contrato: ' . $e->getMessage()])
+                ->with('error', 'Erro ao gerar contrato: ' . $e->getMessage());
         }
     }
 
