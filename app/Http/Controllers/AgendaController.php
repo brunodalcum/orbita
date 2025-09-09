@@ -193,9 +193,7 @@ class AgendaController extends Controller
                 ],
                 [
                     'status' => $status,
-                    'confirmado_em' => now(),
-                    'ip_confirmacao' => $request->ip(),
-                    'user_agent' => $request->userAgent()
+                    'confirmado_em' => ($status === 'confirmado') ? now() : null
                 ]
             );
             
@@ -227,11 +225,22 @@ class AgendaController extends Controller
             }
             
         } catch (\Exception $e) {
-            \Log::error('Erro ao confirmar participação: ' . $e->getMessage());
+            \Log::error('🚨 [PRODUÇÃO] Erro ao confirmar participação', [
+                'erro' => $e->getMessage(),
+                'linha' => $e->getLine(),
+                'arquivo' => $e->getFile(),
+                'trace' => $e->getTraceAsString(),
+                'agenda_id' => $id,
+                'email' => $request->get('email'),
+                'status' => $request->get('status')
+            ]);
             
-            return redirect()->route('agenda.confirmacao.sucesso', [
+            // Retornar página de erro ao invés de redirect
+            return view('agenda.confirmacao-sucesso', [
                 'status' => 'error',
-                'message' => 'Erro ao processar confirmação'
+                'message' => 'Erro ao processar confirmação: ' . $e->getMessage(),
+                'titulo' => '',
+                'action' => 'error'
             ]);
         }
     }
