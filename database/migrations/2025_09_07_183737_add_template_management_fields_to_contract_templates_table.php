@@ -12,18 +12,50 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('contract_templates', function (Blueprint $table) {
-            // Campos para gerenciamento de templates
-            $table->json('variables')->nullable()->after('placeholders_json'); // Variáveis detectadas
-            $table->unsignedBigInteger('created_by')->nullable()->after('is_active'); // Usuário que criou
-            $table->unsignedBigInteger('updated_by')->nullable()->after('created_by'); // Usuário que atualizou
+            // Verificar se as colunas já existem antes de adicioná-las
+            if (!Schema::hasColumn('contract_templates', 'variables')) {
+                $table->json('variables')->nullable()->after('placeholders_json'); // Variáveis detectadas
+            }
             
-            // Índices para performance
-            $table->index('is_active');
-            $table->index('created_by');
+            if (!Schema::hasColumn('contract_templates', 'created_by')) {
+                $table->unsignedBigInteger('created_by')->nullable()->after('is_active'); // Usuário que criou
+            }
             
-            // Foreign keys
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            if (!Schema::hasColumn('contract_templates', 'updated_by')) {
+                $table->unsignedBigInteger('updated_by')->nullable()->after('created_by'); // Usuário que atualizou
+            }
+        });
+        
+        // Adicionar índices e foreign keys em uma operação separada
+        Schema::table('contract_templates', function (Blueprint $table) {
+            // Verificar se os índices já existem
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()
+                ->listTableIndexes('contract_templates');
+            
+            if (!isset($indexes['contract_templates_is_active_index'])) {
+                $table->index('is_active');
+            }
+            
+            if (!isset($indexes['contract_templates_created_by_index'])) {
+                $table->index('created_by');
+            }
+            
+            // Verificar se as foreign keys já existem
+            try {
+                if (Schema::hasColumn('contract_templates', 'created_by')) {
+                    $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+                }
+            } catch (\Exception $e) {
+                // Foreign key já existe, ignorar
+            }
+            
+            try {
+                if (Schema::hasColumn('contract_templates', 'updated_by')) {
+                    $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+                }
+            } catch (\Exception $e) {
+                // Foreign key já existe, ignorar
+            }
         });
     }
 

@@ -371,7 +371,7 @@ Route::get('/planos/bandeiras/list', [App\Http\Controllers\PlanoController::clas
 Route::post('/planos/filter', [App\Http\Controllers\PlanoController::class, 'filter'])->name('planos.filter');
 
 // Rotas para Contratos
-Route::prefix('contracts')->name('contracts.')->middleware(['auth', 'permission:contratos.view'])->group(function () {
+Route::prefix('contracts')->name('contracts.')->middleware(['auth'])->group(function () {
     Route::get('/', [App\Http\Controllers\ContractController::class, 'index'])->name('index');
     Route::get('/create', [App\Http\Controllers\ContractController::class, 'create'])->name('create');
     
