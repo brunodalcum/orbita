@@ -74,13 +74,6 @@ class ContractController extends Controller
             return back()->with('error', 'Arquivo PDF não encontrado no servidor.');
         }
 
-        // Log da ação
-        \Log::info('📄 Visualização de contrato PDF', [
-            'contract_id' => $contract->id,
-            'licenciado' => $contract->licenciado->razao_social ?? $contract->licenciado->nome_fantasia,
-            'user_id' => auth()->id(),
-            'pdf_path' => $contract->contract_pdf_path
-        ]);
 
         // Retornar o PDF para visualização no browser
         return response()->file($pdfPath, [
@@ -185,88 +178,28 @@ class ContractController extends Controller
      */
     public function generateStep3(Request $request)
     {
-        // DEBUG: Log dos dados recebidos - VERSÃO PRODUÇÃO
-        \Log::info('🔍 [PRODUÇÃO] DEBUG generateStep3 - MÉTODO CHAMADO!', [
-            'timestamp' => now(),
-            'environment' => app()->environment(),
-            'all_data' => $request->all(),
-            'licenciado_id' => $request->get('licenciado_id'),
-            'template_id' => $request->get('template_id'),
-            'observacoes_admin' => $request->get('observacoes_admin'),
-            'method' => $request->method(),
-            'url' => $request->fullUrl(),
-            'user_id' => auth()->id(),
-            'user_authenticated' => auth()->check(),
-            'headers' => $request->headers->all()
+        $request->validate([
+            'licenciado_id' => 'required|exists:licenciados,id',
+            'template_id' => 'required|exists:contract_templates,id',
+            'observacoes_admin' => 'nullable|string|max:1000'
         ]);
-        
-        \Log::info('🚀 [PRODUÇÃO] Iniciando processo de geração de contrato', [
-            'contract_will_be_created' => 'yes',
-            'timestamp' => now(),
-            'environment' => app()->environment()
-        ]);
-        
-        // Log antes da validação
-        \Log::info('🔍 [PRODUÇÃO] Iniciando validação dos dados...');
-        
-        try {
-            $request->validate([
-                'licenciado_id' => 'required|exists:licenciados,id',
-                'template_id' => 'required|exists:contract_templates,id',
-                'observacoes_admin' => 'nullable|string|max:1000'
-            ]);
-            \Log::info('✅ [PRODUÇÃO] Validação passou com sucesso');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('❌ [PRODUÇÃO] Erro de validação:', [
-                'errors' => $e->errors(),
-                'request_data' => $request->all()
-            ]);
-            throw $e;
-        }
 
         try {
-            \Log::info('📝 [PRODUÇÃO] Buscando licenciado e template...', [
-                'licenciado_id_to_find' => $request->licenciado_id,
-                'template_id_to_find' => $request->template_id,
-                'step' => 'before_database_queries'
-            ]);
-            
-            // Buscar licenciado com log detalhado
-            \Log::info('🔍 [PRODUÇÃO] Tentando buscar licenciado...');
+            // Buscar licenciado e template
             $licenciado = Licenciado::findOrFail($request->licenciado_id);
-            \Log::info('✅ [PRODUÇÃO] Licenciado encontrado', [
-                'licenciado_id' => $licenciado->id,
-                'nome' => $licenciado->razao_social ?? $licenciado->nome_fantasia
-            ]);
-            
-            // Buscar template com log detalhado
-            \Log::info('🔍 [PRODUÇÃO] Tentando buscar template...');
             $template = ContractTemplate::findOrFail($request->template_id);
-            \Log::info('✅ [PRODUÇÃO] Template encontrado', [
-                'template_id' => $template->id,
-                'nome' => $template->name
-            ]);
-            \Log::info('✅ Licenciado e template encontrados', [
-                'licenciado' => $licenciado->razao_social ?? $licenciado->nome_fantasia,
-                'template' => $template->name
-            ]);
 
             // Preparar dados do contrato
-            \Log::info('🔧 Preparando dados do contrato...');
             $contractData = $this->prepareContractData($licenciado);
-            \Log::info('✅ Dados preparados', ['data_keys' => array_keys($contractData)]);
             
             // Substituir variáveis no template
-            \Log::info('🔄 Substituindo variáveis no template...');
             $filledContent = $this->replaceTemplateVariables($template->content, $contractData);
-            \Log::info('✅ Template preenchido', ['content_length' => strlen($filledContent)]);
 
             // Criar o contrato no banco
-            \Log::info('💾 Criando contrato no banco...');
             $contract = Contract::create([
-                'licenciado_table_id' => $request->licenciado_id,  // Corrigido: usar request ao invés de $licenciado->id
+                'licenciado_table_id' => $request->licenciado_id,
                 'template_id' => $request->template_id,
-                'status' => 'criado',  // Usar status válido do enum
+                'status' => 'criado',
                 'observacoes_admin' => $request->observacoes_admin,
                 'contract_data' => json_encode($contractData),
                 'meta' => json_encode([
@@ -277,38 +210,30 @@ class ContractController extends Controller
                 'generated_at' => now(),
                 'active' => true
             ]);
-            \Log::info('✅ Contrato criado no banco', ['contract_id' => $contract->id]);
 
             // Gerar PDF do contrato
-            \Log::info('📄 Iniciando geração de PDF...');
             $pdfPath = $this->generateContractPDF($contract, $filledContent);
-            \Log::info('✅ PDF gerado', ['pdf_path' => $pdfPath]);
             
             // Atualizar contrato com caminho do PDF
-            \Log::info('🔄 Atualizando contrato com PDF...');
             $contract->update([
                 'contract_pdf_path' => $pdfPath,
-                'status' => 'pdf_ready',  // Status válido do enum
+                'status' => 'pdf_ready',
                 'pdf_generated_at' => now()
             ]);
-            \Log::info('✅ Contrato atualizado com sucesso');
 
             return redirect()->route('contracts.index')
                 ->with('success', 'Contrato gerado com sucesso! ID: ' . $contract->id . '. Você pode agora enviar para assinatura.');
 
         } catch (\Exception $e) {
-            \Log::error('❌ ERRO na geração de contrato:', [
+            \Log::error('Erro na geração de contrato:', [
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString(),
                 'licenciado_id' => $request->licenciado_id,
                 'template_id' => $request->template_id,
-                'user_id' => auth()->id(),
-                'request_data' => $request->all()
+                'user_id' => auth()->id()
             ]);
             
-            // Em vez de back() que pode levar ao step1, redirecionar especificamente para contracts.index com erro
             return redirect()->route('contracts.index')
                 ->withErrors(['error' => 'Erro ao gerar contrato: ' . $e->getMessage()])
                 ->with('error', 'Erro ao gerar contrato: ' . $e->getMessage());
@@ -454,11 +379,6 @@ class ContractController extends Controller
             // Sanitizar HTML
             $cleanHtml = $this->sanitizeHtml($htmlContent);
             
-            // Log para debug
-            \Log::info('📄 Iniciando geração de PDF', [
-                'contract_id' => $contract->id,
-                'html_length' => strlen($cleanHtml)
-            ]);
             
             // Gerar PDF com opções avançadas
             $pdf = Pdf::loadHTML($cleanHtml);
@@ -488,32 +408,13 @@ class ContractController extends Controller
             $pdfContent = $pdf->output();
             $fullPath = storage_path('app/' . $filePath);
             
-            \Log::info('📄 Tentando salvar PDF', [
-                'file_path' => $filePath,
-                'full_path' => $fullPath,
-                'pdf_size' => strlen($pdfContent),
-                'dir_exists' => is_dir($fullDir),
-                'dir_writable' => is_writable($fullDir)
-            ]);
-            
             // Usar file_put_contents ao invés de Storage::put para debugging
             $bytesWritten = file_put_contents($fullPath, $pdfContent);
-            
-            \Log::info('📄 Resultado do salvamento', [
-                'bytes_written' => $bytesWritten,
-                'file_exists_after' => file_exists($fullPath),
-                'file_size_after' => file_exists($fullPath) ? filesize($fullPath) : 0
-            ]);
             
             if (!file_exists($fullPath) || $bytesWritten === false) {
                 throw new \Exception('PDF não foi salvo corretamente: ' . $fullPath . ' (bytes: ' . $bytesWritten . ')');
             }
             
-            \Log::info('✅ PDF gerado com sucesso', [
-                'contract_id' => $contract->id,
-                'file_path' => $filePath,
-                'file_size' => filesize($fullPath)
-            ]);
             
             return $filePath;
             
@@ -774,7 +675,7 @@ class ContractController extends Controller
 
     private function generatePDF(ContractTemplate $template, array $data)
     {
-        // Renderizar template
+        // Renderizar template - sempre usar o template default que é inteligente
         $html = view('contracts.templates.default', $data)->render();
         
         // Substituir placeholders conforme especificação do usuário
@@ -793,14 +694,18 @@ class ContractController extends Controller
             }
         }
 
-        // Gerar PDF
+        // Gerar PDF com opções otimizadas para assinaturas
         $pdf = Pdf::loadHTML($html);
         $pdf->setPaper('A4', 'portrait');
         $pdf->setOptions([
             'dpi' => 150,
-            'defaultFont' => 'sans-serif',
-            'isRemoteEnabled' => false,
-            'isHtml5ParserEnabled' => true
+            'defaultFont' => 'DejaVu Sans',
+            'isRemoteEnabled' => true, // Permitir imagens externas para assinaturas
+            'isHtml5ParserEnabled' => true,
+            'isPhpEnabled' => false,
+            'isFontSubsettingEnabled' => true,
+            'defaultPaperSize' => 'A4',
+            'defaultPaperOrientation' => 'portrait'
         ]);
 
         return $pdf;
@@ -889,13 +794,6 @@ class ContractController extends Controller
 
         $fileName = $contract->signed_contract_path ? 'Contrato_Assinado_' . str_pad($contract->id, 6, '0', STR_PAD_LEFT) . '.pdf' : 'Contrato_' . str_pad($contract->id, 6, '0', STR_PAD_LEFT) . '.pdf';
         
-        \Log::info('📥 Download de contrato', [
-            'contract_id' => $contract->id,
-            'licenciado' => $contract->licenciado->razao_social ?? $contract->licenciado->nome_fantasia,
-            'file_name' => $fileName,
-            'is_signed' => (bool) $contract->signed_contract_path,
-            'user_id' => auth()->id()
-        ]);
         
         return response()->download($fullPath, $fileName);
     }
@@ -1003,10 +901,6 @@ class ContractController extends Controller
                 }
             });
 
-            \Log::info('Email de contrato enviado com sucesso', [
-                'contract_id' => $contract->id,
-                'email' => $licenciado->email
-            ]);
 
         } catch (\Exception $e) {
             \Log::error('Erro ao enviar email do contrato: ' . $e->getMessage(), [
@@ -1139,10 +1033,6 @@ class ContractController extends Controller
     private function generateSignedContractPDF(Contract $contract, array $signatureData)
     {
         try {
-            \Log::info('Gerando PDF do contrato assinado', [
-                'contract_id' => $contract->id,
-                'signer_name' => $signatureData['signer_name'] ?? 'N/A'
-            ]);
 
             // Preparar dados do contrato incluindo assinatura
             $contractData = $this->prepareContractData($contract);
@@ -1165,10 +1055,12 @@ class ContractController extends Controller
                 $contractData['signature_image_path'] = $signatureImagePath;
             }
             
-            // Obter template padrão ou usar template básico
+            // Obter template padrão
             $template = ContractTemplate::getDefault();
             if (!$template) {
-                $template = $this->getDefaultSignedContractTemplate();
+                // Criar template temporário se não existir
+                $template = new \stdClass();
+                $template->content = '';
             }
             
             // Gerar PDF com dados de assinatura
@@ -1194,10 +1086,6 @@ class ContractController extends Controller
             // Atualizar caminho do contrato assinado
             $contract->update(['signed_contract_path' => $filePath]);
             
-            \Log::info('PDF do contrato assinado gerado com sucesso', [
-                'contract_id' => $contract->id,
-                'file_path' => $filePath
-            ]);
             
             return $filePath;
             
@@ -1255,13 +1143,6 @@ class ContractController extends Controller
         }
     }
 
-    private function getDefaultSignedContractTemplate()
-    {
-        // Template básico caso não exista um padrão
-        $template = new \stdClass();
-        $template->content = view('contracts.templates.signed-default')->render();
-        return $template;
-    }
 
     private function sendSignatureConfirmationEmail(Contract $contract)
     {
@@ -1819,20 +1700,12 @@ class ContractController extends Controller
     {
         try {
             // Log da exclusão para auditoria
-            \Log::info('🗑️ Exclusão de contrato', [
-                'contract_id' => $contract->id,
-                'licenciado' => $contract->licenciado->razao_social ?? $contract->licenciado->nome_fantasia,
-                'status' => $contract->status,
-                'user_id' => auth()->id(),
-                'user_name' => auth()->user()->name
-            ]);
 
             // Remover arquivos físicos se existirem
             if ($contract->contract_pdf_path) {
                 $pdfPath = storage_path('app/' . $contract->contract_pdf_path);
                 if (file_exists($pdfPath)) {
                     unlink($pdfPath);
-                    \Log::info('📄 Arquivo PDF removido', ['path' => $contract->contract_pdf_path]);
                 }
             }
 
@@ -1840,7 +1713,6 @@ class ContractController extends Controller
                 $signedPath = storage_path('app/' . $contract->signed_contract_path);
                 if (file_exists($signedPath)) {
                     unlink($signedPath);
-                    \Log::info('📄 Arquivo assinado removido', ['path' => $contract->signed_contract_path]);
                 }
             }
 

@@ -363,21 +363,80 @@
             Por estarem justas e contratadas, as partes assinam o presente contrato em duas vias de igual teor e forma.
         </p>
         
-        <div class="signature-container">
-            <div class="signature-block">
-                <div class="signature-line"></div>
-                <div class="signature-name">{{ $contratada['nome'] ?? 'DSPAY TECNOLOGIA LTDA' }}</div>
-                <div class="signature-doc">CNPJ: {{ $contratada['cnpj'] ?? '00.000.000/0001-00' }}</div>
-                <div class="signature-role">CONTRATADA</div>
+        @if(isset($signature_info) && $signature_info)
+            <!-- CONTRATO ASSINADO DIGITALMENTE -->
+            <div class="digital-signature-section" style="border: 2px solid #10b981; border-radius: 10px; padding: 20px; background: #f0fdf4; margin-bottom: 30px;">
+                <div style="text-align: center; font-weight: bold; color: #059669; margin-bottom: 20px; font-size: 18px;">
+                    🔒 CONTRATO ASSINADO DIGITALMENTE
+                </div>
+                
+                <div style="display: table; width: 100%; margin-bottom: 20px;">
+                    <div style="display: table-row;">
+                        <div style="display: table-cell; padding: 8px; border-bottom: 1px solid #d1fae5; font-weight: bold; width: 30%; color: #065f46;">Assinante:</div>
+                        <div style="display: table-cell; padding: 8px; border-bottom: 1px solid #d1fae5;">{{ $signature_info['signer_name'] ?? 'N/A' }}</div>
+                    </div>
+                    <div style="display: table-row;">
+                        <div style="display: table-cell; padding: 8px; border-bottom: 1px solid #d1fae5; font-weight: bold; width: 30%; color: #065f46;">Documento:</div>
+                        <div style="display: table-cell; padding: 8px; border-bottom: 1px solid #d1fae5;">{{ $signature_info['signer_document'] ?? 'N/A' }}</div>
+                    </div>
+                    <div style="display: table-row;">
+                        <div style="display: table-cell; padding: 8px; border-bottom: 1px solid #d1fae5; font-weight: bold; width: 30%; color: #065f46;">Data/Hora da Assinatura:</div>
+                        <div style="display: table-cell; padding: 8px; border-bottom: 1px solid #d1fae5;">{{ $signature_info['signed_at'] ?? 'N/A' }}</div>
+                    </div>
+                    <div style="display: table-row;">
+                        <div style="display: table-cell; padding: 8px; border-bottom: 1px solid #d1fae5; font-weight: bold; width: 30%; color: #065f46;">IP de Origem:</div>
+                        <div style="display: table-cell; padding: 8px; border-bottom: 1px solid #d1fae5;">{{ $signature_info['signer_ip'] ?? 'N/A' }}</div>
+                    </div>
+                    <div style="display: table-row;">
+                        <div style="display: table-cell; padding: 8px; font-weight: bold; width: 30%; color: #065f46;">Status:</div>
+                        <div style="display: table-cell; padding: 8px;"><strong style="color: #059669;">✓ ASSINADO DIGITALMENTE</strong></div>
+                    </div>
+                </div>
+
+                @if(isset($signature_image_path) && file_exists($signature_image_path))
+                <div style="text-align: center; margin: 20px 0; padding: 20px; border: 1px dashed #10b981; background: #fff; border-radius: 8px;">
+                    <div style="font-weight: bold; margin-bottom: 10px;">Assinatura Digital:</div>
+                    <img src="file://{{ $signature_image_path }}" alt="Assinatura Digital" style="max-width: 300px; max-height: 100px;" />
+                </div>
+                @endif
+
+                <div style="background: #065f46; color: white; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center;">
+                    <div><strong>CERTIFICADO DE AUTENTICIDADE</strong></div>
+                    <div>Este documento foi assinado digitalmente conforme a Lei 14.063/2020</div>
+                    <div style="font-family: 'Courier New', monospace; font-size: 12px; word-break: break-all; margin-top: 10px; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 4px;">
+                        <strong>Hash de Integridade:</strong><br>
+                        {{ $signature_info['signature_hash'] ?? 'N/A' }}
+                    </div>
+                </div>
             </div>
             
-            <div class="signature-block">
-                <div class="signature-line"></div>
-                <div class="signature-name">{{ $contratante['nome'] ?? $licensee->razao_social ?? $licensee->nome_fantasia ?? 'Nome não informado' }}</div>
-                <div class="signature-doc">{{ $contratante['documento'] ?? ($licensee ? $licensee->cnpj_cpf : 'Documento não informado') }}</div>
-                <div class="signature-role">CONTRATANTE</div>
+            <!-- Assinatura da Contratada -->
+            <div class="signature-container">
+                <div class="signature-block" style="width: 100%; text-align: center;">
+                    <div class="signature-line"></div>
+                    <div class="signature-name">{{ $contratada['nome'] ?? 'DSPAY TECNOLOGIA LTDA' }}</div>
+                    <div class="signature-doc">CNPJ: {{ $contratada['cnpj'] ?? '00.000.000/0001-00' }}</div>
+                    <div class="signature-role">CONTRATADA</div>
+                </div>
             </div>
-        </div>
+        @else
+            <!-- CONTRATO PARA ASSINATURA -->
+            <div class="signature-container">
+                <div class="signature-block">
+                    <div class="signature-line"></div>
+                    <div class="signature-name">{{ $contratada['nome'] ?? 'DSPAY TECNOLOGIA LTDA' }}</div>
+                    <div class="signature-doc">CNPJ: {{ $contratada['cnpj'] ?? '00.000.000/0001-00' }}</div>
+                    <div class="signature-role">CONTRATADA</div>
+                </div>
+                
+                <div class="signature-block">
+                    <div class="signature-line"></div>
+                    <div class="signature-name">{{ $contratante['nome'] ?? $licensee->razao_social ?? $licensee->nome_fantasia ?? 'Nome não informado' }}</div>
+                    <div class="signature-doc">{{ $contratante['documento'] ?? ($licensee ? $licensee->cnpj_cpf : 'Documento não informado') }}</div>
+                    <div class="signature-role">CONTRATANTE</div>
+                </div>
+            </div>
+        @endif
     </div>
 
         <div class="footer">

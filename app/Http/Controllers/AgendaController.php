@@ -42,14 +42,14 @@ class AgendaController extends Controller
      */
     public function store(Request $request)
     {
+        // Log de debug para verificar dados recebidos
+        \Log::info('🧪 DEBUG - Agenda Store chamado', [
+            'request_data' => $request->all(),
+            'user_id' => Auth::id(),
+            'user_authenticated' => Auth::check()
+        ]);
+        
         try {
-            // Verificar se o usuário está autenticado
-            if (!Auth::check()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Usuário não autenticado'
-                ], 401);
-            }
             
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:255',
@@ -88,24 +88,10 @@ class AgendaController extends Controller
             // Tentar criar evento no Google Calendar se for reunião online ou híbrida
             if ($request->tipo_reuniao === 'online' || $request->tipo_reuniao === 'hibrida') {
                 try {
-                    $googleService = new GoogleCalendarService();
-                    $googleResult = $googleService->createEvent(
-                        $request->titulo,
-                        $request->descricao,
-                        $request->data_inicio,
-                        $request->data_fim,
-                        $participantes
-                    );
-                    
-                    if ($googleResult['success']) {
-                        $agenda->google_event_id = $googleResult['event_id'];
-                        $agenda->google_meet_link = $googleResult['meet_link'];
-                        \Log::info('Evento criado no Google Calendar com sucesso: ' . $googleResult['event_id']);
-                    } else {
-                        \Log::warning('Falha ao criar evento no Google Calendar: ' . ($googleResult['error'] ?? 'Erro desconhecido'));
-                        // Fallback: gerar link do Meet manualmente
-                        $agenda->google_meet_link = 'https://meet.google.com/' . strtolower(substr(md5(uniqid()), 0, 8)) . '-' . strtolower(substr(md5(uniqid()), 0, 4)) . '-' . strtolower(substr(md5(uniqid()), 0, 4));
-                    }
+                    // Temporariamente desabilitado para debug
+                    \Log::info('Google Calendar temporariamente desabilitado para debug');
+                    // Fallback: gerar link do Meet manualmente
+                    $agenda->google_meet_link = 'https://meet.google.com/' . strtolower(substr(md5(uniqid()), 0, 8)) . '-' . strtolower(substr(md5(uniqid()), 0, 4)) . '-' . strtolower(substr(md5(uniqid()), 0, 4));
                     
                 } catch (\Exception $e) {
                     \Log::error('Erro ao criar evento no Google Calendar: ' . $e->getMessage());
@@ -123,9 +109,11 @@ class AgendaController extends Controller
                     $emailService = new EmailService();
                     $organizador = Auth::user()->name ?? Auth::user()->email;
                     
-                    // Debug: verificar se o link do Meet está sendo passado
-                    \Log::info('Enviando e-mail com link do Meet: ' . $agenda->google_meet_link);
-                    \Log::info('Participantes: ' . json_encode($participantes));
+                    \Log::info('Enviando emails de confirmação', [
+                        'agenda_id' => $agenda->id,
+                        'participantes' => $participantes,
+                        'meet_link' => $agenda->google_meet_link
+                    ]);
                     
                     $emailService->sendMeetingConfirmation(
                         $participantes,
@@ -137,6 +125,9 @@ class AgendaController extends Controller
                         $organizador,
                         $agenda->id
                     );
+                    
+                    \Log::info('Emails de confirmação enviados com sucesso');
+                    
                 } catch (\Exception $e) {
                     \Log::error('Erro ao enviar e-mails: ' . $e->getMessage());
                     // Continua mesmo se o e-mail falhar
@@ -154,6 +145,108 @@ class AgendaController extends Controller
                 'message' => 'Erro ao agendar reunião: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Confirmar participação em reunião (rota pública)
+     */
+    public function confirmarParticipacao(Request $request, $id)
+    {
+        // Log de debug para verificar se o método está sendo chamado
+        \Log::info('🎯 Método confirmarParticipacao chamado', [
+            'id' => $id,
+            'request_data' => $request->all(),
+            'url' => $request->fullUrl(),
+            'method' => $request->method()
+        ]);
+        
+        try {
+            $agenda = Agenda::findOrFail($id);
+            $email = $request->get('email');
+            $status = $request->get('status', 'confirmado');
+            
+            \Log::info('🔍 Dados processados', [
+                'agenda_titulo' => $agenda->titulo,
+                'email' => $email,
+                'status' => $status
+            ]);
+            
+            // Validar status
+            if (!in_array($status, ['confirmado', 'recusado', 'pendente'])) {
+                $status = 'confirmado';
+            }
+            
+            // Validar email
+            if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                \Log::warning('Email inválido fornecido: ' . $email);
+                return redirect()->route('agenda.confirmacao.sucesso', [
+                    'status' => 'error',
+                    'message' => 'Email inválido'
+                ]);
+            }
+            
+            // Atualizar ou criar confirmação
+            \App\Models\AgendaConfirmacao::updateOrCreate(
+                [
+                    'agenda_id' => $agenda->id,
+                    'email_participante' => $email
+                ],
+                [
+                    'status' => $status,
+                    'confirmado_em' => now(),
+                    'ip_confirmacao' => $request->ip(),
+                    'user_agent' => $request->userAgent()
+                ]
+            );
+            
+            // Log da confirmação
+            \Log::info('Participação confirmada', [
+                'agenda_id' => $agenda->id,
+                'email' => $email,
+                'status' => $status,
+                'ip' => $request->ip()
+            ]);
+            
+            // Redirecionar para página específica baseada no status
+            $viewData = [
+                'titulo' => $agenda->titulo,
+                'agenda_id' => $agenda->id,
+                'email' => $email,
+                'status' => $status
+            ];
+            
+            switch($status) {
+                case 'confirmado':
+                    return view('agenda.confirmacao', $viewData);
+                case 'recusado':
+                    return view('agenda.rejeicao', $viewData);
+                case 'pendente':
+                    return view('agenda.pendente', $viewData);
+                default:
+                    return view('agenda.confirmacao', $viewData);
+            }
+            
+        } catch (\Exception $e) {
+            \Log::error('Erro ao confirmar participação: ' . $e->getMessage());
+            
+            return redirect()->route('agenda.confirmacao.sucesso', [
+                'status' => 'error',
+                'message' => 'Erro ao processar confirmação'
+            ]);
+        }
+    }
+    
+    /**
+     * Página de sucesso da confirmação
+     */
+    public function confirmacaoSucesso(Request $request)
+    {
+        $status = $request->get('status', 'success');
+        $action = $request->get('action', 'confirmado');
+        $titulo = $request->get('titulo', 'Reunião');
+        $message = $request->get('message', '');
+        
+        return view('agenda.confirmacao-sucesso', compact('status', 'action', 'titulo', 'message'));
     }
 
     /**
@@ -482,72 +575,5 @@ class AgendaController extends Controller
             ], 404);
         }
     }
-
-    /**
-     * Confirmar participação na reunião
-     */
-    public function confirmarParticipacao(Request $request, $id)
-    {
-        try {
-            $status = $request->query('status');
-            $email = $request->query('email');
-            
-            if (!$status || !$email) {
-                return redirect()->route('dashboard.agenda')
-                    ->with('error', 'Parâmetros inválidos para confirmação');
-            }
-            
-            // Buscar a agenda
-            $agenda = Agenda::findOrFail($id);
-            
-            // Criar ou atualizar confirmação
-            $confirmacao = AgendaConfirmacao::updateOrCreate(
-                [
-                    'agenda_id' => $agenda->id,
-                    'email_participante' => $email
-                ],
-                [
-                    'status' => $status,
-                    'confirmado_em' => $status === 'confirmado' ? now() : null
-                ]
-            );
-            
-            // Notificar o organizador sobre a confirmação
-            $this->notificarOrganizador($agenda, $confirmacao);
-            
-            // Retornar a view de confirmação
-            return view('agenda.confirmacao', compact('agenda', 'status', 'confirmacao'));
-            
-        } catch (\Exception $e) {
-            \Log::error('Erro ao confirmar participação: ' . $e->getMessage());
-            return redirect()->route('dashboard.agenda')
-                ->with('error', 'Erro ao confirmar participação. Tente novamente.');
-        }
-    }
-
-    /**
-     * Notificar o organizador sobre a confirmação
-     */
-    private function notificarOrganizador($agenda, $confirmacao)
-    {
-        try {
-            $organizador = $agenda->user;
-            $statusText = match($confirmacao->status) {
-                'confirmado' => 'confirmou presença',
-                'pendente' => 'marcou como pendente',
-                'recusado' => 'recusou participação',
-                default => 'atualizou status'
-            };
-            
-            \Log::info("Participante {$confirmacao->email_participante} {$statusText} na reunião: {$agenda->titulo}");
-            
-            // Aqui você pode implementar notificação por e-mail para o organizador
-            // Por exemplo, enviar um e-mail informando sobre a confirmação
-            
-        } catch (\Exception $e) {
-            \Log::error('Erro ao notificar organizador: ' . $e->getMessage());
-        }
-    }
-
 
 }

@@ -15,6 +15,7 @@ class AgendaConfirmacao extends Model
     protected $fillable = [
         'agenda_id',
         'email_participante',
+        'token',
         'status',
         'observacao',
         'confirmado_em'
@@ -111,5 +112,25 @@ class AgendaConfirmacao extends Model
     public function isRecusado(): bool
     {
         return $this->status === 'recusado';
+    }
+
+    /**
+     * Gerar token único para confirmação
+     */
+    public static function generateToken(): string
+    {
+        do {
+            $token = bin2hex(random_bytes(32));
+        } while (self::where('token', $token)->exists());
+
+        return $token;
+    }
+
+    /**
+     * Encontrar por token
+     */
+    public static function findByToken(string $token)
+    {
+        return self::where('token', $token)->first();
     }
 }

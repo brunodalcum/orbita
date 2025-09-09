@@ -423,6 +423,34 @@ Route::prefix('contract-templates')->name('contract-templates.')->middleware(['a
     Route::patch('/{contractTemplate}/toggle-status', [App\Http\Controllers\ContractTemplateController::class, 'toggleStatus'])->name('toggle-status');
 });
 
+// Rotas para Adquirentes (dentro do middleware de autenticação)
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'redirect.role'])->group(function () {
+    Route::get('/adquirentes', [App\Http\Controllers\AdquirenteController::class, 'index'])->name('dashboard.adquirentes');
+    Route::post('/adquirentes', [App\Http\Controllers\AdquirenteController::class, 'store'])->name('adquirentes.store');
+    Route::get('/adquirentes/{id}', [App\Http\Controllers\AdquirenteController::class, 'show'])->name('adquirentes.show');
+    Route::get('/adquirentes/{id}/edit', [App\Http\Controllers\AdquirenteController::class, 'edit'])->name('adquirentes.edit');
+    Route::put('/adquirentes/{id}', [App\Http\Controllers\AdquirenteController::class, 'update'])->name('adquirentes.update');
+    Route::delete('/adquirentes/{id}', [App\Http\Controllers\AdquirenteController::class, 'destroy'])->name('adquirentes.destroy');
+    Route::patch('/adquirentes/{id}/toggle-status', [App\Http\Controllers\AdquirenteController::class, 'toggleStatus'])->name('adquirentes.toggle-status');
+
+    // Rotas para Agenda
+    Route::get('/agenda', [App\Http\Controllers\AgendaController::class, 'index'])->name('dashboard.agenda');
+    Route::post('/agenda', [App\Http\Controllers\AgendaController::class, 'store'])->name('agenda.store');
+    Route::get('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'show'])->name('agenda.show');
+    Route::get('/agenda/{id}/edit', [App\Http\Controllers\AgendaController::class, 'edit'])->name('agenda.edit');
+    Route::put('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'update'])->name('agenda.update');
+    Route::delete('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'destroy'])->name('agenda.destroy');
+    Route::patch('/agenda/{id}/toggle-status', [App\Http\Controllers\AgendaController::class, 'toggleStatus'])->name('agenda.toggle-status');
+    Route::get('/agenda/data/{data}', [App\Http\Controllers\AgendaController::class, 'getAgendaPorData'])->name('agenda.por-data');
+    Route::get('/agenda/data', [App\Http\Controllers\AgendaController::class, 'getAgendaPorData'])->name('agenda.por-data.query');
+    Route::get('/agenda/licenciados/list', [App\Http\Controllers\AgendaController::class, 'getLicenciados'])->name('agenda.licenciados.list');
+    Route::get('/agenda/licenciados/{id}', [App\Http\Controllers\AgendaController::class, 'getLicenciadoDetails'])->name('agenda.licenciados.details');
+});
+
+// Rotas públicas para confirmação de agenda (sem autenticação)
+Route::get('/agenda/confirmar/{id}', [App\Http\Controllers\AgendaController::class, 'confirmarParticipacao'])->name('agenda.confirmar');
+Route::get('/agenda/confirmacao-sucesso', [App\Http\Controllers\AgendaController::class, 'confirmacaoSucesso'])->name('agenda.confirmacao.sucesso');
+
 // Rotas públicas para assinatura de contratos (sem autenticação)
 Route::get('/contracts/sign/{token}', [App\Http\Controllers\ContractController::class, 'showSignaturePage'])->name('contracts.sign.show');
 Route::post('/contracts/sign/{token}', [App\Http\Controllers\ContractController::class, 'processSignature'])->name('contracts.sign.process');
@@ -445,27 +473,11 @@ Route::prefix('api/produtos')->name('api.products.')->group(function () {
     Route::get('/categoria/{categorySlug}', [App\Http\Controllers\ProductController::class, 'categoryProducts'])->name('category');
 });
 
-// Rotas para Adquirentes
-Route::get('/adquirentes', [App\Http\Controllers\AdquirenteController::class, 'index'])->name('dashboard.adquirentes');
-Route::post('/adquirentes', [App\Http\Controllers\AdquirenteController::class, 'store'])->name('adquirentes.store');
-Route::get('/adquirentes/{id}', [App\Http\Controllers\AdquirenteController::class, 'show'])->name('adquirentes.show');
-Route::get('/adquirentes/{id}/edit', [App\Http\Controllers\AdquirenteController::class, 'edit'])->name('adquirentes.edit');
-Route::put('/adquirentes/{id}', [App\Http\Controllers\AdquirenteController::class, 'update'])->name('adquirentes.update');
-Route::delete('/adquirentes/{id}', [App\Http\Controllers\AdquirenteController::class, 'destroy'])->name('adquirentes.destroy');
-Route::patch('/adquirentes/{id}/toggle-status', [App\Http\Controllers\AdquirenteController::class, 'toggleStatus'])->name('adquirentes.toggle-status');
-
-// Rotas para Agenda
-Route::get('/agenda', [App\Http\Controllers\AgendaController::class, 'index'])->name('dashboard.agenda');
-Route::post('/agenda', [App\Http\Controllers\AgendaController::class, 'store'])->name('agenda.store');
-Route::get('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'show'])->name('agenda.show');
-Route::get('/agenda/{id}/edit', [App\Http\Controllers\AgendaController::class, 'edit'])->name('agenda.edit');
-Route::put('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'update'])->name('agenda.update');
-Route::delete('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'destroy'])->name('agenda.destroy');
-Route::patch('/agenda/{id}/toggle-status', [App\Http\Controllers\AgendaController::class, 'toggleStatus'])->name('agenda.toggle-status');
-Route::get('/agenda/data/{data}', [App\Http\Controllers\AgendaController::class, 'getAgendaPorData'])->name('agenda.por-data');
-Route::get('/agenda/data', [App\Http\Controllers\AgendaController::class, 'getAgendaPorData'])->name('agenda.por-data.query');
-Route::get('/agenda/licenciados/list', [App\Http\Controllers\AgendaController::class, 'getLicenciados'])->name('agenda.licenciados.list');
-Route::get('/agenda/licenciados/{id}', [App\Http\Controllers\AgendaController::class, 'getLicenciadoDetails'])->name('agenda.licenciados.details');
 
 // Rota para callback OAuth2 do Google Calendar
 Route::get('/auth/google/callback', [App\Http\Controllers\GoogleAuthController::class, 'callback'])->name('google.auth.callback');
+
+// Rotas públicas para confirmação de compromissos (sem autenticação)
+Route::get('/agenda/confirmacao/{token}', [App\Http\Controllers\AgendaController::class, 'showConfirmation'])->name('agenda.confirmation.show');
+Route::post('/agenda/confirmacao/{token}/aceitar', [App\Http\Controllers\AgendaController::class, 'acceptInvitation'])->name('agenda.confirmation.accept');
+Route::post('/agenda/confirmacao/{token}/rejeitar', [App\Http\Controllers\AgendaController::class, 'rejectInvitation'])->name('agenda.confirmation.reject');

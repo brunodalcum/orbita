@@ -328,11 +328,11 @@
         <h1>Participação Confirmada!</h1>
         <div class="subtitle">Sua presença foi confirmada com sucesso. Obrigado!</div>
         
-        @if(isset($titulo) && $titulo)
+        <?php if(isset($titulo) && $titulo): ?>
             <div class="meeting-title">
-                <h2>📅 {{ $titulo }}</h2>
+                <h2>📅 <?php echo e($titulo); ?></h2>
             </div>
-        @endif
+        <?php endif; ?>
         
         <div class="success-message">
             <strong>✅ Confirmado com sucesso!</strong><br>
@@ -341,16 +341,16 @@
         </div>
         
         <div class="buttons-container">
-            <a href="{{ url('/') }}" class="button back-button">🏠 Voltar ao Início</a>
-            <a href="mailto:?subject=Confirmação de Participação&body=Confirmei minha participação na reunião: {{ $titulo ?? 'Reunião' }}" 
+            <a href="<?php echo e(url('/')); ?>" class="button back-button">🏠 Voltar ao Início</a>
+            <a href="mailto:?subject=Confirmação de Participação&body=Confirmei minha participação na reunião: <?php echo e($titulo ?? 'Reunião'); ?>" 
                class="button share-button">📧 Compartilhar</a>
         </div>
         
         <div class="footer">
             <div class="logo">🚀 Orbita</div>
             <p>Sistema de Gestão de Reuniões e Agendas</p>
-            <small>Confirmação registrada em {{ date('d/m/Y H:i') }}</small>
+            <small>Confirmação registrada em <?php echo e(date('d/m/Y H:i')); ?></small>
         </div>
     </div>
 </body>
-</html>
+</html><?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/agenda/confirmacao.blade.php ENDPATH**/ ?>

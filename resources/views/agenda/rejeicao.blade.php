@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✅ Participação Confirmada - Orbita</title>
+    <title>❌ Participação Recusada - Orbita</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -21,20 +21,6 @@
             padding: 20px;
             position: relative;
             overflow-x: hidden;
-        }
-        
-        /* Animação de confetti */
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #fff;
-            animation: confetti-fall 3s linear infinite;
-        }
-        
-        @keyframes confetti-fall {
-            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
         
         /* Partículas de fundo */
@@ -46,17 +32,17 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
             pointer-events: none;
             animation: float 20s ease-in-out infinite;
         }
         
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) rotate(1deg); }
-            66% { transform: translateY(10px) rotate(-1deg); }
+            33% { transform: translateY(-15px) rotate(0.5deg); }
+            66% { transform: translateY(8px) rotate(-0.5deg); }
         }
         
         .container {
@@ -83,7 +69,7 @@
         
         .icon {
             font-size: 120px;
-            animation: bounceIn 1.5s ease-out, pulse 2s infinite;
+            animation: fadeIn 1.5s ease-out, gentle-sway 3s ease-in-out infinite;
             position: relative;
             z-index: 2;
         }
@@ -95,14 +81,14 @@
             transform: translate(-50%, -50%);
             width: 180px;
             height: 180px;
-            background: rgba(72, 187, 120, 0.1);
+            background: rgba(229, 62, 62, 0.1);
             border-radius: 50%;
-            animation: rotate 10s linear infinite;
+            animation: rotate 15s linear infinite;
             z-index: 1;
         }
         
         h1 {
-            color: #22543d;
+            color: #742a2a;
             margin-bottom: 20px;
             font-size: 36px;
             font-weight: 700;
@@ -110,7 +96,7 @@
         }
         
         .subtitle {
-            color: #2f855a;
+            color: #9b2c2c;
             font-size: 22px;
             margin-bottom: 40px;
             line-height: 1.5;
@@ -118,12 +104,12 @@
         }
         
         .meeting-title {
-            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
             border-radius: 20px;
             padding: 30px;
             margin: 40px 0;
-            border: 2px solid #9ae6b4;
-            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.15);
+            border: 2px solid #fc8181;
+            box-shadow: 0 8px 25px rgba(229, 62, 62, 0.15);
             position: relative;
             overflow: hidden;
         }
@@ -135,44 +121,55 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #48bb78, #38a169);
+            background: linear-gradient(90deg, #e53e3e, #c53030);
         }
         
         .meeting-title h2 {
-            color: #22543d;
+            color: #742a2a;
             font-size: 24px;
             margin: 0;
             font-weight: 600;
         }
         
-        .success-message {
-            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
-            border: 2px solid #48bb78;
+        .rejection-message {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            border: 2px solid #e53e3e;
             border-radius: 20px;
             padding: 30px;
             margin: 40px 0;
             font-weight: 500;
             font-size: 18px;
-            color: #22543d;
+            color: #742a2a;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.2);
+            box-shadow: 0 8px 25px rgba(229, 62, 62, 0.2);
         }
         
-        .success-message::before {
+        .rejection-message::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 3s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 4s infinite;
         }
         
         @keyframes shimmer {
             0% { left: -100%; }
             100% { left: 100%; }
+        }
+        
+        .understanding-message {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border: 1px solid #cbd5e0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            color: #4a5568;
+            font-size: 16px;
+            line-height: 1.6;
         }
         
         .buttons-container {
@@ -224,39 +221,38 @@
             box-shadow: 0 15px 35px rgba(66, 153, 225, 0.4);
         }
         
-        .share-button {
-            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+        .contact-button {
+            background: linear-gradient(135deg, #805ad5 0%, #6b46c1 100%);
             color: white;
-            box-shadow: 0 8px 25px rgba(56, 161, 105, 0.3);
+            box-shadow: 0 8px 25px rgba(128, 90, 213, 0.3);
         }
         
-        .share-button:hover {
-            box-shadow: 0 15px 35px rgba(56, 161, 105, 0.4);
+        .contact-button:hover {
+            box-shadow: 0 15px 35px rgba(128, 90, 213, 0.4);
         }
         
         .footer {
             margin-top: 50px;
-            color: #2f855a;
+            color: #9b2c2c;
             font-size: 16px;
         }
         
         .footer .logo {
             font-size: 24px;
             font-weight: 700;
-            color: #22543d;
+            color: #742a2a;
             margin-bottom: 10px;
         }
         
-        @keyframes bounceIn {
-            0% { transform: scale(0.3) rotate(-360deg); opacity: 0; }
-            50% { transform: scale(1.1) rotate(-180deg); opacity: 1; }
-            70% { transform: scale(0.9) rotate(-90deg); }
-            100% { transform: scale(1) rotate(0deg); }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
         }
         
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        @keyframes gentle-sway {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-2deg); }
+            75% { transform: rotate(2deg); }
         }
         
         @keyframes rotate {
@@ -293,40 +289,16 @@
             }
         }
     </style>
-    <script>
-        // Criar confetti
-        function createConfetti() {
-            const colors = ['#48bb78', '#38a169', '#68d391', '#9ae6b4', '#c6f6d5'];
-            for(let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 3 + 's';
-                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => {
-                    confetti.remove();
-                }, 5000);
-            }
-        }
-        
-        // Executar confetti ao carregar
-        window.addEventListener('load', function() {
-            setTimeout(createConfetti, 500);
-        });
-    </script>
 </head>
 <body>
     <div class="container">
         <div class="icon-container">
             <div class="icon-bg"></div>
-            <div class="icon">🎉</div>
+            <div class="icon">😔</div>
         </div>
         
-        <h1>Participação Confirmada!</h1>
-        <div class="subtitle">Sua presença foi confirmada com sucesso. Obrigado!</div>
+        <h1>Participação Recusada</h1>
+        <div class="subtitle">Entendemos que você não poderá participar desta vez.</div>
         
         @if(isset($titulo) && $titulo)
             <div class="meeting-title">
@@ -334,22 +306,28 @@
             </div>
         @endif
         
-        <div class="success-message">
-            <strong>✅ Confirmado com sucesso!</strong><br>
-            Você confirmou sua participação na reunião. O organizador será notificado automaticamente 
-            e você receberá lembretes antes do evento.
+        <div class="rejection-message">
+            <strong>❌ Participação recusada</strong><br>
+            Você informou que não poderá participar da reunião. O organizador foi notificado 
+            automaticamente sobre sua decisão.
+        </div>
+        
+        <div class="understanding-message">
+            <strong>💙 Compreendemos sua situação</strong><br>
+            Sabemos que às vezes é impossível participar de todos os eventos. Esperamos contar 
+            com sua presença em futuras reuniões e oportunidades.
         </div>
         
         <div class="buttons-container">
             <a href="{{ url('/') }}" class="button back-button">🏠 Voltar ao Início</a>
-            <a href="mailto:?subject=Confirmação de Participação&body=Confirmei minha participação na reunião: {{ $titulo ?? 'Reunião' }}" 
-               class="button share-button">📧 Compartilhar</a>
+            <a href="mailto:organizador@exemplo.com?subject=Sobre a reunião: {{ $titulo ?? 'Reunião' }}" 
+               class="button contact-button">📧 Contatar Organizador</a>
         </div>
         
         <div class="footer">
             <div class="logo">🚀 Orbita</div>
             <p>Sistema de Gestão de Reuniões e Agendas</p>
-            <small>Confirmação registrada em {{ date('d/m/Y H:i') }}</small>
+            <small>Resposta registrada em {{ date('d/m/Y H:i') }}</small>
         </div>
     </div>
 </body>
