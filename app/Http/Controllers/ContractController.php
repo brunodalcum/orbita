@@ -225,9 +225,27 @@ class ContractController extends Controller
         }
 
         try {
-            \Log::info('📝 Buscando licenciado e template...');
+            \Log::info('📝 [PRODUÇÃO] Buscando licenciado e template...', [
+                'licenciado_id_to_find' => $request->licenciado_id,
+                'template_id_to_find' => $request->template_id,
+                'step' => 'before_database_queries'
+            ]);
+            
+            // Buscar licenciado com log detalhado
+            \Log::info('🔍 [PRODUÇÃO] Tentando buscar licenciado...');
             $licenciado = Licenciado::findOrFail($request->licenciado_id);
+            \Log::info('✅ [PRODUÇÃO] Licenciado encontrado', [
+                'licenciado_id' => $licenciado->id,
+                'nome' => $licenciado->razao_social ?? $licenciado->nome_fantasia
+            ]);
+            
+            // Buscar template com log detalhado
+            \Log::info('🔍 [PRODUÇÃO] Tentando buscar template...');
             $template = ContractTemplate::findOrFail($request->template_id);
+            \Log::info('✅ [PRODUÇÃO] Template encontrado', [
+                'template_id' => $template->id,
+                'nome' => $template->name
+            ]);
             \Log::info('✅ Licenciado e template encontrados', [
                 'licenciado' => $licenciado->razao_social ?? $licenciado->nome_fantasia,
                 'template' => $template->name
