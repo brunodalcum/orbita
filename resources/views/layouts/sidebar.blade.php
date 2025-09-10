@@ -60,10 +60,27 @@
                 Adquirentes
             </a>
             
-            <a href="{{ route('dashboard.agenda') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
-                <i class="fas fa-calendar-alt mr-3"></i>
-                Agenda
-            </a>
+            <!-- Menu Agenda com Submenu -->
+            <div class="relative" x-data="{ open: {{ request()->routeIs('dashboard.agenda*') ? 'true' : 'false' }} }">
+                <button @click="open = !open" class="sidebar-link flex items-center justify-between w-full px-4 py-3 text-white rounded-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-calendar-alt mr-3"></i>
+                        Agenda
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                </button>
+                
+                <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="mt-2 ml-4 space-y-1">
+                    <a href="{{ route('dashboard.agenda') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('dashboard.agenda') && !request()->routeIs('dashboard.agenda.calendar') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-list mr-3"></i>
+                        Lista de Compromissos
+                    </a>
+                    <a href="{{ route('dashboard.agenda.calendar') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('dashboard.agenda.calendar') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-calendar mr-3"></i>
+                        Calendário
+                    </a>
+                </div>
+            </div>
             
             <a href="{{ route('dashboard.leads') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
                 <i class="fas fa-user-plus mr-3"></i>

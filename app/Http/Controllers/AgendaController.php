@@ -7,6 +7,7 @@ use App\Models\Agenda;
 use App\Models\AgendaConfirmacao;
 use App\Models\Licenciado;
 use App\Services\GoogleCalendarService;
+use App\Services\GoogleCalendarIntegrationService;
 use App\Services\EmailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,10 +22,17 @@ class AgendaController extends Controller
     public function index()
     {
         $dataAtual = request('data', now()->format('Y-m-d'));
-        $agendas = Agenda::where('user_id', Auth::id())
-            ->doDia($dataAtual)
-            ->orderBy('data_inicio')
-            ->get();
+        
+        // Buscar agendas do usuário
+        $query = Agenda::where('user_id', Auth::id());
+        
+        // Se não há filtro de data específica, mostrar todas as agendas
+        // Se há filtro de data, usar o scope doDia
+        if (request('data')) {
+            $query->doDia($dataAtual);
+        }
+        
+        $agendas = $query->orderBy('data_inicio', 'desc')->get();
 
         return view('dashboard.agenda', compact('agendas', 'dataAtual'));
     }
@@ -34,7 +42,13 @@ class AgendaController extends Controller
      */
     public function create()
     {
-        //
+        // Buscar licenciados ativos para o select
+        $licenciados = Licenciado::whereIn('status', ['ativo', 'aprovado'])
+            ->whereNotNull('email')
+            ->orderBy('razao_social')
+            ->get();
+
+        return view('dashboard.agenda-create', compact('licenciados'));
     }
 
     /**
@@ -57,21 +71,45 @@ class AgendaController extends Controller
                 'data_inicio' => 'required|date',
                 'data_fim' => 'required|date|after:data_inicio',
                 'tipo_reuniao' => 'required|in:presencial,online,hibrida',
-                'participantes' => 'nullable|string'
+                'participantes' => 'nullable|string|max:2000',
+                'meet_link' => 'nullable|url',
+                'licenciado_id' => 'nullable|exists:licenciados,id'
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Erro de validação: ' . implode(', ', $validator->errors()->all()),
-                    'errors' => $validator->errors()
-                ], 422);
+                return back()->withErrors($validator)->withInput()->with('error', 'Por favor, corrija os erros no formulário.');
             }
 
             // Processar participantes
             $participantes = [];
             if ($request->participantes) {
-                $participantes = json_decode($request->participantes, true) ?? [];
+                // Dividir por vírgula ou quebra de linha
+                $emailsString = $request->participantes;
+                $emails = preg_split('/[,\n\r]+/', $emailsString);
+                
+                // Limpar e filtrar emails válidos
+                foreach ($emails as $email) {
+                    $email = trim($email);
+                    if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $participantes[] = $email;
+                    }
+                }
+            }
+            
+            // Adicionar automaticamente o email do licenciado se selecionado
+            if ($request->licenciado_id) {
+                $licenciado = \App\Models\Licenciado::find($request->licenciado_id);
+                if ($licenciado && $licenciado->email && filter_var($licenciado->email, FILTER_VALIDATE_EMAIL)) {
+                    // Verificar se o email do licenciado já não está na lista
+                    if (!in_array($licenciado->email, $participantes)) {
+                        $participantes[] = $licenciado->email;
+                        \Log::info('📧 Email do licenciado adicionado automaticamente', [
+                            'licenciado_id' => $licenciado->id,
+                            'licenciado_email' => $licenciado->email,
+                            'participantes_total' => count($participantes)
+                        ]);
+                    }
+                }
             }
             
             // Criar a agenda no banco de dados
@@ -82,22 +120,61 @@ class AgendaController extends Controller
             $agenda->data_fim = $request->data_fim;
             $agenda->tipo_reuniao = $request->tipo_reuniao;
             $agenda->participantes = $participantes;
+            $agenda->licenciado_id = $request->licenciado_id;
+            $agenda->meet_link = $request->meet_link; // Adicionar campo meet_link
             $agenda->user_id = Auth::id();
             $agenda->status = 'agendada';
             
-            // Tentar criar evento no Google Calendar se for reunião online ou híbrida
+            // Integração com Google Calendar e Meet
             if ($request->tipo_reuniao === 'online' || $request->tipo_reuniao === 'hibrida') {
                 try {
-                    // Temporariamente desabilitado para debug
-                    \Log::info('Google Calendar temporariamente desabilitado para debug');
-                    // Fallback: gerar link do Meet manualmente
-                    $agenda->google_meet_link = 'https://meet.google.com/' . strtolower(substr(md5(uniqid()), 0, 8)) . '-' . strtolower(substr(md5(uniqid()), 0, 4)) . '-' . strtolower(substr(md5(uniqid()), 0, 4));
+                    $googleService = new GoogleCalendarIntegrationService();
+                    
+                    // Verificar se há token de acesso do usuário
+                    $token = session('google_token') ?? \Illuminate\Support\Facades\Cache::get("google_token_user_" . Auth::id());
+                    
+                    if ($token && $googleService->isConfigured()) {
+                        $googleService->setAccessToken($token);
+                        
+                        // Criar evento no Google Calendar
+                        $eventData = [
+                            'titulo' => $request->titulo,
+                            'descricao' => $request->descricao,
+                            'data_inicio' => $request->data_inicio,
+                            'data_fim' => $request->data_fim,
+                            'tipo_reuniao' => $request->tipo_reuniao,
+                            'participantes' => array_column($participantes, 'email')
+                        ];
+                        
+                        $googleEvent = $googleService->createEvent($eventData);
+                        
+                        // Salvar informações do Google
+                        $agenda->google_event_id = $googleEvent['google_event_id'];
+                        $agenda->google_meet_link = $googleEvent['google_meet_link'];
+                        $agenda->google_event_url = $googleEvent['event_url'];
+                        $agenda->google_synced_at = now();
+                        
+                        \Log::info('✅ Evento criado no Google Calendar', [
+                            'agenda_id' => $agenda->id ?? 'novo',
+                            'google_event_id' => $googleEvent['google_event_id'],
+                            'meet_link' => $googleEvent['google_meet_link']
+                        ]);
+                        
+                    } else {
+                        // Fallback: gerar link do Meet manualmente
+                        $agenda->google_meet_link = $googleService->generateMeetLink();
+                        \Log::warning('⚠️ Google Calendar não autenticado, usando Meet link manual', [
+                            'meet_link' => $agenda->google_meet_link
+                        ]);
+                    }
                     
                 } catch (\Exception $e) {
-                    \Log::error('Erro ao criar evento no Google Calendar: ' . $e->getMessage());
-                    // Fallback: gerar link do Meet manualmente se o Google falhar
-                    $agenda->google_meet_link = 'https://meet.google.com/' . strtolower(substr(md5(uniqid()), 0, 8)) . '-' . strtolower(substr(md5(uniqid()), 0, 4)) . '-' . strtolower(substr(md5(uniqid()), 0, 4));
-                    \Log::info('Usando link Meet manual devido ao erro: ' . $e->getMessage());
+                    \Log::error('❌ Erro ao criar evento no Google Calendar: ' . $e->getMessage());
+                    
+                    // Fallback: gerar link do Meet manualmente
+                    $googleService = new GoogleCalendarIntegrationService();
+                    $agenda->google_meet_link = $googleService->generateMeetLink();
+                    \Log::info('🔄 Usando Meet link manual devido ao erro: ' . $agenda->google_meet_link);
                 }
             }
             
@@ -134,16 +211,16 @@ class AgendaController extends Controller
                 }
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Reunião agendada com sucesso!' . (!empty($participantes) ? ' E-mails enviados aos participantes.' : ''),
-                'agenda' => $agenda
-            ]);
+            $message = 'Reunião agendada com sucesso!';
+            if (!empty($participantes)) {
+                $message .= ' E-mails enviados aos participantes.';
+            }
+            
+            return redirect()->route('dashboard.agenda')->with('success', $message);
+            
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erro ao agendar reunião: ' . $e->getMessage()
-            ], 500);
+            \Log::error('Erro ao agendar reunião: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'Erro ao agendar reunião: ' . $e->getMessage());
         }
     }
 
@@ -266,6 +343,12 @@ class AgendaController extends Controller
         try {
             $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
             
+            // Buscar licenciado se existir
+            $licenciado = null;
+            if ($agenda->licenciado_id) {
+                $licenciado = \App\Models\Licenciado::find($agenda->licenciado_id);
+            }
+            
             // Adicionar informações de confirmação
             $agenda->confirmacoes = [
                 'confirmados' => $agenda->confirmacoesConfirmadas()->count(),
@@ -288,7 +371,8 @@ class AgendaController extends Controller
             
             return response()->json([
                 'success' => true,
-                'agenda' => $agenda
+                'agenda' => $agenda,
+                'licenciado' => $licenciado
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -329,7 +413,9 @@ class AgendaController extends Controller
             'data_inicio' => 'required|date',
             'data_fim' => 'required|date|after:data_inicio',
             'tipo_reuniao' => 'required|in:presencial,online,hibrida',
-            'participantes' => 'nullable|string'
+            'participantes' => 'nullable|string|max:2000',
+            'meet_link' => 'nullable|url',
+            'licenciado_id' => 'nullable|exists:licenciados,id'
         ]);
 
         if ($validator->fails()) {
@@ -345,7 +431,28 @@ class AgendaController extends Controller
             // Processar participantes
             $participantes = [];
             if ($request->participantes) {
-                $participantes = json_decode($request->participantes, true) ?? [];
+                // Dividir por vírgula ou quebra de linha
+                $emailsString = $request->participantes;
+                $emails = preg_split('/[,\n\r]+/', $emailsString);
+                
+                // Limpar e filtrar emails válidos
+                foreach ($emails as $email) {
+                    $email = trim($email);
+                    if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $participantes[] = $email;
+                    }
+                }
+            }
+            
+            // Adicionar automaticamente o email do licenciado se selecionado
+            if ($request->licenciado_id) {
+                $licenciado = \App\Models\Licenciado::find($request->licenciado_id);
+                if ($licenciado && $licenciado->email && filter_var($licenciado->email, FILTER_VALIDATE_EMAIL)) {
+                    // Verificar se o email do licenciado já não está na lista
+                    if (!in_array($licenciado->email, $participantes)) {
+                        $participantes[] = $licenciado->email;
+                    }
+                }
             }
             
             // Atualizar dados básicos
@@ -355,6 +462,8 @@ class AgendaController extends Controller
             $agenda->data_fim = $request->data_fim;
             $agenda->tipo_reuniao = $request->tipo_reuniao;
             $agenda->participantes = $participantes;
+            $agenda->meet_link = $request->meet_link;
+            $agenda->licenciado_id = $request->licenciado_id;
             
             // Atualizar no Google Calendar se necessário
             if (($request->tipo_reuniao === 'online' || $request->tipo_reuniao === 'hibrida') && $agenda->google_event_id) {
@@ -404,19 +513,24 @@ class AgendaController extends Controller
             
             $agenda->save();
 
-            // Enviar e-mails de atualização
+            // Enviar e-mails de atualização e criar confirmações
             if (!empty($participantes)) {
                 try {
                     $emailService = new EmailService();
                     $organizador = Auth::user()->name ?? Auth::user()->email;
+                    
+                    // Criar confirmações para novos participantes
+                    $emailService->criarConfirmacoesPendentes($agenda->id, $participantes);
+                    
                     $emailService->sendMeetingUpdate(
                         $participantes,
                         $request->titulo,
                         $request->descricao,
                         $request->data_inicio,
                         $request->data_fim,
-                        $agenda->google_meet_link,
-                        $organizador
+                        $agenda->meet_link ?: $agenda->google_meet_link,
+                        $organizador,
+                        $agenda->id
                     );
                 } catch (\Exception $e) {
                     \Log::error('Erro ao enviar e-mails de atualização: ' . $e->getMessage());
@@ -583,6 +697,24 @@ class AgendaController extends Controller
                 'message' => 'Licenciado não encontrado'
             ], 404);
         }
+    }
+
+    /**
+     * Exibe a view do calendário mensal
+     */
+    public function calendar(Request $request)
+    {
+        $month = $request->get('month', now()->format('Y-m'));
+        $date = Carbon::createFromFormat('Y-m', $month);
+        
+        // Buscar todos os eventos do mês para o usuário logado
+        $agendas = Agenda::where('user_id', Auth::id())
+            ->whereYear('data_inicio', $date->year)
+            ->whereMonth('data_inicio', $date->month)
+            ->orderBy('data_inicio')
+            ->get();
+
+        return view('dashboard.agenda-calendar', compact('agendas', 'month', 'date'));
     }
 
 }

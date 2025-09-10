@@ -35,7 +35,7 @@ class EmailService
     /**
      * Criar confirmações pendentes para os participantes
      */
-    private function criarConfirmacoesPendentes($agendaId, $participantes)
+    public function criarConfirmacoesPendentes($agendaId, $participantes)
     {
         try {
             foreach ($participantes as $email) {
@@ -83,13 +83,13 @@ class EmailService
     /**
      * Enviar e-mail de atualização de reunião
      */
-    public function sendMeetingUpdate($participantes, $titulo, $descricao, $dataInicio, $dataFim, $meetLink = null, $organizador = null)
+    public function sendMeetingUpdate($participantes, $titulo, $descricao, $dataInicio, $dataFim, $meetLink = null, $organizador = null, $agendaId = null)
     {
         try {
             foreach ($participantes as $email) {
                 $email = trim($email);
                 if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $this->sendUpdateEmail($email, $titulo, $descricao, $dataInicio, $dataFim, $meetLink, $organizador);
+                    $this->sendUpdateEmail($email, $titulo, $descricao, $dataInicio, $dataFim, $meetLink, $organizador, $agendaId);
                 }
             }
             
@@ -103,7 +103,7 @@ class EmailService
     /**
      * Enviar e-mail de atualização individual
      */
-    private function sendUpdateEmail($email, $titulo, $descricao, $dataInicio, $dataFim, $meetLink = null, $organizador = null)
+    private function sendUpdateEmail($email, $titulo, $descricao, $dataInicio, $dataFim, $meetLink = null, $organizador = null, $agendaId = null)
     {
         $data = [
             'titulo' => $titulo,
@@ -111,10 +111,13 @@ class EmailService
             'data_inicio' => $dataInicio,
             'data_fim' => $dataFim,
             'meet_link' => $meetLink,
-            'organizador' => $organizador
+            'organizador' => $organizador,
+            'agenda_id' => $agendaId,
+            'participant_email' => $email
         ];
 
-        Mail::send('emails.meeting-update', $data, function ($message) use ($email, $titulo) {
+        // Usar o mesmo template de confirmação para atualizações
+        Mail::send('emails.meeting-confirmation', $data, function ($message) use ($email, $titulo) {
             $message->to($email)
                     ->subject('Reunião Atualizada: ' . $titulo);
         });

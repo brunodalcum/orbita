@@ -435,21 +435,68 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     // Rotas para Agenda
     Route::get('/agenda', [App\Http\Controllers\AgendaController::class, 'index'])->name('dashboard.agenda');
+    Route::get('/agenda/calendario', [App\Http\Controllers\AgendaController::class, 'calendar'])->name('dashboard.agenda.calendar');
+    Route::get('/agenda/nova', [App\Http\Controllers\AgendaController::class, 'create'])->name('dashboard.agenda.create');
+    Route::get('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'show'])->name('dashboard.agenda.show');
+    Route::get('/agenda/{id}/edit', [App\Http\Controllers\AgendaController::class, 'edit'])->name('dashboard.agenda.edit');
+    Route::put('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'update'])->name('dashboard.agenda.update');
+    Route::delete('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'destroy'])->name('dashboard.agenda.destroy');
+    
+    // API para licenciados (usado na agenda)
+    Route::get('/licenciados/api/list', [App\Http\Controllers\LicenciadoController::class, 'apiList'])->name('licenciados.api.list');
     Route::post('/agenda', [App\Http\Controllers\AgendaController::class, 'store'])->name('agenda.store');
-    Route::get('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'show'])->name('agenda.show');
-    Route::get('/agenda/{id}/edit', [App\Http\Controllers\AgendaController::class, 'edit'])->name('agenda.edit');
-    Route::put('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'update'])->name('agenda.update');
-    Route::delete('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'destroy'])->name('agenda.destroy');
     Route::patch('/agenda/{id}/toggle-status', [App\Http\Controllers\AgendaController::class, 'toggleStatus'])->name('agenda.toggle-status');
     Route::get('/agenda/data/{data}', [App\Http\Controllers\AgendaController::class, 'getAgendaPorData'])->name('agenda.por-data');
     Route::get('/agenda/data', [App\Http\Controllers\AgendaController::class, 'getAgendaPorData'])->name('agenda.por-data.query');
     Route::get('/agenda/licenciados/list', [App\Http\Controllers\AgendaController::class, 'getLicenciados'])->name('agenda.licenciados.list');
     Route::get('/agenda/licenciados/{id}', [App\Http\Controllers\AgendaController::class, 'getLicenciadoDetails'])->name('agenda.licenciados.details');
+
+    // Rotas para integração com Google Calendar
+    Route::prefix('google')->name('google.')->group(function () {
+        Route::get('/auth', [App\Http\Controllers\GoogleAuthController::class, 'redirectToGoogle'])->name('auth');
+        Route::get('/callback', [App\Http\Controllers\GoogleAuthController::class, 'handleGoogleCallback'])->name('callback');
+        Route::post('/disconnect', [App\Http\Controllers\GoogleAuthController::class, 'disconnect'])->name('disconnect');
+        
+        // Rotas de status mais robustas
+        Route::get('/status', [App\Http\Controllers\GoogleStatusController::class, 'status'])->name('status');
+        Route::get('/simple-test', [App\Http\Controllers\GoogleStatusController::class, 'simpleTest'])->name('simple-test');
+        Route::get('/test', [App\Http\Controllers\GoogleAuthController::class, 'test'])->name('test');
+        
+        Route::get('/debug', function () {
+            return view('google-debug');
+        })->name('debug');
+    });
 });
 
 // Rotas públicas para confirmação de agenda (sem autenticação)
 Route::get('/agenda/confirmar/{id}', [App\Http\Controllers\AgendaController::class, 'confirmarParticipacao'])->name('agenda.confirmar');
 Route::get('/agenda/confirmacao-sucesso', [App\Http\Controllers\AgendaController::class, 'confirmacaoSucesso'])->name('agenda.confirmacao.sucesso');
+
+// Rota de debug Google SEM autenticação (temporária para debug)
+Route::get('/google-debug-public', function () {
+    try {
+        return response()->json([
+            'success' => true,
+            'message' => 'Rota Google funcionando!',
+            'timestamp' => now()->format('Y-m-d H:i:s'),
+            'config' => [
+                'client_id_set' => !empty(config('google.client_id')),
+                'client_secret_set' => !empty(config('google.client_secret')),
+                'redirect_uri' => config('google.redirect_uri'),
+            ],
+            'laravel_version' => app()->version(),
+            'php_version' => PHP_VERSION,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile(),
+            'timestamp' => now()->format('Y-m-d H:i:s'),
+        ], 500);
+    }
+});
 
 // Rotas públicas para assinatura de contratos (sem autenticação)
 Route::get('/contracts/sign/{token}', [App\Http\Controllers\ContractController::class, 'showSignaturePage'])->name('contracts.sign.show');

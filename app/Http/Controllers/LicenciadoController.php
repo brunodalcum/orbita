@@ -552,4 +552,27 @@ class LicenciadoController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * API para listar licenciados (usado na agenda)
+     */
+    public function apiList()
+    {
+        try {
+            $licenciados = Licenciado::whereIn('status', ['ativo', 'aprovado'])
+                ->whereNotNull('email')
+                ->orderBy('razao_social')
+                ->get(['id', 'razao_social', 'nome_fantasia', 'email']);
+
+            return response()->json([
+                'success' => true,
+                'licenciados' => $licenciados
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao carregar licenciados'
+            ], 500);
+        }
+    }
 }

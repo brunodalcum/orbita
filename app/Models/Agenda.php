@@ -12,17 +12,22 @@ class Agenda extends Model
         'descricao',
         'data_inicio',
         'data_fim',
+        'meet_link',
         'google_meet_link',
         'google_event_id',
+        'google_event_url',
+        'google_synced_at',
         'participantes',
         'status',
         'user_id',
-        'tipo_reuniao'
+        'tipo_reuniao',
+        'licenciado_id'
     ];
 
     protected $casts = [
         'data_inicio' => 'datetime',
         'data_fim' => 'datetime',
+        'google_synced_at' => 'datetime',
         'participantes' => 'array'
     ];
 
