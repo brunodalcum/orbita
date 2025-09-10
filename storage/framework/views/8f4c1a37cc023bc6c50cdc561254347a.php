@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - dspay</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
+    <link rel="icon" type="image/png" href="<?php echo e(asset('images/dspay-logo.png')); ?>">
+    <link rel="shortcut icon" type="image/png" href="<?php echo e(asset('images/dspay-logo.png')); ?>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -40,7 +40,26 @@
 <body class="bg-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar Dinâmico -->
-        <x-dynamic-sidebar />
+        <?php if (isset($component)) { $__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec = $attributes; } ?>
+<?php $component = App\View\Components\DynamicSidebar::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('dynamic-sidebar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\DynamicSidebar::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec)): ?>
+<?php $attributes = $__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec; ?>
+<?php unset($__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec)): ?>
+<?php $component = $__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec; ?>
+<?php unset($__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec); ?>
+<?php endif; ?>
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
@@ -58,8 +77,8 @@
                         <button class="p-2 text-gray-400 hover:text-gray-600">
                             <i class="fas fa-cog"></i>
                         </button>
-                        <form method="POST" action="{{ route('logout.custom') }}" class="inline">
-                            @csrf
+                        <form method="POST" action="<?php echo e(route('logout.custom')); ?>" class="inline">
+                            <?php echo csrf_field(); ?>
                             <button type="submit" class="p-2 text-gray-400 hover:text-gray-600">
                                 <i class="fas fa-sign-out-alt"></i>
                             </button>
@@ -76,7 +95,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Total de Licenciados</p>
-                                <p class="text-3xl font-bold">{{ $stats['total'] }}</p>
+                                <p class="text-3xl font-bold"><?php echo e($stats['total']); ?></p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-users mr-1"></i>
                                     Cadastros ativos
@@ -92,7 +111,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Aprovados</p>
-                                <p class="text-3xl font-bold">{{ $stats['aprovados'] }}</p>
+                                <p class="text-3xl font-bold"><?php echo e($stats['aprovados']); ?></p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-check mr-1"></i>
                                     Licenciados ativos
@@ -108,7 +127,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Em Análise</p>
-                                <p class="text-3xl font-bold">{{ $stats['em_analise'] }}</p>
+                                <p class="text-3xl font-bold"><?php echo e($stats['em_analise']); ?></p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-clock mr-1"></i>
                                     Aguardando aprovação
@@ -124,7 +143,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Recusados</p>
-                                <p class="text-3xl font-bold">{{ $stats['recusados'] }}</p>
+                                <p class="text-3xl font-bold"><?php echo e($stats['recusados']); ?></p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-times mr-1"></i>
                                     Cadastros recusados
@@ -145,36 +164,36 @@
                     <div class="card rounded-xl p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Licenciados Recentes</h3>
                         <div class="space-y-4">
-                            @forelse($licenciadosRecentes as $licenciado)
+                            <?php $__empty_1 = true; $__currentLoopData = $licenciadosRecentes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $licenciado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                     <div class="flex items-center">
                                         <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                                             <i class="fas fa-id-card text-blue-600"></i>
                                         </div>
                                         <div class="ml-3">
-                                            <p class="font-medium text-gray-800">{{ $licenciado->razao_social }}</p>
-                                            <p class="text-sm text-gray-600">{{ $licenciado->cnpj_cpf }}</p>
+                                            <p class="font-medium text-gray-800"><?php echo e($licenciado->razao_social); ?></p>
+                                            <p class="text-sm text-gray-600"><?php echo e($licenciado->cnpj_cpf); ?></p>
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        @if($licenciado->status === 'aprovado')
+                                        <?php if($licenciado->status === 'aprovado'): ?>
                                             <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Aprovado</span>
-                                        @elseif($licenciado->status === 'em_analise')
+                                        <?php elseif($licenciado->status === 'em_analise'): ?>
                                             <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Em Análise</span>
-                                        @elseif($licenciado->status === 'recusado')
+                                        <?php elseif($licenciado->status === 'recusado'): ?>
                                             <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Recusado</span>
-                                        @elseif($licenciado->status === 'em_risco')
+                                        <?php elseif($licenciado->status === 'em_risco'): ?>
                                             <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">Em Risco</span>
-                                        @endif
-                                        <p class="text-sm text-gray-600 mt-1">{{ $licenciado->created_at->diffForHumans() }}</p>
+                                        <?php endif; ?>
+                                        <p class="text-sm text-gray-600 mt-1"><?php echo e($licenciado->created_at->diffForHumans()); ?></p>
                                     </div>
                                 </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="text-center py-8">
                                     <i class="fas fa-inbox text-gray-400 text-4xl mb-2"></i>
                                     <p class="text-gray-500">Nenhum licenciado cadastrado ainda</p>
                                 </div>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -182,141 +201,145 @@
                     <div class="card rounded-xl p-6">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-800">Compromissos do Dia</h3>
-                            <a href="{{ route('dashboard.agenda') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            <a href="<?php echo e(route('dashboard.agenda')); ?>" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                 Ver todos
                             </a>
                         </div>
                         <div class="space-y-3">
-                            @forelse($compromissosHoje as $compromisso)
+                            <?php $__empty_1 = true; $__currentLoopData = $compromissosHoje; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $compromisso): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                                     <div class="flex items-center flex-1">
                                         <div class="w-10 h-10 rounded-lg flex items-center justify-center
-                                            @if($compromisso->tipo_reuniao === 'online') bg-blue-100
-                                            @elseif($compromisso->tipo_reuniao === 'presencial') bg-green-100
-                                            @else bg-purple-100
-                                            @endif">
-                                            @if($compromisso->tipo_reuniao === 'online')
+                                            <?php if($compromisso->tipo_reuniao === 'online'): ?> bg-blue-100
+                                            <?php elseif($compromisso->tipo_reuniao === 'presencial'): ?> bg-green-100
+                                            <?php else: ?> bg-purple-100
+                                            <?php endif; ?>">
+                                            <?php if($compromisso->tipo_reuniao === 'online'): ?>
                                                 <i class="fas fa-video text-blue-600"></i>
-                                            @elseif($compromisso->tipo_reuniao === 'presencial')
+                                            <?php elseif($compromisso->tipo_reuniao === 'presencial'): ?>
                                                 <i class="fas fa-handshake text-green-600"></i>
-                                            @else
+                                            <?php else: ?>
                                                 <i class="fas fa-users text-purple-600"></i>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                         <div class="ml-3 flex-1">
-                                            <p class="font-medium text-gray-800 text-sm">{{ Str::limit($compromisso->titulo, 25) }}</p>
+                                            <p class="font-medium text-gray-800 text-sm"><?php echo e(Str::limit($compromisso->titulo, 25)); ?></p>
                                             <div class="flex items-center text-xs text-gray-600 mt-1">
                                                 <i class="fas fa-clock mr-1"></i>
-                                                {{ \Carbon\Carbon::parse($compromisso->data_inicio)->format('H:i') }} - 
-                                                {{ \Carbon\Carbon::parse($compromisso->data_fim)->format('H:i') }}
-                                                @if($compromisso->solicitante && $compromisso->solicitante->id !== Auth::id())
-                                                    <span class="ml-2 text-gray-500">• {{ Str::limit($compromisso->solicitante->name, 15) }}</span>
-                                                @endif
+                                                <?php echo e(\Carbon\Carbon::parse($compromisso->data_inicio)->format('H:i')); ?> - 
+                                                <?php echo e(\Carbon\Carbon::parse($compromisso->data_fim)->format('H:i')); ?>
+
+                                                <?php if($compromisso->solicitante && $compromisso->solicitante->id !== Auth::id()): ?>
+                                                    <span class="ml-2 text-gray-500">• <?php echo e(Str::limit($compromisso->solicitante->name, 15)); ?></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="flex items-center space-x-2">
-                                        @if($compromisso->status_aprovacao === 'pendente' && $compromisso->destinatario_id === Auth::id())
+                                        <?php if($compromisso->status_aprovacao === 'pendente' && $compromisso->destinatario_id === Auth::id()): ?>
                                             <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">Pendente</span>
-                                        @elseif($compromisso->status_aprovacao === 'aprovada')
+                                        <?php elseif($compromisso->status_aprovacao === 'aprovada'): ?>
                                             <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Confirmada</span>
-                                        @elseif($compromisso->status_aprovacao === 'recusada')
+                                        <?php elseif($compromisso->status_aprovacao === 'recusada'): ?>
                                             <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Recusada</span>
-                                        @else
+                                        <?php else: ?>
                                             <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Agendada</span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="text-center py-8">
                                     <i class="fas fa-calendar-day text-gray-400 text-4xl mb-2"></i>
                                     <p class="text-gray-500 text-sm">Nenhum compromisso para hoje</p>
-                                    <a href="{{ route('dashboard.agenda.create') }}" class="inline-flex items-center mt-3 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                                    <a href="<?php echo e(route('dashboard.agenda.create')); ?>" class="inline-flex items-center mt-3 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
                                         <i class="fas fa-plus mr-2"></i>
                                         Nova Reunião
                                     </a>
                                 </div>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                         
-                        @if($compromissosHoje->count() > 0)
+                        <?php if($compromissosHoje->count() > 0): ?>
                             <div class="mt-4 pt-4 border-t border-gray-200">
                                 <div class="flex items-center justify-between text-sm">
                                     <span class="text-gray-600">
                                         <i class="fas fa-calendar-check mr-1 text-blue-600"></i>
-                                        {{ $compromissosHoje->count() }} compromisso(s) hoje
+                                        <?php echo e($compromissosHoje->count()); ?> compromisso(s) hoje
                                     </span>
-                                    <a href="{{ route('dashboard.agenda.create') }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    <a href="<?php echo e(route('dashboard.agenda.create')); ?>" class="text-blue-600 hover:text-blue-800 font-medium">
                                         <i class="fas fa-plus mr-1"></i>
                                         Nova Reunião
                                     </a>
                                 </div>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
 
                     <!-- Últimos Leads Cadastrados -->
                     <div class="card rounded-xl p-6">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-800">Últimos Leads Cadastrados</h3>
-                            <a href="{{ route('dashboard.leads') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            <a href="<?php echo e(route('dashboard.leads')); ?>" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                 Ver todos
                                 <i class="fas fa-arrow-right ml-1"></i>
                             </a>
                         </div>
                         
-                        @if($leadsRecentes->count() > 0)
+                        <?php if($leadsRecentes->count() > 0): ?>
                             <div class="space-y-3">
-                                @foreach($leadsRecentes as $lead)
+                                <?php $__currentLoopData = $leadsRecentes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lead): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
                                                 <i class="fas fa-user text-white text-sm"></i>
                                             </div>
                                             <div>
-                                                <p class="font-medium text-gray-800 text-sm">{{ $lead->nome }}</p>
+                                                <p class="font-medium text-gray-800 text-sm"><?php echo e($lead->nome); ?></p>
                                                 <p class="text-gray-500 text-xs">
-                                                    {{ $lead->email }} • {{ $lead->telefone }}
+                                                    <?php echo e($lead->email); ?> • <?php echo e($lead->telefone); ?>
+
                                                 </p>
-                                                @if($lead->empresa)
+                                                <?php if($lead->empresa): ?>
                                                     <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1">
-                                                        {{ $lead->empresa }}
+                                                        <?php echo e($lead->empresa); ?>
+
                                                     </span>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="text-right">
                                             <div class="flex items-center mb-1">
-                                                @if($lead->status === 'novo')
+                                                <?php if($lead->status === 'novo'): ?>
                                                     <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                                                     <span class="text-green-600 text-xs font-medium">Novo</span>
-                                                @elseif($lead->status === 'em_contato')
+                                                <?php elseif($lead->status === 'em_contato'): ?>
                                                     <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
                                                     <span class="text-yellow-600 text-xs font-medium">Em Contato</span>
-                                                @elseif($lead->status === 'convertido')
+                                                <?php elseif($lead->status === 'convertido'): ?>
                                                     <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
                                                     <span class="text-blue-600 text-xs font-medium">Convertido</span>
-                                                @else
+                                                <?php else: ?>
                                                     <div class="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
-                                                    <span class="text-gray-600 text-xs font-medium">{{ ucfirst($lead->status) }}</span>
-                                                @endif
+                                                    <span class="text-gray-600 text-xs font-medium"><?php echo e(ucfirst($lead->status)); ?></span>
+                                                <?php endif; ?>
                                             </div>
                                             <p class="text-gray-400 text-xs">
-                                                {{ $lead->created_at->diffForHumans() }}
+                                                <?php echo e($lead->created_at->diffForHumans()); ?>
+
                                             </p>
                                         </div>
                                     </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
-                        @else
+                        <?php else: ?>
                             <div class="text-center py-8">
                                 <i class="fas fa-users text-gray-300 text-4xl mb-3"></i>
                                 <p class="text-gray-500">Nenhum lead cadastrado ainda</p>
-                                <a href="{{ route('dashboard.leads') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium mt-2 inline-block">
+                                <a href="<?php echo e(route('dashboard.leads')); ?>" class="text-blue-600 hover:text-blue-800 text-sm font-medium mt-2 inline-block">
                                     Gerenciar leads
                                 </a>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </main>
@@ -326,3 +349,4 @@
 
 </body>
 </html>
+<?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/dashboard.blade.php ENDPATH**/ ?>

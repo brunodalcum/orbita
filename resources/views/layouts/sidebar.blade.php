@@ -61,7 +61,7 @@
             </a>
             
             <!-- Menu Agenda com Submenu -->
-            <div class="relative" x-data="{ open: {{ request()->routeIs('dashboard.agenda*') ? 'true' : 'false' }} }">
+            <div class="relative" x-data="{ open: {{ request()->routeIs('dashboard.agenda*') || request()->routeIs('agenda.*') ? 'true' : 'false' }} }">
                 <button @click="open = !open" class="sidebar-link flex items-center justify-between w-full px-4 py-3 text-white rounded-lg">
                     <div class="flex items-center">
                         <i class="fas fa-calendar-alt mr-3"></i>
@@ -71,13 +71,32 @@
                 </button>
                 
                 <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="mt-2 ml-4 space-y-1">
-                    <a href="{{ route('dashboard.agenda') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('dashboard.agenda') && !request()->routeIs('dashboard.agenda.calendar') ? 'bg-white bg-opacity-20' : '' }}">
+                    <a href="{{ route('dashboard.agenda') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('dashboard.agenda') && !request()->routeIs('dashboard.agenda.calendar') && !request()->routeIs('dashboard.agenda.create') && !request()->routeIs('agenda.pendentes-aprovacao') ? 'bg-white bg-opacity-20' : '' }}">
                         <i class="fas fa-list mr-3"></i>
                         Lista de Compromissos
                     </a>
                     <a href="{{ route('dashboard.agenda.calendar') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('dashboard.agenda.calendar') ? 'bg-white bg-opacity-20' : '' }}">
                         <i class="fas fa-calendar mr-3"></i>
                         Calendário
+                    </a>
+                    <a href="{{ route('dashboard.agenda.create') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('dashboard.agenda.create') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-plus mr-3"></i>
+                        Novo Compromisso
+                    </a>
+                    <a href="{{ route('agenda.pendentes-aprovacao') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('agenda.pendentes-aprovacao') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-clock mr-2"></i>
+                        Aprovação de Compromissos
+                        @php
+                            $pendentesCount = 0;
+                            if (Auth::check()) {
+                                $pendentesCount = \App\Models\Agenda::pendentesAprovacao(Auth::id())->count();
+                            }
+                        @endphp
+                        @if($pendentesCount > 0)
+                            <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                                {{ $pendentesCount }}
+                            </span>
+                        @endif
                     </a>
                 </div>
             </div>

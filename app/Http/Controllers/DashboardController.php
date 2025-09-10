@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Licenciado;
 use App\Models\Lead;
 use App\Models\Operacao;
+use App\Models\Agenda;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -32,6 +34,18 @@ class DashboardController extends Controller
             ->limit(8)
             ->get();
 
-        return view('dashboard', compact('stats', 'licenciadosRecentes', 'operacoes', 'leadsRecentes'));
+        // Compromissos do dia atual
+        $compromissosHoje = Agenda::whereDate('data_inicio', today())
+            ->where(function($query) {
+                $query->where('user_id', Auth::id())
+                      ->orWhere('solicitante_id', Auth::id())
+                      ->orWhere('destinatario_id', Auth::id());
+            })
+            ->with(['solicitante', 'destinatario'])
+            ->orderBy('data_inicio')
+            ->limit(5)
+            ->get();
+
+        return view('dashboard', compact('stats', 'licenciadosRecentes', 'operacoes', 'leadsRecentes', 'compromissosHoje'));
     }
 }

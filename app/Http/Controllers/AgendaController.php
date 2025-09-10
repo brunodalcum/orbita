@@ -56,14 +56,6 @@ class AgendaController extends Controller
      */
     public function store(Request $request)
     {
-        // Log de debug para verificar dados recebidos
-        \Log::info('🧪 DEBUG - Agenda Store chamado', [
-            'request_data' => $request->all(),
-            'user_id' => Auth::id(),
-            'user_authenticated' => Auth::check(),
-            'url' => $request->fullUrl(),
-            'method' => $request->method()
-        ]);
         
         try {
             
@@ -75,23 +67,60 @@ class AgendaController extends Controller
                 'tipo_reuniao' => 'required|in:presencial,online,hibrida',
                 'participantes' => 'nullable|string|max:2000',
                 'meet_link' => 'nullable|url',
-                'licenciado_id' => 'nullable|exists:licenciados,id'
+                'licenciado_id' => 'nullable|exists:licenciados,id',
+                'destinatario_id' => 'nullable|exists:users,id'
             ]);
 
             if ($validator->fails()) {
-                \Log::warning('❌ Validação falhou - retornando para formulário', [
-                    'errors' => $validator->errors()->toArray(),
-                    'request_data' => $request->all()
-                ]);
                 return back()->withErrors($validator)->withInput()->with('error', 'Por favor, corrija os erros no formulário.');
             }
 
-            \Log::info('✅ Validação passou - processando agenda', [
-                'titulo' => $request->titulo,
-                'data_inicio' => $request->data_inicio,
-                'data_fim' => $request->data_fim,
-                'tipo_reuniao' => $request->tipo_reuniao
-            ]);
+            // Verificar se há destinatário (agenda entre usuários)
+            $destinatarioId = $request->destinatario_id;
+            $solicitanteId = Auth::id();
+            $requerAprovacao = false;
+            $foraHorarioComercial = false;
+            $statusAprovacao = 'automatica';
+
+            // Se um licenciado foi selecionado, encontrar o user_id correspondente pelo email
+            if ($request->licenciado_id && !$destinatarioId) {
+                $licenciado = \App\Models\Licenciado::find($request->licenciado_id);
+                if ($licenciado && $licenciado->email) {
+                    // Buscar usuário pelo email do licenciado
+                    $user = \App\Models\User::where('email', $licenciado->email)->first();
+                    if ($user) {
+                        $destinatarioId = $user->id;
+                        \Log::info('🎯 Licenciado encontrado e usuário correspondente localizado', [
+                            'licenciado_id' => $licenciado->id,
+                            'licenciado_email' => $licenciado->email,
+                            'user_id' => $user->id,
+                            'user_name' => $user->name
+                        ]);
+                    } else {
+                        \Log::warning('⚠️ Usuário não encontrado para o licenciado', [
+                            'licenciado_id' => $licenciado->id,
+                            'licenciado_email' => $licenciado->email
+                        ]);
+                    }
+                }
+            }
+
+            if ($destinatarioId && $destinatarioId != $solicitanteId) {
+                // Verificar conflito de horário
+                if (\App\Models\BusinessHours::hasTimeConflict($destinatarioId, $request->data_inicio, $request->data_fim)) {
+                    return back()->withErrors(['data_inicio' => 'O destinatário já possui compromisso neste horário.'])
+                                ->withInput()
+                                ->with('error', 'Horário não disponível para o destinatário.');
+                }
+
+                // Verificar se está dentro do horário comercial
+                $foraHorarioComercial = !\App\Models\BusinessHours::isWithinBusinessHours($destinatarioId, $request->data_inicio) ||
+                                       !\App\Models\BusinessHours::isWithinBusinessHours($destinatarioId, $request->data_fim);
+
+                // Definir se requer aprovação
+                $requerAprovacao = $foraHorarioComercial || true; // Sempre requer aprovação por enquanto
+                $statusAprovacao = $requerAprovacao ? 'pendente' : 'automatica';
+            }
 
             // Processar participantes
             $participantes = [];
@@ -134,9 +163,19 @@ class AgendaController extends Controller
             $agenda->tipo_reuniao = $request->tipo_reuniao;
             $agenda->participantes = $participantes;
             $agenda->licenciado_id = $request->licenciado_id;
-            $agenda->meet_link = $request->meet_link; // Adicionar campo meet_link
+            $agenda->meet_link = $request->meet_link;
             $agenda->user_id = Auth::id();
-            $agenda->status = 'agendada';
+            $agenda->solicitante_id = $solicitanteId;
+            $agenda->destinatario_id = $destinatarioId;
+            $agenda->status_aprovacao = $statusAprovacao;
+            $agenda->requer_aprovacao = $requerAprovacao;
+            $agenda->fora_horario_comercial = $foraHorarioComercial;
+            // Status da agenda baseado na aprovação
+            if ($requerAprovacao && $statusAprovacao === 'pendente') {
+                $agenda->status = 'agendada'; // Agenda criada, mas aguardando aprovação
+            } else {
+                $agenda->status = 'agendada'; // Agenda aprovada automaticamente
+            }
             
             // Integração com Google Calendar e Meet
             if ($request->tipo_reuniao === 'online' || $request->tipo_reuniao === 'hibrida') {
@@ -193,6 +232,11 @@ class AgendaController extends Controller
             
             $agenda->save();
 
+            // Criar notificação se há destinatário e requer aprovação
+            if ($destinatarioId && $requerAprovacao) {
+                \App\Models\AgendaNotification::createSolicitacaoNotification($agenda, $destinatarioId);
+            }
+
             // Enviar e-mails de confirmação
             if (!empty($participantes)) {
                 try {
@@ -224,30 +268,112 @@ class AgendaController extends Controller
                 }
             }
 
-            $message = 'Reunião agendada com sucesso!';
-            if (!empty($participantes)) {
-                $message .= ' E-mails enviados aos participantes.';
+            if ($requerAprovacao) {
+                $destinatario = \App\Models\User::find($destinatarioId);
+                $message = "Solicitação de reunião enviada para {$destinatario->name}. Aguardando aprovação.";
+                if ($foraHorarioComercial) {
+                    $message .= ' (Fora do horário comercial)';
+                }
+            } else {
+                $message = 'Reunião agendada com sucesso!';
+                if (!empty($participantes)) {
+                    $message .= ' E-mails enviados aos participantes.';
+                }
             }
             
-            \Log::info('✅ Agenda salva com sucesso - redirecionando', [
-                'agenda_id' => $agenda->id,
-                'titulo' => $agenda->titulo,
-                'redirect_route' => 'dashboard.agenda',
-                'message' => $message
-            ]);
             
             return redirect()->route('dashboard.agenda')->with('success', $message);
             
         } catch (\Exception $e) {
-            \Log::error('❌ ERRO CRÍTICO ao agendar reunião', [
-                'error_message' => $e->getMessage(),
-                'error_file' => $e->getFile(),
-                'error_line' => $e->getLine(),
-                'stack_trace' => $e->getTraceAsString(),
-                'request_data' => $request->all()
-            ]);
+            \Log::error('Erro ao agendar reunião: ' . $e->getMessage());
             return back()->withInput()->with('error', 'Erro ao agendar reunião: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Aprovar solicitação de agenda
+     */
+    public function aprovar(Request $request, $id)
+    {
+        try {
+            $agenda = Agenda::findOrFail($id);
+            
+            // Verificar se o usuário pode aprovar esta agenda
+            if ($agenda->destinatario_id !== Auth::id()) {
+                return response()->json(['success' => false, 'message' => 'Você não tem permissão para aprovar esta agenda.'], 403);
+            }
+            
+            if ($agenda->status_aprovacao !== 'pendente') {
+                return response()->json(['success' => false, 'message' => 'Esta agenda já foi processada.'], 400);
+            }
+            
+            // Verificar novamente se não há conflito de horário
+            if (\App\Models\BusinessHours::hasTimeConflict(Auth::id(), $agenda->data_inicio, $agenda->data_fim, $agenda->id)) {
+                return response()->json(['success' => false, 'message' => 'Você já possui compromisso neste horário.'], 400);
+            }
+            
+            $agenda->aprovar(Auth::id());
+            
+            return response()->json(['success' => true, 'message' => 'Agenda aprovada com sucesso!']);
+            
+        } catch (\Exception $e) {
+            \Log::error('Erro ao aprovar agenda: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Erro ao aprovar agenda.'], 500);
+        }
+    }
+    
+    /**
+     * Recusar solicitação de agenda
+     */
+    public function recusar(Request $request, $id)
+    {
+        try {
+            $agenda = Agenda::findOrFail($id);
+            
+            // Verificar se o usuário pode recusar esta agenda
+            if ($agenda->destinatario_id !== Auth::id()) {
+                return response()->json(['success' => false, 'message' => 'Você não tem permissão para recusar esta agenda.'], 403);
+            }
+            
+            if ($agenda->status_aprovacao !== 'pendente') {
+                return response()->json(['success' => false, 'message' => 'Esta agenda já foi processada.'], 400);
+            }
+            
+            $motivo = $request->input('motivo');
+            $agenda->recusar(Auth::id(), $motivo);
+            
+            return response()->json(['success' => true, 'message' => 'Agenda recusada.']);
+            
+        } catch (\Exception $e) {
+            \Log::error('Erro ao recusar agenda: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Erro ao recusar agenda.'], 500);
+        }
+    }
+    
+    /**
+     * Listar agendas pendentes de aprovação (view)
+     */
+    public function pendentesAprovacao()
+    {
+        $agendas = Agenda::pendentesAprovacao(Auth::id())
+                        ->with(['solicitante', 'destinatario'])
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+        
+        return view('dashboard.agenda-pendentes-aprovacao', compact('agendas'));
+    }
+    
+    /**
+     * API para listar agendas pendentes de aprovação
+     */
+    public function apiPendentesAprovacao()
+    {
+        $agendas = Agenda::pendentesAprovacao(Auth::id())
+                        ->with(['solicitante', 'destinatario'])
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+        
+        return response()->json(['agendas' => $agendas]);
     }
 
     /**
@@ -255,24 +381,12 @@ class AgendaController extends Controller
      */
     public function confirmarParticipacao(Request $request, $id)
     {
-        // Log de debug para verificar se o método está sendo chamado
-        \Log::info('🎯 Método confirmarParticipacao chamado', [
-            'id' => $id,
-            'request_data' => $request->all(),
-            'url' => $request->fullUrl(),
-            'method' => $request->method()
-        ]);
         
         try {
             $agenda = Agenda::findOrFail($id);
             $email = $request->get('email');
             $status = $request->get('status', 'confirmado');
             
-            \Log::info('🔍 Dados processados', [
-                'agenda_titulo' => $agenda->titulo,
-                'email' => $email,
-                'status' => $status
-            ]);
             
             // Validar status
             if (!in_array($status, ['confirmado', 'recusado', 'pendente'])) {
@@ -281,7 +395,6 @@ class AgendaController extends Controller
             
             // Validar email
             if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                \Log::warning('Email inválido fornecido: ' . $email);
                 return redirect()->route('agenda.confirmacao.sucesso', [
                     'status' => 'error',
                     'message' => 'Email inválido'
@@ -300,13 +413,6 @@ class AgendaController extends Controller
                 ]
             );
             
-            // Log da confirmação
-            \Log::info('Participação confirmada', [
-                'agenda_id' => $agenda->id,
-                'email' => $email,
-                'status' => $status,
-                'ip' => $request->ip()
-            ]);
             
             // Redirecionar para página específica baseada no status
             $viewData = [

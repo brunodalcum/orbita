@@ -53,6 +53,15 @@ Route::middleware([
         Route::get('/relatorios', [App\Http\Controllers\LicenciadoDashboardController::class, 'relatorios'])->name('relatorios');
         Route::get('/perfil', [App\Http\Controllers\LicenciadoDashboardController::class, 'perfil'])->name('perfil');
         Route::get('/suporte', [App\Http\Controllers\LicenciadoDashboardController::class, 'suporte'])->name('suporte');
+        
+        // Rotas da Agenda para Licenciados
+        Route::get('/agenda', [App\Http\Controllers\LicenciadoAgendaController::class, 'index'])->name('agenda');
+        Route::get('/agenda/calendario', [App\Http\Controllers\LicenciadoAgendaController::class, 'calendar'])->name('agenda.calendar');
+        Route::get('/agenda/nova', [App\Http\Controllers\LicenciadoAgendaController::class, 'create'])->name('agenda.create');
+        Route::post('/agenda', [App\Http\Controllers\LicenciadoAgendaController::class, 'store'])->name('agenda.store');
+        Route::get('/agenda/pendentes', [App\Http\Controllers\LicenciadoAgendaController::class, 'pendentesAprovacao'])->name('agenda.pendentes');
+        Route::post('/agenda/{id}/aprovar', [App\Http\Controllers\LicenciadoAgendaController::class, 'aprovar'])->name('agenda.aprovar');
+        Route::post('/agenda/{id}/recusar', [App\Http\Controllers\LicenciadoAgendaController::class, 'recusar'])->name('agenda.recusar');
     });
     
     // Rotas para Leads
@@ -437,6 +446,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/agenda', [App\Http\Controllers\AgendaController::class, 'index'])->name('dashboard.agenda');
     Route::get('/agenda/calendario', [App\Http\Controllers\AgendaController::class, 'calendar'])->name('dashboard.agenda.calendar');
     Route::get('/agenda/nova', [App\Http\Controllers\AgendaController::class, 'create'])->name('dashboard.agenda.create');
+    Route::get('/agenda/pendentes-aprovacao', [App\Http\Controllers\AgendaController::class, 'pendentesAprovacao'])->name('agenda.pendentes-aprovacao');
     Route::get('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'show'])->name('dashboard.agenda.show');
     Route::get('/agenda/{id}/edit', [App\Http\Controllers\AgendaController::class, 'edit'])->name('dashboard.agenda.edit');
     Route::put('/agenda/{id}', [App\Http\Controllers\AgendaController::class, 'update'])->name('dashboard.agenda.update');
@@ -450,6 +460,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/agenda/data', [App\Http\Controllers\AgendaController::class, 'getAgendaPorData'])->name('agenda.por-data.query');
     Route::get('/agenda/licenciados/list', [App\Http\Controllers\AgendaController::class, 'getLicenciados'])->name('agenda.licenciados.list');
     Route::get('/agenda/licenciados/{id}', [App\Http\Controllers\AgendaController::class, 'getLicenciadoDetails'])->name('agenda.licenciados.details');
+    
+    // Rotas para sistema de aprovação de agenda
+    Route::post('/agenda/{id}/aprovar', [App\Http\Controllers\AgendaController::class, 'aprovar'])->name('agenda.aprovar');
+    Route::post('/agenda/{id}/recusar', [App\Http\Controllers\AgendaController::class, 'recusar'])->name('agenda.recusar');
+    Route::get('/api/agenda/pendentes-aprovacao', [App\Http\Controllers\AgendaController::class, 'apiPendentesAprovacao'])->name('api.agenda.pendentes-aprovacao');
 
     // Rotas para integração com Google Calendar
     Route::prefix('google')->name('google.')->group(function () {

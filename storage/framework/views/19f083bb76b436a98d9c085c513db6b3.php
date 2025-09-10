@@ -1,8 +1,6 @@
-@extends('layouts.dashboard')
+<?php $__env->startSection('title', 'Lista de Compromissos'); ?>
 
-@section('title', 'Lista de Compromissos')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="min-h-screen bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
@@ -19,64 +17,67 @@
                     <div class="flex items-center bg-white rounded-lg shadow-sm border border-gray-200">
                         <input type="date" 
                                id="dateFilter"
-                               value="{{ request('data') ? request('data') : '' }}" 
+                               value="<?php echo e(request('data') ? request('data') : ''); ?>" 
                                onchange="changeDate(this.value)"
                                class="px-4 py-2 border-0 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        @if(request('data'))
+                        <?php if(request('data')): ?>
                             <button onclick="clearDateFilter()" 
                                     class="px-3 py-2 text-gray-500 hover:text-red-600 transition-colors"
                                     title="Limpar filtro">
                                 <i class="fas fa-times"></i>
                             </button>
-                        @endif
+                        <?php endif; ?>
                     </div>
                     
-                    @if(request('data'))
+                    <?php if(request('data')): ?>
                         <div class="text-sm text-gray-600 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
                             <i class="fas fa-filter mr-2 text-blue-600"></i>
-                            Filtrado por: <strong>{{ \Carbon\Carbon::parse(request('data'))->format('d/m/Y') }}</strong>
+                            Filtrado por: <strong><?php echo e(\Carbon\Carbon::parse(request('data'))->format('d/m/Y')); ?></strong>
                         </div>
-                    @endif
+                    <?php endif; ?>
                     
-                    <a href="{{ route('dashboard.agenda.create') }}" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-semibold flex items-center shadow-lg hover:shadow-xl transform hover:scale-105 border border-blue-400">
+                    <a href="<?php echo e(route('dashboard.agenda.create')); ?>" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-semibold flex items-center shadow-lg hover:shadow-xl transform hover:scale-105 border border-blue-400">
                         <i class="fas fa-plus mr-2 text-white"></i>
                         Nova Reunião
                     </a>
                     
-                    @php
+                    <?php
                         $pendentesCount = 0;
                         if (Auth::check()) {
                             $pendentesCount = \App\Models\Agenda::pendentesAprovacao(Auth::id())->count();
                         }
-                    @endphp
+                    ?>
                     
-                    <a href="{{ route('agenda.pendentes-aprovacao') }}" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 font-semibold flex items-center shadow-lg hover:shadow-xl transform hover:scale-105 border border-orange-400">
+                    <a href="<?php echo e(route('agenda.pendentes-aprovacao')); ?>" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 font-semibold flex items-center shadow-lg hover:shadow-xl transform hover:scale-105 border border-orange-400">
                         <i class="fas fa-clock mr-2 text-white"></i>
                         Aprovar Compromissos
-                        @if($pendentesCount > 0)
+                        <?php if($pendentesCount > 0): ?>
                             <span class="ml-2 bg-red-500 text-white text-xs px-2.5 py-1 rounded-full font-bold animate-pulse shadow-md border border-red-400">
-                                {{ $pendentesCount }}
+                                <?php echo e($pendentesCount); ?>
+
                             </span>
-                        @endif
+                        <?php endif; ?>
                     </a>
                 </div>
             </div>
         </div>
 
         <!-- Alerts -->
-        @if(session('success'))
+        <?php if(session('success')): ?>
             <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
                 <i class="fas fa-check-circle mr-3 text-green-600"></i>
-                {{ session('success') }}
-            </div>
-        @endif
+                <?php echo e(session('success')); ?>
 
-        @if(session('error'))
+            </div>
+        <?php endif; ?>
+
+        <?php if(session('error')): ?>
             <div class="mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
                 <i class="fas fa-exclamation-circle mr-3 text-red-600"></i>
-                {{ session('error') }}
+                <?php echo e(session('error')); ?>
+
             </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Filtros e Estatísticas -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -87,7 +88,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm text-gray-600">Hoje</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $agendas->count() }}</p>
+                        <p class="text-2xl font-bold text-gray-900"><?php echo e($agendas->count()); ?></p>
                     </div>
                 </div>
             </div>
@@ -98,7 +99,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm text-gray-600">Confirmados</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('status', 'confirmado')->count() }}</p>
+                        <p class="text-2xl font-bold text-gray-900"><?php echo e($agendas->where('status', 'confirmado')->count()); ?></p>
                     </div>
                 </div>
             </div>
@@ -109,7 +110,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm text-gray-600">Pendentes</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('status', 'pendente')->count() }}</p>
+                        <p class="text-2xl font-bold text-gray-900"><?php echo e($agendas->where('status', 'pendente')->count()); ?></p>
                     </div>
                 </div>
             </div>
@@ -120,7 +121,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm text-gray-600">Online</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('tipo_reuniao', 'online')->count() }}</p>
+                        <p class="text-2xl font-bold text-gray-900"><?php echo e($agendas->where('tipo_reuniao', 'online')->count()); ?></p>
                     </div>
                 </div>
             </div>
@@ -131,10 +132,11 @@
             <div class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
                     <h2 class="text-xl font-semibold text-gray-900">
-                        Compromissos de {{ \Carbon\Carbon::parse($dataAtual)->locale('pt_BR')->translatedFormat('d \\d\\e F \\d\\e Y') }}
+                        Compromissos de <?php echo e(\Carbon\Carbon::parse($dataAtual)->locale('pt_BR')->translatedFormat('d \\d\\e F \\d\\e Y')); ?>
+
                     </h2>
                     <div class="flex items-center space-x-2">
-                        <span class="text-sm text-gray-500">{{ $agendas->count() }} compromisso(s)</span>
+                        <span class="text-sm text-gray-500"><?php echo e($agendas->count()); ?> compromisso(s)</span>
                     </div>
                 </div>
             </div>
@@ -143,136 +145,140 @@
             <div class="mb-6 flex items-center justify-between">
                 <div class="text-sm text-gray-600">
                     <i class="fas fa-calendar-check mr-2 text-blue-600"></i>
-                    @if(request('data'))
-                        <strong>{{ $agendas->count() }}</strong> reunião(ões) encontrada(s) para <strong>{{ \Carbon\Carbon::parse(request('data'))->format('d/m/Y') }}</strong>
-                    @else
-                        <strong>{{ $agendas->count() }}</strong> reunião(ões) no total
-                    @endif
+                    <?php if(request('data')): ?>
+                        <strong><?php echo e($agendas->count()); ?></strong> reunião(ões) encontrada(s) para <strong><?php echo e(\Carbon\Carbon::parse(request('data'))->format('d/m/Y')); ?></strong>
+                    <?php else: ?>
+                        <strong><?php echo e($agendas->count()); ?></strong> reunião(ões) no total
+                    <?php endif; ?>
                 </div>
                 
-                @if(!request('data') && $agendas->count() > 0)
+                <?php if(!request('data') && $agendas->count() > 0): ?>
                     <div class="text-xs text-gray-500">
                         <i class="fas fa-info-circle mr-1"></i>
                         Use o filtro de data para ver reuniões específicas
                     </div>
-                @endif
+                <?php endif; ?>
             </div>
 
-            @if($agendas->count() > 0)
+            <?php if($agendas->count() > 0): ?>
                 <div class="divide-y divide-gray-200">
-                    @foreach($agendas as $agenda)
-                        <div class="p-6 hover:bg-gray-50 transition-colors cursor-pointer" onclick="viewAgenda({{ $agenda->id }})">
+                    <?php $__currentLoopData = $agendas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $agenda): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="p-6 hover:bg-gray-50 transition-colors cursor-pointer" onclick="viewAgenda(<?php echo e($agenda->id); ?>)">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-4">
                                     <!-- Status Icon -->
                                     <div class="flex-shrink-0">
-                                    @if($agenda->status === 'concluida')
+                                    <?php if($agenda->status === 'concluida'): ?>
                                             <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                                                 <i class="fas fa-check-circle text-green-600 text-xl"></i>
                                             </div>
-                                    @elseif($agenda->status === 'agendada')
+                                    <?php elseif($agenda->status === 'agendada'): ?>
                                             <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                                                 <i class="fas fa-clock text-yellow-600 text-xl"></i>
                                             </div>
-                                        @elseif($agenda->status === 'cancelada')
+                                        <?php elseif($agenda->status === 'cancelada'): ?>
                                             <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                                                 <i class="fas fa-times-circle text-red-600 text-xl"></i>
                                             </div>
-                                        @else
+                                        <?php else: ?>
                                             <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                                                 <i class="fas fa-calendar text-gray-600 text-xl"></i>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
 
                                     <!-- Informações do Compromisso -->
                                     <div class="flex-1">
-                                        <h3 class="text-lg font-semibold text-gray-900">{{ $agenda->titulo }}</h3>
-                                        @if($agenda->descricao)
-                                            <p class="text-gray-600 mt-1">{{ Str::limit($agenda->descricao, 100) }}</p>
-                                        @endif
+                                        <h3 class="text-lg font-semibold text-gray-900"><?php echo e($agenda->titulo); ?></h3>
+                                        <?php if($agenda->descricao): ?>
+                                            <p class="text-gray-600 mt-1"><?php echo e(Str::limit($agenda->descricao, 100)); ?></p>
+                                        <?php endif; ?>
                                         
                                         <div class="flex items-center space-x-6 mt-3">
                                             <div class="flex items-center text-sm text-gray-500">
                                                 <i class="fas fa-clock mr-2"></i>
-                                                {{ \Carbon\Carbon::parse($agenda->data_inicio)->format('H:i') }} - 
-                                                {{ \Carbon\Carbon::parse($agenda->data_fim)->format('H:i') }}
+                                                <?php echo e(\Carbon\Carbon::parse($agenda->data_inicio)->format('H:i')); ?> - 
+                                                <?php echo e(\Carbon\Carbon::parse($agenda->data_fim)->format('H:i')); ?>
+
                                             </div>
                                             
                                             <div class="flex items-center text-sm text-gray-500">
-                                                @if($agenda->tipo_reuniao === 'online')
+                                                <?php if($agenda->tipo_reuniao === 'online'): ?>
                                                     <i class="fas fa-video mr-2"></i>
                                                     Online
-                                                @elseif($agenda->tipo_reuniao === 'presencial')
+                                                <?php elseif($agenda->tipo_reuniao === 'presencial'): ?>
                                                     <i class="fas fa-handshake mr-2"></i>
                                                     Presencial
-                                                @else
+                                                <?php else: ?>
                                                     <i class="fas fa-users mr-2"></i>
                                                     Híbrida
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                             
-                                            @if($agenda->participantes && count($agenda->participantes) > 0)
+                                            <?php if($agenda->participantes && count($agenda->participantes) > 0): ?>
                                                 <div class="flex items-center text-sm text-gray-500">
                                                     <i class="fas fa-users mr-2"></i>
-                                                    {{ count($agenda->participantes) }} participante(s)
+                                                    <?php echo e(count($agenda->participantes)); ?> participante(s)
                                                     
-                                                    @php
+                                                    <?php
                                                         $confirmados = $agenda->confirmacoesConfirmadas()->count();
                                                         $pendentes = $agenda->confirmacoesPendentes()->count();
                                                         $recusados = $agenda->confirmacoesRecusadas()->count();
                                                         $total = count($agenda->participantes);
-                                                    @endphp
+                                                    ?>
                                                     
-                                                    @if($confirmados > 0 || $pendentes > 0 || $recusados > 0)
+                                                    <?php if($confirmados > 0 || $pendentes > 0 || $recusados > 0): ?>
                                                         <span class="ml-2 flex items-center space-x-1">
-                                                            @if($confirmados > 0)
+                                                            <?php if($confirmados > 0): ?>
                                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                                    ✅ {{ $confirmados }}
+                                                                    ✅ <?php echo e($confirmados); ?>
+
                                                                 </span>
-                                                            @endif
-                                                            @if($pendentes > 0)
+                                                            <?php endif; ?>
+                                                            <?php if($pendentes > 0): ?>
                                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                                    ⏰ {{ $pendentes }}
+                                                                    ⏰ <?php echo e($pendentes); ?>
+
                                                                 </span>
-                                                            @endif
-                                                            @if($recusados > 0)
+                                                            <?php endif; ?>
+                                                            <?php if($recusados > 0): ?>
                                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                                    ❌ {{ $recusados }}
+                                                                    ❌ <?php echo e($recusados); ?>
+
                                                                 </span>
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </span>
-                                                    @endif
+                                                    <?php endif; ?>
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Ações -->
                                 <div class="flex items-center space-x-2">
-                                    @if($agenda->meet_link)
-                                        <a href="{{ $agenda->meet_link }}" target="_blank" 
+                                    <?php if($agenda->meet_link): ?>
+                                        <a href="<?php echo e($agenda->meet_link); ?>" target="_blank" 
                                            class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors"
                                            title="Abrir Google Meet"
                                            onclick="event.stopPropagation()">
                                             <i class="fab fa-google text-lg"></i>
                                         </a>
-                                    @endif
+                                    <?php endif; ?>
                                     
-                                    <button onclick="event.stopPropagation(); viewAgendaDetails({{ $agenda->id }})" 
+                                    <button onclick="event.stopPropagation(); viewAgendaDetails(<?php echo e($agenda->id); ?>)" 
                                             class="p-2 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors"
                                             title="Ver Detalhes">
                                         <i class="fas fa-eye text-lg"></i>
                                     </button>
                                     
-                                    <button onclick="event.stopPropagation(); editAgenda({{ $agenda->id }})" 
+                                    <button onclick="event.stopPropagation(); editAgenda(<?php echo e($agenda->id); ?>)" 
                                             class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
                                             title="Editar">
                                         <i class="fas fa-edit text-lg"></i>
                                     </button>
                                     
-                                    <button onclick="event.stopPropagation(); confirmDeleteAgenda({{ $agenda->id }}, '{{ addslashes($agenda->titulo) }}')" 
+                                    <button onclick="event.stopPropagation(); confirmDeleteAgenda(<?php echo e($agenda->id); ?>, '<?php echo e(addslashes($agenda->titulo)); ?>')" 
                                             class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
                                             title="Excluir">
                                         <i class="fas fa-trash text-lg"></i>
@@ -281,15 +287,15 @@
                             </div>
 
                             <!-- Botões de Aprovação (se for destinatário e pendente) -->
-                            @if($agenda->destinatario_id === Auth::id() && $agenda->status_aprovacao === 'pendente')
+                            <?php if($agenda->destinatario_id === Auth::id() && $agenda->status_aprovacao === 'pendente'): ?>
                                 <div class="mt-4 flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
-                                        <button onclick="aprovarAgenda({{ $agenda->id }})" 
+                                        <button onclick="aprovarAgenda(<?php echo e($agenda->id); ?>)" 
                                                 class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
                                             <i class="fas fa-check mr-2"></i>
                                             Aprovar
                                         </button>
-                                        <button onclick="recusarAgenda({{ $agenda->id }})" 
+                                        <button onclick="recusarAgenda(<?php echo e($agenda->id); ?>)" 
                                                 class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
                                             <i class="fas fa-times mr-2"></i>
                                             Recusar
@@ -300,60 +306,61 @@
                                             <i class="fas fa-clock mr-1"></i>
                                             Aguardando Aprovação
                                         </span>
-                                        @if($agenda->fora_horario_comercial)
+                                        <?php if($agenda->fora_horario_comercial): ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                                                 <i class="fas fa-moon mr-1"></i>
                                                 Fora do Horário
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                            @else
+                            <?php else: ?>
                             <!-- Status Badge -->
                             <div class="mt-4 flex justify-end">
                                     <div class="flex items-center space-x-2">
                                         <!-- Status da Agenda -->
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                                            @if($agenda->status === 'concluida') bg-green-100 text-green-800
-                                            @elseif($agenda->status === 'agendada') bg-yellow-100 text-yellow-800
-                                            @elseif($agenda->status === 'em_andamento') bg-blue-100 text-blue-800
-                                            @elseif($agenda->status === 'cancelada') bg-red-100 text-red-800
-                                    @else bg-gray-100 text-gray-800
-                                    @endif">
-                                    {{ ucfirst(str_replace('_', ' ', $agenda->status)) }}
+                                            <?php if($agenda->status === 'concluida'): ?> bg-green-100 text-green-800
+                                            <?php elseif($agenda->status === 'agendada'): ?> bg-yellow-100 text-yellow-800
+                                            <?php elseif($agenda->status === 'em_andamento'): ?> bg-blue-100 text-blue-800
+                                            <?php elseif($agenda->status === 'cancelada'): ?> bg-red-100 text-red-800
+                                    <?php else: ?> bg-gray-100 text-gray-800
+                                    <?php endif; ?>">
+                                    <?php echo e(ucfirst(str_replace('_', ' ', $agenda->status))); ?>
+
                                 </span>
                                         
                                         <!-- Status de Aprovação -->
-                                        @if($agenda->status_aprovacao === 'aprovada')
+                                        <?php if($agenda->status_aprovacao === 'aprovada'): ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 <i class="fas fa-thumbs-up mr-1"></i>
                                                 Aprovada
                                             </span>
-                                        @elseif($agenda->status_aprovacao === 'recusada')
+                                        <?php elseif($agenda->status_aprovacao === 'recusada'): ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                                 <i class="fas fa-thumbs-down mr-1"></i>
                                                 Recusada
                                             </span>
-                                        @elseif($agenda->status_aprovacao === 'pendente' && $agenda->destinatario_id !== Auth::id())
+                                        <?php elseif($agenda->status_aprovacao === 'pendente' && $agenda->destinatario_id !== Auth::id()): ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                                                 <i class="fas fa-hourglass-half mr-1"></i>
                                                 Aguardando Aprovação
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                         
-                                        @if($agenda->fora_horario_comercial)
+                                        <?php if($agenda->fora_horario_comercial): ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                                                 <i class="fas fa-moon mr-1"></i>
                                                 Fora do Horário
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                             </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
-            @else
+            <?php else: ?>
                 <div class="p-12 text-center">
                     <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-calendar-times text-gray-400 text-2xl"></i>
@@ -365,7 +372,7 @@
                         Agendar Primeira Reunião
                     </button>
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -510,12 +517,12 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 function changeDate(newDate) {
-    window.location.href = `{{ route('dashboard.agenda') }}?data=${newDate}`;
+    window.location.href = `<?php echo e(route('dashboard.agenda')); ?>?data=${newDate}`;
 }
 
 // Variáveis globais
@@ -598,9 +605,9 @@ function showToast(message, type = 'info') {
     setTimeout(() => toast.classList.add('hidden'), 3000);
 }
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
     /* Hover effects para os cards */
     .bg-white:hover {
@@ -632,7 +639,7 @@ function showToast(message, type = 'info') {
         }
     }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
 <!-- Modal de Confirmação de Exclusão -->
 <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
@@ -700,8 +707,8 @@ function showToast(message, type = 'info') {
             </div>
             
             <form id="editAgendaForm" method="POST">
-                @csrf
-                @method('PUT')
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
                 <div id="editFormContent" class="space-y-6">
                     <!-- Conteúdo será carregado via JavaScript -->
                 </div>
@@ -722,7 +729,7 @@ function showToast(message, type = 'info') {
     </div>
 </div>
 
-<script src="{{ asset('js/agenda-actions.js') }}"></script>
+<script src="<?php echo e(asset('js/agenda-actions.js')); ?>"></script>
 
 <script>
 // Função para alterar o filtro de data
@@ -845,3 +852,5 @@ function showToast(message, type = 'info') {
     }, 4000);
 }
 </script>
+
+<?php echo $__env->make('layouts.dashboard', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/dashboard/agenda.blade.php ENDPATH**/ ?>

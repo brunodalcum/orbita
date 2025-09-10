@@ -60,6 +60,61 @@
             <span class="font-medium">Comissões</span>
             <span class="ml-auto bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">R$ 1.2k</span>
         </a>
+
+        <!-- Menu Agenda com Submenu -->
+        <div class="relative" x-data="{ open: {{ request()->routeIs('licenciado.agenda*') ? 'true' : 'false' }} }">
+            <button @click="open = !open" 
+                    class="sidebar-link w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('licenciado.agenda*') ? 'bg-white/20 shadow-md' : 'hover:bg-white/10' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-calendar-alt mr-3 text-lg"></i>
+                    <span class="font-medium">Agenda</span>
+                </div>
+                <i class="fas fa-chevron-down transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+            </button>
+            
+            <div x-show="open" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 transform -translate-y-2"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                 x-transition:leave-end="opacity-0 transform -translate-y-2"
+                 class="mt-2 ml-4 space-y-1">
+                
+                <a href="{{ route('licenciado.agenda') }}" 
+                   class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ $currentRoute === 'licenciado.agenda' ? 'bg-white/30 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fas fa-list mr-2"></i>
+                    Lista de Compromissos
+                </a>
+                
+                <a href="{{ route('licenciado.agenda.calendar') }}" 
+                   class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ $currentRoute === 'licenciado.agenda.calendar' ? 'bg-white/30 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fas fa-calendar mr-2"></i>
+                    Calendário
+                </a>
+                
+                <a href="{{ route('licenciado.agenda.create') }}" 
+                   class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ $currentRoute === 'licenciado.agenda.create' ? 'bg-white/30 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fas fa-plus mr-2"></i>
+                    Nova Reunião
+                </a>
+                
+                <a href="{{ route('licenciado.agenda.pendentes') }}" 
+                   class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ $currentRoute === 'licenciado.agenda.pendentes' ? 'bg-white/30 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fas fa-clock mr-2"></i>
+                    Pendentes de Aprovação
+                    @php
+                        $pendentesCount = 0;
+                        if (Auth::check()) {
+                            $pendentesCount = \App\Models\Agenda::pendentesAprovacao(Auth::id())->count();
+                        }
+                    @endphp
+                    @if($pendentesCount > 0)
+                        <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">{{ $pendentesCount }}</span>
+                    @endif
+                </a>
+            </div>
+        </div>
         
         <!-- Relatórios -->
         <a href="{{ route('licenciado.relatorios') }}" 

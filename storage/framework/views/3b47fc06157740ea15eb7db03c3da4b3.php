@@ -3,7 +3,7 @@
     <div class="p-6">
         <!-- Logo -->
         <div class="flex items-center mb-8">
-            <img src="{{ asset('images/dspay-logo.png') }}" 
+            <img src="<?php echo e(asset('images/dspay-logo.png')); ?>" 
                  alt="dspay" 
                  class="h-10 w-auto mx-auto"
                  onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzMzNjZFRiIvPgo8dGV4dCB4PSIyMCIgeT0iMjYiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5EU1BBWTwvdGV4dD4KPC9zdmc+';">
@@ -11,35 +11,36 @@
 
         <!-- Menu Dinâmico -->
         <nav class="space-y-2">
-            @foreach($menuItems as $item)
+            <?php $__currentLoopData = $menuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="menu-item">
                     <!-- Item Principal -->
-                    <a href="{{ route($item['route']) }}" 
-                       class="flex items-center px-4 py-3 text-white rounded-lg transition-all duration-200 {{ $item['is_active'] ? 'bg-white/20 border-l-4 border-white' : 'hover:bg-white/10' }}">
-                        <i class="{{ $item['icon'] }} mr-3"></i>
-                        <span class="font-medium">{{ $item['name'] }}</span>
-                        @if(count($item['submenu']) > 0)
-                            <i class="fas fa-chevron-down ml-auto text-sm transition-transform duration-200 chevron-icon" id="chevron-{{ $loop->index }}" style="color: white; opacity: 0.8;" title="Submenu ({{ count($item['submenu']) }} items)"></i>
-                        @endif
+                    <a href="<?php echo e(route($item['route'])); ?>" 
+                       class="flex items-center px-4 py-3 text-white rounded-lg transition-all duration-200 <?php echo e($item['is_active'] ? 'bg-white/20 border-l-4 border-white' : 'hover:bg-white/10'); ?>">
+                        <i class="<?php echo e($item['icon']); ?> mr-3"></i>
+                        <span class="font-medium"><?php echo e($item['name']); ?></span>
+                        <?php if(count($item['submenu']) > 0): ?>
+                            <i class="fas fa-chevron-down ml-auto text-sm transition-transform duration-200 chevron-icon" id="chevron-<?php echo e($loop->index); ?>" style="color: white; opacity: 0.8;" title="Submenu (<?php echo e(count($item['submenu'])); ?> items)"></i>
+                        <?php endif; ?>
                     </a>
 
                     <!-- Submenu -->
-                    @if(count($item['submenu']) > 0)
-                        <div class="submenu ml-4 mt-2 space-y-1 {{ $item['is_active'] ? '' : 'hidden' }}" id="submenu-{{ $loop->index }}">
-                            @foreach($item['submenu'] as $subItem)
-                                <a href="{{ $subItem['route'] === 'dashboard.agenda' && isset($subItem['action']) && $subItem['action'] === 'create' ? route('dashboard.agenda.create') : route($subItem['route']) . (isset($subItem['action']) ? '#' . $subItem['action'] : '') }}" 
+                    <?php if(count($item['submenu']) > 0): ?>
+                        <div class="submenu ml-4 mt-2 space-y-1 <?php echo e($item['is_active'] ? '' : 'hidden'); ?>" id="submenu-<?php echo e($loop->index); ?>">
+                            <?php $__currentLoopData = $item['submenu']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a href="<?php echo e($subItem['route'] === 'dashboard.agenda' && isset($subItem['action']) && $subItem['action'] === 'create' ? route('dashboard.agenda.create') : route($subItem['route']) . (isset($subItem['action']) ? '#' . $subItem['action'] : '')); ?>" 
                                    class="flex items-center px-3 py-2 text-white/80 rounded-lg text-sm hover:bg-white/10 transition-all duration-200">
                                     <i class="fas fa-circle mr-2 text-xs"></i>
-                                    {{ $subItem['name'] }}
-                                    @if(isset($subItem['action']))
-                                        <span class="ml-auto text-xs bg-white/20 px-2 py-1 rounded">{{ ucfirst($subItem['action']) }}</span>
-                                    @endif
+                                    <?php echo e($subItem['name']); ?>
+
+                                    <?php if(isset($subItem['action'])): ?>
+                                        <span class="ml-auto text-xs bg-white/20 px-2 py-1 rounded"><?php echo e(ucfirst($subItem['action'])); ?></span>
+                                    <?php endif; ?>
                                 </a>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </nav>
     </div>
 
@@ -50,8 +51,8 @@
                 <i class="fas fa-user text-white"></i>
             </div>
             <div class="ml-3">
-                <p class="text-white font-medium">{{ $user->name ?? 'Usuário' }}</p>
-                <p class="text-white/70 text-sm">{{ $user->role->display_name ?? 'Usuário' }}</p>
+                <p class="text-white font-medium"><?php echo e($user->name ?? 'Usuário'); ?></p>
+                <p class="text-white/70 text-sm"><?php echo e($user->role->display_name ?? 'Usuário'); ?></p>
             </div>
         </div>
     </div>
@@ -153,4 +154,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-</script>
+</script><?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/components/dynamic-sidebar.blade.php ENDPATH**/ ?>
