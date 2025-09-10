@@ -60,7 +60,9 @@ class AgendaController extends Controller
         \Log::info('🧪 DEBUG - Agenda Store chamado', [
             'request_data' => $request->all(),
             'user_id' => Auth::id(),
-            'user_authenticated' => Auth::check()
+            'user_authenticated' => Auth::check(),
+            'url' => $request->fullUrl(),
+            'method' => $request->method()
         ]);
         
         try {
@@ -68,8 +70,8 @@ class AgendaController extends Controller
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:255',
                 'descricao' => 'nullable|string',
-                'data_inicio' => 'required|date',
-                'data_fim' => 'required|date|after:data_inicio',
+                'data_inicio' => 'required|date_format:Y-m-d\TH:i',
+                'data_fim' => 'required|date_format:Y-m-d\TH:i|after:data_inicio',
                 'tipo_reuniao' => 'required|in:presencial,online,hibrida',
                 'participantes' => 'nullable|string|max:2000',
                 'meet_link' => 'nullable|url',
@@ -77,8 +79,19 @@ class AgendaController extends Controller
             ]);
 
             if ($validator->fails()) {
+                \Log::warning('❌ Validação falhou - retornando para formulário', [
+                    'errors' => $validator->errors()->toArray(),
+                    'request_data' => $request->all()
+                ]);
                 return back()->withErrors($validator)->withInput()->with('error', 'Por favor, corrija os erros no formulário.');
             }
+
+            \Log::info('✅ Validação passou - processando agenda', [
+                'titulo' => $request->titulo,
+                'data_inicio' => $request->data_inicio,
+                'data_fim' => $request->data_fim,
+                'tipo_reuniao' => $request->tipo_reuniao
+            ]);
 
             // Processar participantes
             $participantes = [];
@@ -216,10 +229,23 @@ class AgendaController extends Controller
                 $message .= ' E-mails enviados aos participantes.';
             }
             
+            \Log::info('✅ Agenda salva com sucesso - redirecionando', [
+                'agenda_id' => $agenda->id,
+                'titulo' => $agenda->titulo,
+                'redirect_route' => 'dashboard.agenda',
+                'message' => $message
+            ]);
+            
             return redirect()->route('dashboard.agenda')->with('success', $message);
             
         } catch (\Exception $e) {
-            \Log::error('Erro ao agendar reunião: ' . $e->getMessage());
+            \Log::error('❌ ERRO CRÍTICO ao agendar reunião', [
+                'error_message' => $e->getMessage(),
+                'error_file' => $e->getFile(),
+                'error_line' => $e->getLine(),
+                'stack_trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
             return back()->withInput()->with('error', 'Erro ao agendar reunião: ' . $e->getMessage());
         }
     }
