@@ -9,6 +9,7 @@ use App\Models\Licenciado;
 use App\Services\GoogleCalendarService;
 use App\Services\GoogleCalendarIntegrationService;
 use App\Services\EmailService;
+use App\Services\ReminderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -158,6 +159,18 @@ class AgendaController extends Controller
                 }
             }
             
+            // Adicionar automaticamente o email do criador da agenda
+            $creatorEmail = Auth::user()->email;
+            if ($creatorEmail && filter_var($creatorEmail, FILTER_VALIDATE_EMAIL)) {
+                if (!in_array($creatorEmail, $participantes)) {
+                    $participantes[] = $creatorEmail;
+                    \Log::info('📧 Email do criador adicionado automaticamente', [
+                        'creator_email' => $creatorEmail,
+                        'participantes_total' => count($participantes)
+                    ]);
+                }
+            }
+            
             // Criar a agenda no banco de dados
             $agenda = new Agenda();
             $agenda->titulo = $request->titulo;
@@ -235,6 +248,21 @@ class AgendaController extends Controller
             }
             
             $agenda->save();
+
+            // Criar lembretes automáticos
+            try {
+                $reminderService = new ReminderService();
+                $reminderStats = $reminderService->createForEvent($agenda);
+                
+                \Log::info('✅ Lembretes criados para agenda', [
+                    'agenda_id' => $agenda->id,
+                    'lembretes_criados' => $reminderStats['created'],
+                    'lembretes_pulados' => $reminderStats['skipped'],
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('❌ Erro ao criar lembretes: ' . $e->getMessage());
+                // Não falhar a criação da agenda por causa dos lembretes
+            }
 
             // Criar notificação se há destinatário e requer aprovação
             if ($destinatarioId && $requerAprovacao) {
@@ -649,6 +677,21 @@ class AgendaController extends Controller
             
             $agenda->save();
 
+            // Reagendar lembretes automáticos
+            try {
+                $reminderService = new ReminderService();
+                $reminderStats = $reminderService->rescheduleForEvent($agenda);
+                
+                \Log::info('✅ Lembretes reagendados para agenda', [
+                    'agenda_id' => $agenda->id,
+                    'lembretes_cancelados' => $reminderStats['canceled'],
+                    'lembretes_criados' => $reminderStats['created']['created'],
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('❌ Erro ao reagendar lembretes: ' . $e->getMessage());
+                // Não falhar a atualização da agenda por causa dos lembretes
+            }
+
             // Enviar e-mails de atualização e criar confirmações
             if (!empty($participantes)) {
                 try {
@@ -694,13 +737,21 @@ class AgendaController extends Controller
         try {
             $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
             
+            // Log para debug
+            \Log::info('🗑️ Iniciando exclusão de agenda', [
+                'agenda_id' => $agenda->id,
+                'titulo' => $agenda->titulo,
+                'user_id' => Auth::id(),
+            ]);
+            
             // Excluir do Google Calendar se existir
             if ($agenda->google_event_id) {
                 try {
                     $googleService = new GoogleCalendarService();
                     $googleService->deleteEvent($agenda->google_event_id);
+                    \Log::info('✅ Evento excluído do Google Calendar', ['event_id' => $agenda->google_event_id]);
                 } catch (\Exception $e) {
-                    \Log::error('Erro ao excluir evento do Google Calendar: ' . $e->getMessage());
+                    \Log::error('❌ Erro ao excluir evento do Google Calendar: ' . $e->getMessage());
                 }
             }
             
@@ -714,18 +765,61 @@ class AgendaController extends Controller
                         $agenda->titulo,
                         $organizador
                     );
+                    \Log::info('✅ E-mails de cancelamento enviados');
                 } catch (\Exception $e) {
-                    \Log::error('Erro ao enviar e-mails de cancelamento: ' . $e->getMessage());
+                    \Log::error('❌ Erro ao enviar e-mails de cancelamento: ' . $e->getMessage());
                 }
             }
             
+            // Cancelar lembretes automáticos (com verificação de classe)
+            try {
+                if (class_exists('\\App\\Services\\ReminderService')) {
+                    $reminderService = new ReminderService();
+                    $canceledCount = $reminderService->cancelForEvent($agenda);
+                    
+                    \Log::info('✅ Lembretes cancelados para agenda excluída', [
+                        'agenda_id' => $agenda->id,
+                        'lembretes_cancelados' => $canceledCount,
+                    ]);
+                } else {
+                    \Log::warning('⚠️ ReminderService não encontrado, pulando cancelamento de lembretes');
+                }
+            } catch (\Exception $e) {
+                \Log::error('❌ Erro ao cancelar lembretes: ' . $e->getMessage());
+                // Não falhar a exclusão da agenda por causa dos lembretes
+            }
+            
+            // Excluir a agenda
             $agenda->delete();
+            
+            \Log::info('✅ Agenda excluída com sucesso', ['agenda_id' => $id]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Reunião excluída com sucesso!' . (!empty($agenda->participantes) ? ' E-mails de cancelamento enviados aos participantes.' : '')
             ]);
+            
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::error('❌ Agenda não encontrada para exclusão', [
+                'agenda_id' => $id,
+                'user_id' => Auth::id(),
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Reunião não encontrada ou você não tem permissão para excluí-la.'
+            ], 404);
+            
         } catch (\Exception $e) {
+            \Log::error('❌ ERRO CRÍTICO ao excluir agenda', [
+                'agenda_id' => $id,
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao excluir reunião: ' . $e->getMessage()

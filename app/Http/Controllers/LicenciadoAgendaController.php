@@ -11,6 +11,7 @@ use App\Models\AgendaNotification;
 use App\Models\BusinessHours;
 use App\Services\GoogleCalendarIntegrationService;
 use App\Services\EmailService;
+use App\Services\ReminderService;
 use Carbon\Carbon;
 
 class LicenciadoAgendaController extends Controller
@@ -140,6 +141,14 @@ class LicenciadoAgendaController extends Controller
                 }
             }
             
+            // Adicionar automaticamente o email do criador da agenda
+            $creatorEmail = Auth::user()->email;
+            if ($creatorEmail && filter_var($creatorEmail, FILTER_VALIDATE_EMAIL)) {
+                if (!in_array($creatorEmail, $participantes)) {
+                    $participantes[] = $creatorEmail;
+                }
+            }
+            
             // Criar a agenda no banco de dados
             $agenda = new Agenda();
             $agenda->titulo = $request->titulo;
@@ -163,6 +172,21 @@ class LicenciadoAgendaController extends Controller
             }
             
             $agenda->save();
+
+            // Criar lembretes automáticos
+            try {
+                $reminderService = new ReminderService();
+                $reminderStats = $reminderService->createForEvent($agenda);
+                
+                \Log::info('✅ Lembretes criados para agenda (licenciado)', [
+                    'agenda_id' => $agenda->id,
+                    'lembretes_criados' => $reminderStats['created'],
+                    'lembretes_pulados' => $reminderStats['skipped'],
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('❌ Erro ao criar lembretes (licenciado): ' . $e->getMessage());
+                // Não falhar a criação da agenda por causa dos lembretes
+            }
 
             // Criar notificação se há destinatário e requer aprovação
             if ($destinatarioId && $requerAprovacao) {
