@@ -505,7 +505,12 @@ class AgendaController extends Controller
     public function show(string $id)
     {
         try {
-            $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            // Super Admin pode ver qualquer agenda, outros usuários só suas próprias
+            if (Auth::user()->role_id == 1) { // Super Admin
+                $agenda = Agenda::findOrFail($id);
+            } else {
+                $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            }
             
             // Buscar licenciado se existir
             $licenciado = null;
@@ -552,7 +557,12 @@ class AgendaController extends Controller
     public function edit(string $id)
     {
         try {
-            $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            // Super Admin pode editar qualquer agenda, outros usuários só suas próprias
+            if (Auth::user()->role_id == 1) { // Super Admin
+                $agenda = Agenda::findOrFail($id);
+            } else {
+                $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            }
             
             return response()->json([
                 'success' => true,
@@ -590,7 +600,12 @@ class AgendaController extends Controller
         }
 
         try {
-            $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            // Super Admin pode atualizar qualquer agenda, outros usuários só suas próprias
+            if (Auth::user()->role_id == 1) { // Super Admin
+                $agenda = Agenda::findOrFail($id);
+            } else {
+                $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            }
             
             // Processar participantes
             $participantes = [];
@@ -735,13 +750,20 @@ class AgendaController extends Controller
     public function destroy(string $id)
     {
         try {
-            $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            // Super Admin pode excluir qualquer agenda, outros usuários só suas próprias
+            if (Auth::user()->role_id == 1) { // Super Admin
+                $agenda = Agenda::findOrFail($id);
+            } else {
+                $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            }
             
             // Log para debug
             \Log::info('🗑️ Iniciando exclusão de agenda', [
                 'agenda_id' => $agenda->id,
                 'titulo' => $agenda->titulo,
                 'user_id' => Auth::id(),
+                'user_role' => Auth::user()->role_id,
+                'is_super_admin' => Auth::user()->role_id == 1,
             ]);
             
             // Excluir do Google Calendar se existir
@@ -833,7 +855,12 @@ class AgendaController extends Controller
     public function toggleStatus(Request $request, string $id)
     {
         try {
-            $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            // Super Admin pode alterar status de qualquer agenda, outros usuários só suas próprias
+            if (Auth::user()->role_id == 1) { // Super Admin
+                $agenda = Agenda::findOrFail($id);
+            } else {
+                $agenda = Agenda::where('user_id', Auth::id())->findOrFail($id);
+            }
             $newStatus = $request->status;
             
             $agenda->update(['status' => $newStatus]);
