@@ -23,8 +23,12 @@ class AgendaController extends Controller
     {
         $dataAtual = request('data', now()->format('Y-m-d'));
         
-        // Buscar agendas do usuário
-        $query = Agenda::where('user_id', Auth::id());
+        // Buscar agendas do usuário (como criador, solicitante ou destinatário)
+        $query = Agenda::where(function($q) {
+            $q->where('user_id', Auth::id())
+              ->orWhere('solicitante_id', Auth::id())
+              ->orWhere('destinatario_id', Auth::id());
+        });
         
         // Se não há filtro de data específica, mostrar todas as agendas
         // Se há filtro de data, usar o scope doDia
@@ -839,8 +843,12 @@ class AgendaController extends Controller
         $month = $request->get('month', now()->format('Y-m'));
         $date = Carbon::createFromFormat('Y-m', $month);
         
-        // Buscar todos os eventos do mês para o usuário logado
-        $agendas = Agenda::where('user_id', Auth::id())
+        // Buscar todos os eventos do mês para o usuário logado (como criador, solicitante ou destinatário)
+        $agendas = Agenda::where(function($q) {
+                $q->where('user_id', Auth::id())
+                  ->orWhere('solicitante_id', Auth::id())
+                  ->orWhere('destinatario_id', Auth::id());
+            })
             ->whereYear('data_inicio', $date->year)
             ->whereMonth('data_inicio', $date->month)
             ->orderBy('data_inicio')
