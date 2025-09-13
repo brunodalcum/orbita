@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Extração via Google Places API</title>
     
     <!-- Bootstrap CSS -->
@@ -45,7 +45,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="{{ route('dashboard.leads') }}" class="text-decoration-none">
+                        <a href="<?php echo e(route('dashboard.leads')); ?>" class="text-decoration-none">
                             <i class="fas fa-arrow-left me-1"></i>
                             Leads
                         </a>
@@ -87,7 +87,7 @@
                 <div class="card-body">
                     <i class="fas fa-map-marker-alt text-primary fs-1 mb-2"></i>
                     <h5 class="text-muted">Places Coletados</h5>
-                    <h3 class="text-primary">{{ $totalPlaces ?? 0 }}</h3>
+                    <h3 class="text-primary"><?php echo e($totalPlaces ?? 0); ?></h3>
                 </div>
             </div>
         </div>
@@ -97,7 +97,7 @@
                 <div class="card-body">
                     <i class="fas fa-phone text-success fs-1 mb-2"></i>
                     <h5 class="text-muted">Com Telefone</h5>
-                    <h3 class="text-success">{{ $placesWithPhone ?? 0 }}</h3>
+                    <h3 class="text-success"><?php echo e($placesWithPhone ?? 0); ?></h3>
                 </div>
             </div>
         </div>
@@ -107,7 +107,7 @@
                 <div class="card-body">
                     <i class="fas fa-globe text-info fs-1 mb-2"></i>
                     <h5 class="text-muted">Com Website</h5>
-                    <h3 class="text-info">{{ $placesWithWebsite ?? 0 }}</h3>
+                    <h3 class="text-info"><?php echo e($placesWithWebsite ?? 0); ?></h3>
                 </div>
             </div>
         </div>
@@ -117,7 +117,7 @@
                 <div class="card-body">
                     <i class="fas fa-search text-warning fs-1 mb-2"></i>
                     <h5 class="text-muted">Extrações (7 dias)</h5>
-                    <h3 class="text-warning">{{ $recentExtractions ?? 0 }}</h3>
+                    <h3 class="text-warning"><?php echo e($recentExtractions ?? 0); ?></h3>
                 </div>
             </div>
         </div>
@@ -134,7 +134,7 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    @if(!$apiInfo['configured'])
+                    <?php if(!$apiInfo['configured']): ?>
                         <div class="alert alert-warning border-0 mb-4" style="background: rgba(255, 193, 7, 0.1);">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-exclamation-triangle text-warning fs-4 me-3"></i>
@@ -149,10 +149,10 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
                     
                     <form id="extractionForm">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         
                         <div class="row mb-4">
                             <!-- Termo de Busca -->
@@ -211,20 +211,21 @@
                                     Tipos de Estabelecimento (Opcional)
                                 </label>
                                 <div class="row">
-                                    @if(isset($commonTypes))
-                                        @foreach(array_chunk($commonTypes, 5, true) as $chunk)
+                                    <?php if(isset($commonTypes)): ?>
+                                        <?php $__currentLoopData = array_chunk($commonTypes, 5, true); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="col-md-6">
-                                                @foreach($chunk as $type => $label)
+                                                <?php $__currentLoopData = $chunk; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="types[]" value="{{ $type }}" id="type_{{ $type }}">
-                                                        <label class="form-check-label small" for="type_{{ $type }}">
-                                                            {{ $label }}
+                                                        <input class="form-check-input" type="checkbox" name="types[]" value="<?php echo e($type); ?>" id="type_<?php echo e($type); ?>">
+                                                        <label class="form-check-label small" for="type_<?php echo e($type); ?>">
+                                                            <?php echo e($label); ?>
+
                                                         </label>
                                                     </div>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div>
-                                        @endforeach
-                                    @endif
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -266,7 +267,7 @@
                                 Limpar
                             </button>
                             
-                            <a href="{{ route('dashboard.leads') }}" class="btn btn-outline-dark">
+                            <a href="<?php echo e(route('dashboard.leads')); ?>" class="btn btn-outline-dark">
                                 <i class="fas fa-arrow-left me-2"></i>
                                 Voltar
                             </a>
@@ -278,7 +279,7 @@
     </div>
 
     <!-- Histórico de Extrações -->
-    @if(isset($userExtractions) && $userExtractions->count() > 0)
+    <?php if(isset($userExtractions) && $userExtractions->count() > 0): ?>
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm border-0">
@@ -303,34 +304,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($userExtractions as $extraction)
+                                <?php $__currentLoopData = $userExtractions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $extraction): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td>{{ $extraction->created_at->format('d/m/Y H:i') }}</td>
+                                    <td><?php echo e($extraction->created_at->format('d/m/Y H:i')); ?></td>
                                     <td>
-                                        <strong>{{ $extraction->query }}</strong>
+                                        <strong><?php echo e($extraction->query); ?></strong>
                                     </td>
-                                    <td>{{ $extraction->location ?? 'N/A' }}</td>
+                                    <td><?php echo e($extraction->location ?? 'N/A'); ?></td>
                                     <td>
-                                        @if($extraction->status === 'completed')
+                                        <?php if($extraction->status === 'completed'): ?>
                                             <span class="badge bg-success">Concluída</span>
-                                        @elseif($extraction->status === 'running')
+                                        <?php elseif($extraction->status === 'running'): ?>
                                             <span class="badge bg-primary">Em execução</span>
-                                        @elseif($extraction->status === 'failed')
+                                        <?php elseif($extraction->status === 'failed'): ?>
                                             <span class="badge bg-danger">Falhou</span>
-                                        @else
-                                            <span class="badge bg-secondary">{{ ucfirst($extraction->status) }}</span>
-                                        @endif
+                                        <?php else: ?>
+                                            <span class="badge bg-secondary"><?php echo e(ucfirst($extraction->status)); ?></span>
+                                        <?php endif; ?>
                                     </td>
-                                    <td>{{ $extraction->total_found }}</td>
-                                    <td>{{ $extraction->total_processed }}</td>
+                                    <td><?php echo e($extraction->total_found); ?></td>
+                                    <td><?php echo e($extraction->total_processed); ?></td>
                                     <td>
                                         <button class="btn btn-sm btn-outline-primary" 
-                                                onclick="viewExtractionDetails({{ $extraction->id }})">
+                                                onclick="viewExtractionDetails(<?php echo e($extraction->id); ?>)">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                     </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -338,7 +339,7 @@
             </div>
         </div>
     </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Informações e Compliance -->
     <div class="row mt-4">
@@ -423,11 +424,11 @@ document.getElementById('extractionForm').addEventListener('submit', function(e)
     showLoading();
     
     // Fazer requisição
-    fetch('{{ route("dashboard.places.extract.run") }}', {
+    fetch('<?php echo e(route("dashboard.places.extract.run")); ?>', {
         method: 'POST',
         body: formData,
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '<?php echo e(csrf_token()); ?>'
         }
     })
     .then(response => {
@@ -477,7 +478,7 @@ function startProgressTracking() {
     if (!currentExtractionId) return;
     
     progressInterval = setInterval(() => {
-        fetch(`{{ url('/places/extraction') }}/${currentExtractionId}/status`)
+        fetch(`<?php echo e(url('/places/extraction')); ?>/${currentExtractionId}/status`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -657,7 +658,7 @@ function viewExtractionDetails(extractionId) {
         method: 'GET',
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}'
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '<?php echo e(csrf_token()); ?>'
         }
     })
     .then(response => {
@@ -834,3 +835,4 @@ function exportLeads() {
 
 </body>
 </html>
+<?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/dashboard/places/extract.blade.php ENDPATH**/ ?>
