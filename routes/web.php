@@ -77,7 +77,6 @@ Route::middleware([
     
     // Rotas para Leads
     Route::get('/leads', [App\Http\Controllers\LeadController::class, 'index'])->name('dashboard.leads');
-    Route::get('/leads/extract', [App\Http\Controllers\LeadController::class, 'extract'])->name('dashboard.leads.extract');
     Route::post('/leads/export', [App\Http\Controllers\LeadController::class, 'export'])->name('dashboard.leads.export');
     Route::post('/leads', [App\Http\Controllers\LeadController::class, 'store'])->name('leads.store');
     

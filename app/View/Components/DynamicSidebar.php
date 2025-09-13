@@ -157,7 +157,7 @@ class DynamicSidebar extends Component
             if ($this->user->hasPermission('leads.create')) {
                 $submenu[] = [
                     'name' => 'Extrair Leads',
-                    'route' => 'dashboard.leads.extract',
+                    'route' => 'dashboard.places.extract',
                     'permission' => 'leads.create',
                     'action' => 'extract'
                 ];

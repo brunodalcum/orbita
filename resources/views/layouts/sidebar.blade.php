@@ -187,13 +187,13 @@
                      class="mt-2 ml-4 space-y-1 {{ request()->routeIs('dashboard.leads*') ? 'block' : 'hidden' }}">
                     
                     <a href="{{ route('dashboard.leads') }}" 
-                       class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm hover:bg-white hover:bg-opacity-10 {{ request()->routeIs('dashboard.leads') && !request()->routeIs('dashboard.leads.extract') ? 'bg-white bg-opacity-20' : '' }}">
+                       class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm hover:bg-white hover:bg-opacity-10 {{ request()->routeIs('dashboard.leads') && !request()->routeIs('dashboard.places.extract') ? 'bg-white bg-opacity-20' : '' }}">
                         <i class="fas fa-list mr-2"></i>
                         Lista de Leads
                     </a>
                     
-                    <a href="{{ route('dashboard.leads.extract') }}" 
-                       class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm hover:bg-white hover:bg-opacity-10 {{ request()->routeIs('dashboard.leads.extract') ? 'bg-white bg-opacity-20' : '' }}">
+                    <a href="{{ route('dashboard.places.extract') }}" 
+                       class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm hover:bg-white hover:bg-opacity-10 {{ request()->routeIs('dashboard.places.extract') ? 'bg-white bg-opacity-20' : '' }}">
                         <i class="fas fa-download mr-2"></i>
                         Extrair Leads
                     </a>
