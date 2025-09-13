@@ -867,7 +867,7 @@ function insertLeads() {
     insertBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Inserindo...';
     
     // Fazer requisição AJAX
-    fetch(`/places/extraction/${currentExtractionId}/insert-leads`, {
+    fetch(`{{ url('/places/extraction') }}/${currentExtractionId}/insert-leads`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
