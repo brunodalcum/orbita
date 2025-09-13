@@ -529,11 +529,7 @@ function clearForm() {
     document.getElementById('extractionForm').reset();
 }
 
-// Ver detalhes da extração
-function viewExtractionDetails(extractionId) {
-    // Implementar modal com detalhes da extração
-    alert('Funcionalidade em desenvolvimento');
-}
+// Função viewExtractionDetails implementada mais abaixo no código
 </script>
 
 <!-- Bootstrap JS -->
@@ -592,10 +588,16 @@ function viewExtractionDetails(extractionId) {
                             <i class="fas fa-users me-1"></i>
                             Leads Encontrados (<span id="leads-count">0</span>)
                         </h6>
-                        <button class="btn btn-sm btn-success" onclick="exportLeads()">
-                            <i class="fas fa-download me-1"></i>
-                            Exportar CSV
-                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-primary" onclick="insertLeads()" id="insert-leads-btn">
+                                <i class="fas fa-plus me-1"></i>
+                                Inserir Leads
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="exportLeads()">
+                                <i class="fas fa-download me-1"></i>
+                                Exportar CSV
+                            </button>
+                        </div>
                     </div>
 
                     <div class="table-responsive">
@@ -643,6 +645,9 @@ let currentLeads = [];
  * Visualizar detalhes de uma extração
  */
 function viewExtractionDetails(extractionId) {
+    // Definir ID da extração atual para uso nas outras funções
+    currentExtractionId = extractionId;
+    
     // Mostrar modal
     const modal = new bootstrap.Modal(document.getElementById('leadsDetailsModal'));
     modal.show();
@@ -829,6 +834,92 @@ function exportLeads() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+/**
+ * Inserir leads na tabela de leads do sistema
+ */
+function insertLeads() {
+    if (currentLeads.length === 0) {
+        alert('Nenhum lead para inserir');
+        return;
+    }
+    
+    if (!currentExtractionId) {
+        console.error('currentExtractionId não definido:', currentExtractionId);
+        alert('❌ ID da extração não encontrado. Tente fechar e abrir a modal novamente.');
+        return;
+    }
+    
+    console.log('Inserindo leads da extração ID:', currentExtractionId);
+    
+    // Confirmar ação
+    const confirmMessage = `Deseja inserir ${currentLeads.length} leads na lista de leads do sistema?\n\nEsta ação irá:\n- Adicionar os leads à aba "Leads"\n- Verificar duplicatas automaticamente\n- Criar registros com origem "Google Places API"`;
+    
+    if (!confirm(confirmMessage)) {
+        return;
+    }
+    
+    // Desabilitar botão e mostrar loading
+    const insertBtn = document.getElementById('insert-leads-btn');
+    const originalText = insertBtn.innerHTML;
+    insertBtn.disabled = true;
+    insertBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Inserindo...';
+    
+    // Fazer requisição AJAX
+    fetch(`/places/extraction/${currentExtractionId}/insert-leads`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        insertBtn.disabled = false;
+        insertBtn.innerHTML = originalText;
+        
+        if (data.success) {
+            // Mostrar resultado detalhado
+            const stats = data.stats;
+            let message = `✅ Leads inseridos com sucesso!\n\n`;
+            message += `📊 Estatísticas:\n`;
+            message += `• Inseridos: ${stats.inserted}\n`;
+            message += `• Duplicados (ignorados): ${stats.duplicates}\n`;
+            message += `• Erros: ${stats.errors}\n`;
+            message += `• Total processados: ${stats.total_processed}\n\n`;
+            message += `Os leads estão agora disponíveis na aba "Leads" do sistema.`;
+            
+            alert(message);
+            
+            // Atualizar botão para indicar que já foi inserido
+            insertBtn.innerHTML = '<i class="fas fa-check me-1"></i>Leads Inseridos';
+            insertBtn.classList.remove('btn-primary');
+            insertBtn.classList.add('btn-success');
+            insertBtn.disabled = true;
+            
+            // Opcionalmente, redirecionar para a página de leads
+            if (confirm('Deseja ir para a página de Leads para ver os registros inseridos?')) {
+                window.open('/leads', '_blank');
+            }
+            
+        } else {
+            alert('❌ Erro ao inserir leads: ' + (data.message || 'Erro desconhecido'));
+        }
+    })
+    .catch(error => {
+        insertBtn.disabled = false;
+        insertBtn.innerHTML = originalText;
+        console.error('Erro ao inserir leads:', error);
+        alert('❌ Erro ao inserir leads: ' + error.message);
+    });
 }
 </script>
 

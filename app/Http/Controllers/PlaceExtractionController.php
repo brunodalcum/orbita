@@ -644,4 +644,208 @@ class PlaceExtractionController extends Controller
         return "($ddd) $prefix-$suffix";
     }
 
+    /**
+     * Inserir leads de uma extração na tabela de leads
+     */
+    public function insertLeads(Request $request, int $extractionId): JsonResponse
+    {
+        try {
+            $extraction = PlaceExtraction::forUser(Auth::id())->findOrFail($extractionId);
+            
+            // Buscar os leads da extração (mesmo método usado na modal)
+            if (!empty(config('services.google_places.api_key'))) {
+                $leads = $this->getRealLeadsFromAPI($extraction);
+            } else {
+                $leads = $this->getMockLeadsForExtraction($extraction);
+            }
+
+            if (empty($leads)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Nenhum lead encontrado para inserir',
+                ], 400);
+            }
+
+            $insertedCount = 0;
+            $duplicateCount = 0;
+            $errorCount = 0;
+
+            DB::beginTransaction();
+
+            foreach ($leads as $leadData) {
+                try {
+                    // Verificar se já existe um lead com o mesmo telefone ou nome+endereço
+                    $existingLead = null;
+                    
+                    if (!empty($leadData['formatted_phone_number'])) {
+                        $existingLead = \App\Models\Lead::where('telefone', $leadData['formatted_phone_number'])->first();
+                    }
+                    
+                    if (!$existingLead && !empty($leadData['name']) && !empty($leadData['formatted_address'])) {
+                        $existingLead = \App\Models\Lead::where('nome', $leadData['name'])
+                            ->where('endereco', 'LIKE', '%' . substr($leadData['formatted_address'], 0, 50) . '%')
+                            ->first();
+                    }
+
+                    if ($existingLead) {
+                        $duplicateCount++;
+                        continue;
+                    }
+
+                    // Criar novo lead
+                    $lead = new \App\Models\Lead();
+                    $lead->nome = $leadData['name'] ?? 'Nome não informado';
+                    $lead->email = $this->extractEmailFromWebsite($leadData['website'] ?? null);
+                    $lead->telefone = $leadData['formatted_phone_number'] ?? null;
+                    $lead->endereco = $leadData['formatted_address'] ?? null;
+                    $lead->cidade = $this->extractCityFromAddress($leadData['formatted_address'] ?? '');
+                    $lead->estado = $this->extractStateFromAddress($leadData['formatted_address'] ?? '');
+                    $lead->origem = 'Google Places API';
+                    $lead->status = 'novo';
+                    $lead->observacoes = $this->buildObservations($leadData);
+                    $lead->data_contato = null;
+                    $lead->licenciado_id = null; // Será atribuído posteriormente
+                    
+                    $lead->save();
+                    $insertedCount++;
+
+                } catch (\Exception $e) {
+                    Log::warning('Erro ao inserir lead individual', [
+                        'lead_data' => $leadData,
+                        'error' => $e->getMessage(),
+                    ]);
+                    $errorCount++;
+                }
+            }
+
+            DB::commit();
+
+            // Atualizar estatísticas da extração
+            $extraction->update([
+                'leads_inserted' => $insertedCount,
+                'leads_duplicated' => $duplicateCount,
+                'leads_errors' => $errorCount,
+                'leads_inserted_at' => now(),
+            ]);
+
+            Log::info('Leads inseridos com sucesso', [
+                'extraction_id' => $extractionId,
+                'inserted' => $insertedCount,
+                'duplicates' => $duplicateCount,
+                'errors' => $errorCount,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Leads inseridos com sucesso!",
+                'stats' => [
+                    'inserted' => $insertedCount,
+                    'duplicates' => $duplicateCount,
+                    'errors' => $errorCount,
+                    'total_processed' => count($leads),
+                ],
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            Log::error('Erro ao inserir leads da extração', [
+                'extraction_id' => $extractionId,
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno ao inserir leads: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Extrair email do website (tentativa básica)
+     */
+    private function extractEmailFromWebsite(?string $website): ?string
+    {
+        if (empty($website)) {
+            return null;
+        }
+
+        // Tentar extrair domínio e criar email genérico
+        $domain = parse_url($website, PHP_URL_HOST);
+        if ($domain) {
+            $domain = str_replace('www.', '', $domain);
+            return 'contato@' . $domain;
+        }
+
+        return null;
+    }
+
+    /**
+     * Extrair cidade do endereço
+     */
+    private function extractCityFromAddress(string $address): ?string
+    {
+        // Padrão brasileiro: "Cidade - Estado"
+        if (preg_match('/,\s*([^-]+)\s*-\s*[A-Z]{2}/', $address, $matches)) {
+            return trim($matches[1]);
+        }
+
+        // Fallback: pegar parte antes do estado
+        if (preg_match('/,\s*([^,]+)\s*-\s*[A-Z]{2}/', $address, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return null;
+    }
+
+    /**
+     * Extrair estado do endereço
+     */
+    private function extractStateFromAddress(string $address): ?string
+    {
+        // Padrão brasileiro: "- AL" ou "- Alagoas"
+        if (preg_match('/-\s*([A-Z]{2})\b/', $address, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return null;
+    }
+
+    /**
+     * Construir observações com dados do Google Places
+     */
+    private function buildObservations(array $leadData): string
+    {
+        $observations = [];
+
+        if (!empty($leadData['rating'])) {
+            $observations[] = "Avaliação Google: {$leadData['rating']}⭐";
+        }
+
+        if (!empty($leadData['user_ratings_total'])) {
+            $observations[] = "Total de avaliações: {$leadData['user_ratings_total']}";
+        }
+
+        if (!empty($leadData['website'])) {
+            $observations[] = "Website: {$leadData['website']}";
+        }
+
+        if (!empty($leadData['types'])) {
+            $types = is_array($leadData['types']) ? implode(', ', $leadData['types']) : $leadData['types'];
+            $observations[] = "Tipos: {$types}";
+        }
+
+        if (!empty($leadData['business_status'])) {
+            $status = $leadData['business_status'] === 'OPERATIONAL' ? 'Ativo' : $leadData['business_status'];
+            $observations[] = "Status: {$status}";
+        }
+
+        $observations[] = "Fonte: Google Places API";
+        $observations[] = "Data da captura: " . now()->format('d/m/Y H:i');
+
+        return implode("\n", $observations);
+    }
+
 }

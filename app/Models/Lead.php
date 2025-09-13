@@ -14,11 +14,15 @@ class Lead extends Model
         'email',
         'telefone',
         'empresa',
+        'endereco',
+        'cidade',
+        'estado',
         'status',
         'origem',
         'observacoes',
         'ativo',
-        'licenciado_id'
+        'licenciado_id',
+        'data_contato'
     ];
 
     protected $casts = [

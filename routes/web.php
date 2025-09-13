@@ -529,6 +529,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::post('/places/extract', [App\Http\Controllers\PlaceExtractionController::class, 'extract'])->name('dashboard.places.extract.run');
     Route::get('/places/extraction/{id}/status', [App\Http\Controllers\PlaceExtractionController::class, 'status'])->name('dashboard.places.extraction.status');
     Route::get('/places/extraction/{id}/details', [App\Http\Controllers\PlaceExtractionController::class, 'details'])->name('dashboard.places.extraction.details');
+    Route::post('/places/extraction/{id}/insert-leads', [App\Http\Controllers\PlaceExtractionController::class, 'insertLeads'])->name('dashboard.places.extraction.insert-leads');
 });
 
 // Rotas públicas para confirmação de agenda (sem autenticação)
