@@ -10,6 +10,7 @@ use App\Models\Plano;
 use App\Models\Operacao;
 use App\Models\Adquirente;
 use App\Models\Estabelecimento;
+use App\Models\Agenda;
 use Carbon\Carbon;
 
 class LicenciadoDashboardController extends Controller
@@ -32,8 +33,8 @@ class LicenciadoDashboardController extends Controller
         // Estatísticas básicas
         $stats = $this->getDashboardStats($licenciado);
         
-        // Atividades recentes
-        $recentActivities = $this->getRecentActivities($licenciado);
+        // Agendas de hoje
+        $todayAgendas = $this->getTodayAgendas($licenciado);
         
         // Planos disponíveis
         $availablePlans = Plano::where('ativo', true)
@@ -47,7 +48,7 @@ class LicenciadoDashboardController extends Controller
         return view('licenciado.dashboard', compact(
             'licenciado',
             'stats',
-            'recentActivities',
+            'todayAgendas',
             'availablePlans'
         ));
     }
@@ -363,33 +364,38 @@ class LicenciadoDashboardController extends Controller
     }
 
     /**
-     * Obter atividades recentes
+     * Obter agendas de hoje do licenciado
      */
-    private function getRecentActivities($licenciado)
+    private function getTodayAgendas($licenciado)
     {
-        return collect([
-            (object) [
-                'tipo' => 'venda',
-                'descricao' => 'Nova venda aprovada - R$ 350,00',
-                'data' => Carbon::now()->subHours(2),
-                'icon' => 'fas fa-shopping-cart',
-                'color' => 'green'
-            ],
-            (object) [
-                'tipo' => 'estabelecimento',
-                'descricao' => 'Estabelecimento "Loja Centro" atualizado',
-                'data' => Carbon::now()->subHours(5),
-                'icon' => 'fas fa-store',
-                'color' => 'blue'
-            ],
-            (object) [
-                'tipo' => 'comissao',
-                'descricao' => 'Comissão de R$ 125,00 creditada',
-                'data' => Carbon::now()->subDay(),
-                'icon' => 'fas fa-coins',
-                'color' => 'yellow'
-            ]
-        ]);
+        return Agenda::doUsuario($licenciado->id)
+                    ->whereDate('data_inicio', Carbon::today())
+                    ->with(['solicitante', 'destinatario'])
+                    ->orderBy('data_inicio')
+                    ->get();
+    }
+
+    /**
+     * Página de planos do licenciado
+     */
+    public function planos()
+    {
+        $user = Auth::user();
+        
+        // Verificar se o usuário é licenciado
+        if (!$user->role || $user->role->name !== 'licenciado') {
+            abort(403, 'Acesso negado. Área restrita para licenciados.');
+        }
+
+        // Buscar todos os planos ativos
+        $planos = Plano::where('ativo', true)
+            ->with(['adquirente', 'parceiro', 'taxasAtivas' => function($query) {
+                $query->orderBy('modalidade')->orderBy('bandeira')->orderBy('parcelas');
+            }])
+            ->orderBy('nome')
+            ->get();
+
+        return view('licenciado.planos', compact('planos'));
     }
 
     /**

@@ -10,6 +10,7 @@ use App\Services\GoogleCalendarService;
 use App\Services\GoogleCalendarIntegrationService;
 use App\Services\EmailService;
 use App\Services\ReminderService;
+use App\Services\AutomaticReminderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,6 +24,8 @@ class AgendaController extends Controller
     public function index()
     {
         $dataAtual = request('data', now()->format('Y-m-d'));
+        $isToday = $dataAtual === now()->format('Y-m-d');
+        $hasDateFilter = request()->has('data');
         
         // Buscar agendas do usuário (como criador, solicitante ou destinatário)
         $query = Agenda::where(function($q) {
@@ -31,15 +34,17 @@ class AgendaController extends Controller
               ->orWhere('destinatario_id', Auth::id());
         });
         
-        // Se não há filtro de data específica, mostrar todas as agendas
-        // Se há filtro de data, usar o scope doDia
-        if (request('data')) {
-            $query->doDia($dataAtual);
-        }
+        // Sempre filtrar por data (padrão: hoje)
+        $query->doDia($dataAtual);
         
-        $agendas = $query->orderBy('data_inicio', 'desc')->get();
+        $agendas = $query->orderBy('data_inicio', 'asc')->get();
 
-        return view('dashboard.agenda', compact('agendas', 'dataAtual'));
+        // Contar total de agendas pendentes de aprovação para o botão
+        $pendentesCount = Agenda::where('destinatario_id', Auth::id())
+            ->where('status_aprovacao', 'pendente')
+            ->count();
+
+        return view('dashboard.agenda', compact('agendas', 'dataAtual', 'isToday', 'hasDateFilter', 'pendentesCount'));
     }
 
     /**
@@ -249,16 +254,21 @@ class AgendaController extends Controller
             
             $agenda->save();
 
-            // Criar lembretes automáticos
+            // Criar lembretes automáticos (1 dia antes, 8h da manhã, 1 hora antes)
             try {
-                $reminderService = new ReminderService();
-                $reminderStats = $reminderService->createForEvent($agenda);
+                $automaticReminderService = new AutomaticReminderService();
                 
-                \Log::info('✅ Lembretes criados para agenda', [
-                    'agenda_id' => $agenda->id,
-                    'lembretes_criados' => $reminderStats['created'],
-                    'lembretes_pulados' => $reminderStats['skipped'],
-                ]);
+                if ($automaticReminderService->shouldCreateReminders($agenda)) {
+                    $reminders = $automaticReminderService->createAutomaticReminders($agenda);
+                    
+                    \Log::info('✅ Lembretes automáticos criados para agenda', [
+                        'agenda_id' => $agenda->id,
+                        'lembretes_criados' => count($reminders),
+                        'tipos' => ['1 dia antes', '8h da manhã', '1 hora antes'],
+                    ]);
+                } else {
+                    \Log::info('⚠️ Lembretes automáticos não criados (evento muito próximo ou no passado)');
+                }
             } catch (\Exception $e) {
                 \Log::error('❌ Erro ao criar lembretes: ' . $e->getMessage());
                 // Não falhar a criação da agenda por causa dos lembretes
@@ -793,21 +803,17 @@ class AgendaController extends Controller
                 }
             }
             
-            // Cancelar lembretes automáticos (com verificação de classe)
+            // Remover lembretes automáticos pendentes
             try {
-                if (class_exists('\\App\\Services\\ReminderService')) {
-                    $reminderService = new ReminderService();
-                    $canceledCount = $reminderService->cancelForEvent($agenda);
-                    
-                    \Log::info('✅ Lembretes cancelados para agenda excluída', [
-                        'agenda_id' => $agenda->id,
-                        'lembretes_cancelados' => $canceledCount,
-                    ]);
-                } else {
-                    \Log::warning('⚠️ ReminderService não encontrado, pulando cancelamento de lembretes');
-                }
+                $automaticReminderService = new AutomaticReminderService();
+                $removedCount = $automaticReminderService->removeAutomaticReminders($agenda);
+                
+                \Log::info('✅ Lembretes automáticos removidos para agenda excluída', [
+                    'agenda_id' => $agenda->id,
+                    'lembretes_removidos' => $removedCount,
+                ]);
             } catch (\Exception $e) {
-                \Log::error('❌ Erro ao cancelar lembretes: ' . $e->getMessage());
+                \Log::error('❌ Erro ao remover lembretes automáticos: ' . $e->getMessage());
                 // Não falhar a exclusão da agenda por causa dos lembretes
             }
             

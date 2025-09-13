@@ -17,7 +17,8 @@ class Lead extends Model
         'status',
         'origem',
         'observacoes',
-        'ativo'
+        'ativo',
+        'licenciado_id'
     ];
 
     protected $casts = [
@@ -52,6 +53,30 @@ class Lead extends Model
     public function followUps()
     {
         return $this->hasMany(LeadFollowUp::class)->ordered();
+    }
+
+    /**
+     * Relacionamento com licenciado (usuário)
+     */
+    public function licenciado()
+    {
+        return $this->belongsTo(User::class, 'licenciado_id');
+    }
+
+    /**
+     * Scope para leads atribuídos a um licenciado específico
+     */
+    public function scopeDoLicenciado($query, $licenciadoId)
+    {
+        return $query->where('licenciado_id', $licenciadoId);
+    }
+
+    /**
+     * Scope para leads não atribuídos
+     */
+    public function scopeNaoAtribuidos($query)
+    {
+        return $query->whereNull('licenciado_id');
     }
 
     public function getStatusColorAttribute()

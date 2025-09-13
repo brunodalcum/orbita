@@ -12,6 +12,7 @@ class Reminder extends Model
 
     protected $fillable = [
         'event_id',
+        'participant_id',
         'participant_email',
         'participant_name',
         'channel',
@@ -29,15 +30,22 @@ class Reminder extends Model
         'event_host_name',
         'event_host_email',
         'event_description',
+        'message',
+        'created_by',
+        'paused_at',
+        'paused_by',
+        'is_test',
     ];
 
     protected $casts = [
         'send_at' => 'datetime',
         'sent_at' => 'datetime',
+        'paused_at' => 'datetime',
         'event_start_utc' => 'datetime',
         'event_end_utc' => 'datetime',
         'attempts' => 'integer',
         'offset_minutes' => 'integer',
+        'is_test' => 'boolean',
     ];
 
     /**
@@ -46,6 +54,30 @@ class Reminder extends Model
     public function agenda()
     {
         return $this->belongsTo(Agenda::class, 'event_id');
+    }
+
+    /**
+     * Relacionamento com o participante (usuário)
+     */
+    public function participant()
+    {
+        return $this->belongsTo(User::class, 'participant_id');
+    }
+
+    /**
+     * Relacionamento com quem criou o lembrete
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Relacionamento com quem pausou o lembrete
+     */
+    public function pausedBy()
+    {
+        return $this->belongsTo(User::class, 'paused_by');
     }
 
     /**

@@ -35,4 +35,14 @@ return [
         ],
     ],
 
+    'google_places' => [
+        'api_key' => env('GOOGLE_PLACES_API_KEY'),
+        'base_url' => 'https://maps.googleapis.com/maps/api/place',
+        'rate_limit' => [
+            'requests_per_second' => 50, // Limite padrão do Google
+            'requests_per_day' => 100000, // Ajustar conforme plano
+        ],
+        'cache_ttl' => 3600, // 1 hora de cache para otimizar custos
+    ],
+
 ];

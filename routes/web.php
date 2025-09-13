@@ -56,17 +56,37 @@ Route::middleware([
         
         // Rotas da Agenda para Licenciados
         Route::get('/agenda', [App\Http\Controllers\LicenciadoAgendaController::class, 'index'])->name('agenda');
-        Route::get('/agenda/calendario', [App\Http\Controllers\LicenciadoAgendaController::class, 'calendar'])->name('agenda.calendar');
+        Route::get('/agenda/calendario', [App\Http\Controllers\LicenciadoAgendaController::class, 'calendarModern'])->name('agenda.calendar');
         Route::get('/agenda/nova', [App\Http\Controllers\LicenciadoAgendaController::class, 'create'])->name('agenda.create');
         Route::post('/agenda', [App\Http\Controllers\LicenciadoAgendaController::class, 'store'])->name('agenda.store');
         Route::get('/agenda/pendentes', [App\Http\Controllers\LicenciadoAgendaController::class, 'pendentesAprovacao'])->name('agenda.pendentes');
         Route::post('/agenda/{id}/aprovar', [App\Http\Controllers\LicenciadoAgendaController::class, 'aprovar'])->name('agenda.aprovar');
         Route::post('/agenda/{id}/recusar', [App\Http\Controllers\LicenciadoAgendaController::class, 'recusar'])->name('agenda.recusar');
+        
+        // Rotas de Leads para Licenciados
+        Route::get('/leads', [App\Http\Controllers\LicenciadoLeadController::class, 'index'])->name('leads');
+        Route::get('/leads/extract', [App\Http\Controllers\LicenciadoLeadController::class, 'extract'])->name('leads.extract');
+        Route::post('/leads/export', [App\Http\Controllers\LicenciadoLeadController::class, 'export'])->name('leads.export');
+        Route::get('/leads/{id}', [App\Http\Controllers\LicenciadoLeadController::class, 'show'])->name('leads.show');
+        Route::put('/leads/{id}', [App\Http\Controllers\LicenciadoLeadController::class, 'update'])->name('leads.update');
+        Route::patch('/leads/{id}/toggle-status', [App\Http\Controllers\LicenciadoLeadController::class, 'toggleStatus'])->name('leads.toggle-status');
+        
+        // Rotas de Planos para Licenciados
+        Route::get('/planos', [App\Http\Controllers\LicenciadoDashboardController::class, 'planos'])->name('planos');
     });
     
     // Rotas para Leads
     Route::get('/leads', [App\Http\Controllers\LeadController::class, 'index'])->name('dashboard.leads');
+    Route::get('/leads/extract', [App\Http\Controllers\LeadController::class, 'extract'])->name('dashboard.leads.extract');
+    Route::post('/leads/export', [App\Http\Controllers\LeadController::class, 'export'])->name('dashboard.leads.export');
     Route::post('/leads', [App\Http\Controllers\LeadController::class, 'store'])->name('leads.store');
+    
+    // Rotas específicas ANTES das rotas com parâmetros
+    Route::get('/leads/licenciados', [App\Http\Controllers\LeadController::class, 'getLicenciados'])->name('leads.licenciados');
+    Route::post('/leads/assign', [App\Http\Controllers\LeadController::class, 'assignLead'])->name('leads.assign');
+    Route::post('/leads/send-marketing-email', [App\Http\Controllers\LeadController::class, 'sendMarketingEmail'])->name('leads.send-marketing-email');
+    
+    // Rotas com parâmetros por último
     Route::get('/leads/{id}', [App\Http\Controllers\LeadController::class, 'show'])->name('leads.show');
     Route::get('/leads/{id}/edit', [App\Http\Controllers\LeadController::class, 'edit'])->name('leads.edit');
     Route::put('/leads/{id}', [App\Http\Controllers\LeadController::class, 'update'])->name('leads.update');
@@ -74,7 +94,6 @@ Route::middleware([
     Route::patch('/leads/{id}/toggle-status', [App\Http\Controllers\LeadController::class, 'toggleStatus'])->name('leads.toggle-status');
     Route::get('/leads/{id}/followup', [App\Http\Controllers\LeadController::class, 'getFollowUp'])->name('leads.followup');
     Route::post('/leads/{id}/followup', [App\Http\Controllers\LeadController::class, 'storeFollowUp'])->name('leads.followup.store');
-    Route::post('/leads/send-marketing-email', [App\Http\Controllers\LeadController::class, 'sendMarketingEmail'])->name('leads.send-marketing-email');
     
                     Route::get('/dashboard/licenciados', [App\Http\Controllers\LicenciadoController::class, 'index'])->name('dashboard.licenciados');
                 Route::post('/licenciados', [App\Http\Controllers\LicenciadoController::class, 'store'])->name('licenciados.store');
@@ -466,6 +485,30 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::post('/agenda/{id}/recusar', [App\Http\Controllers\AgendaController::class, 'recusar'])->name('agenda.recusar');
     Route::get('/api/agenda/pendentes-aprovacao', [App\Http\Controllers\AgendaController::class, 'apiPendentesAprovacao'])->name('api.agenda.pendentes-aprovacao');
 
+    // Rotas para Lembretes
+    Route::prefix('reminders')->name('reminders.')->group(function () {
+        Route::get('/', [App\Http\Controllers\ReminderManagementController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\ReminderManagementController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\ReminderManagementController::class, 'store'])->name('store');
+        Route::get('/{id}', [App\Http\Controllers\ReminderManagementController::class, 'show'])->name('show');
+        Route::post('/{id}/pause', [App\Http\Controllers\ReminderManagementController::class, 'pause'])->name('pause');
+        Route::post('/{id}/resume', [App\Http\Controllers\ReminderManagementController::class, 'resume'])->name('resume');
+        Route::delete('/{id}', [App\Http\Controllers\ReminderManagementController::class, 'destroy'])->name('destroy');
+        
+        // Testes e Configuração
+        Route::get('/test-config/dashboard', [App\Http\Controllers\ReminderManagementController::class, 'testConfig'])->name('test-config');
+        Route::post('/test-config/update', [App\Http\Controllers\ReminderManagementController::class, 'updateConfig'])->name('update-config');
+        Route::post('/test-config/send-test', [App\Http\Controllers\ReminderManagementController::class, 'sendTest'])->name('send-test');
+        Route::post('/test-config/process-now', [App\Http\Controllers\ReminderManagementController::class, 'processNow'])->name('process-now');
+    });
+
+    // Rotas para Simulador de Taxas
+    Route::prefix('tax-simulator')->name('tax-simulator.')->group(function () {
+        Route::get('/', [App\Http\Controllers\TaxSimulatorController::class, 'index'])->name('index');
+        Route::post('/calculate', [App\Http\Controllers\TaxSimulatorController::class, 'calculate'])->name('calculate');
+        Route::post('/export-csv', [App\Http\Controllers\TaxSimulatorController::class, 'exportCsv'])->name('export-csv');
+    });
+
     // Rotas para integração com Google Calendar
     Route::prefix('google')->name('google.')->group(function () {
         Route::get('/auth', [App\Http\Controllers\GoogleAuthController::class, 'redirectToGoogle'])->name('auth');
@@ -481,6 +524,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             return view('google-debug');
         })->name('debug');
     });
+    
+    // Rotas para Extração via Google Places
+    Route::get('/places/extract', [App\Http\Controllers\PlaceExtractionController::class, 'index'])->name('dashboard.places.extract');
+    Route::post('/places/extract', [App\Http\Controllers\PlaceExtractionController::class, 'extract'])->name('dashboard.places.extract.run');
+    Route::get('/places/extraction/{id}/status', [App\Http\Controllers\PlaceExtractionController::class, 'status'])->name('dashboard.places.extraction.status');
+    Route::get('/places/extraction/{id}/details', [App\Http\Controllers\PlaceExtractionController::class, 'details'])->name('dashboard.places.extraction.details');
 });
 
 // Rotas públicas para confirmação de agenda (sem autenticação)

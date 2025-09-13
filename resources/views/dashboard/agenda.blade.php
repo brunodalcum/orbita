@@ -10,10 +10,24 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 flex items-center">
-                        <i class="fas fa-list-alt text-blue-600 mr-3"></i>
-                        Lista de Compromissos
+                        <i class="fas fa-calendar-day text-blue-600 mr-3"></i>
+                        @if($isToday && !$hasDateFilter)
+                            Compromissos de Hoje
+                        @elseif($hasDateFilter)
+                            Compromissos - {{ \Carbon\Carbon::parse($dataAtual)->format('d/m/Y') }}
+                        @else
+                            Lista de Compromissos
+                        @endif
                     </h1>
-                    <p class="text-gray-600 mt-2">Gerencie todos os seus compromissos e reuniões</p>
+                    <p class="text-gray-600 mt-2">
+                        @if($isToday && !$hasDateFilter)
+                            Seus compromissos agendados para hoje
+                        @elseif($hasDateFilter)
+                            Compromissos para a data selecionada
+                        @else
+                            Gerencie todos os seus compromissos e reuniões
+                        @endif
+                    </p>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center bg-white rounded-lg shadow-sm border border-gray-200">
@@ -143,19 +157,19 @@
             <div class="mb-6 flex items-center justify-between">
                 <div class="text-sm text-gray-600">
                     <i class="fas fa-calendar-check mr-2 text-blue-600"></i>
-                    @if(request('data'))
-                        <strong>{{ $agendas->count() }}</strong> reunião(ões) encontrada(s) para <strong>{{ \Carbon\Carbon::parse(request('data'))->format('d/m/Y') }}</strong>
+                    @if($isToday && !$hasDateFilter)
+                        <strong>{{ $agendas->count() }}</strong> compromisso(s) para <strong>hoje</strong> ({{ \Carbon\Carbon::parse($dataAtual)->format('d/m/Y') }})
+                    @elseif($hasDateFilter)
+                        <strong>{{ $agendas->count() }}</strong> compromisso(s) para <strong>{{ \Carbon\Carbon::parse($dataAtual)->format('d/m/Y') }}</strong>
                     @else
-                        <strong>{{ $agendas->count() }}</strong> reunião(ões) no total
+                        <strong>{{ $agendas->count() }}</strong> compromisso(s) encontrado(s)
                     @endif
                 </div>
                 
-                @if(!request('data') && $agendas->count() > 0)
-                    <div class="text-xs text-gray-500">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Use o filtro de data para ver reuniões específicas
-                    </div>
-                @endif
+                <div class="text-xs text-gray-500">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Use o filtro de data para ver outros dias
+                </div>
             </div>
 
             @if($agendas->count() > 0)
@@ -356,14 +370,45 @@
             @else
                 <div class="p-12 text-center">
                     <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-calendar-times text-gray-400 text-2xl"></i>
+                        @if($isToday && !$hasDateFilter)
+                            <i class="fas fa-calendar-day text-gray-400 text-2xl"></i>
+                        @else
+                            <i class="fas fa-calendar-times text-gray-400 text-2xl"></i>
+                        @endif
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum compromisso encontrado</h3>
-                    <p class="text-gray-600 mb-6">Não há compromissos agendados para esta data.</p>
-                    <button onclick="openAddAgendaModal()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                        <i class="fas fa-plus mr-2"></i>
-                        Agendar Primeira Reunião
-                    </button>
+                    
+                    @if($isToday && !$hasDateFilter)
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum compromisso para hoje</h3>
+                        <p class="text-gray-600 mb-6">
+                            Você não tem compromissos agendados para hoje ({{ \Carbon\Carbon::parse($dataAtual)->format('d/m/Y') }}).
+                            <br>
+                            <span class="text-sm">Use o filtro de data acima para ver compromissos de outros dias.</span>
+                        </p>
+                    @elseif($hasDateFilter)
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum compromisso para {{ \Carbon\Carbon::parse($dataAtual)->format('d/m/Y') }}</h3>
+                        <p class="text-gray-600 mb-6">
+                            Não há compromissos agendados para esta data.
+                            <br>
+                            <span class="text-sm">Tente selecionar outra data ou limpe o filtro para ver todos os compromissos.</span>
+                        </p>
+                    @else
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum compromisso encontrado</h3>
+                        <p class="text-gray-600 mb-6">Não há compromissos agendados.</p>
+                    @endif
+                    
+                    <div class="flex items-center justify-center space-x-4">
+                        <a href="{{ route('dashboard.agenda.create') }}" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                            <i class="fas fa-plus mr-2"></i>
+                            Nova Reunião
+                        </a>
+                        
+                        @if($hasDateFilter)
+                            <button onclick="clearDateFilter()" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium">
+                                <i class="fas fa-calendar mr-2"></i>
+                                Ver Hoje
+                            </button>
+                        @endif
+                    </div>
                 </div>
             @endif
         </div>

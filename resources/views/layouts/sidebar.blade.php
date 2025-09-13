@@ -101,15 +101,157 @@
                 </div>
             </div>
             
-            <a href="{{ route('dashboard.leads') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
-                <i class="fas fa-user-plus mr-3"></i>
-                Leads
-            </a>
+            <!-- Menu Lembretes com Submenu -->
+            <div class="relative" x-data="{ open: {{ request()->routeIs('reminders*') ? 'true' : 'false' }} }">
+                <button @click="open = !open" class="sidebar-link flex items-center justify-between w-full px-4 py-3 text-white rounded-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-bell mr-3"></i>
+                        Lembretes
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                </button>
+                
+                <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="mt-2 ml-4 space-y-1">
+                    <a href="{{ route('reminders.index') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('reminders.index') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-list mr-3"></i>
+                        Todos os Lembretes
+                        @php
+                            $pendingReminders = 0;
+                            if (Auth::check() && class_exists('\\App\\Models\\Reminder')) {
+                                try {
+                                    $pendingReminders = \App\Models\Reminder::where('status', 'pending')->count();
+                                } catch (\Exception $e) {
+                                    $pendingReminders = 0;
+                                }
+                            }
+                        @endphp
+                        @if($pendingReminders > 0)
+                            <span class="ml-auto bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                                {{ $pendingReminders }}
+                            </span>
+                        @endif
+                    </a>
+                    <a href="{{ route('reminders.create') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('reminders.create') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-plus mr-3"></i>
+                        Criar Lembrete
+                    </a>
+                    <a href="{{ route('reminders.test-config') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('reminders.test-config') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-cog mr-2"></i>
+                        Testes & Configuração
+                        @php
+                            $failedReminders = 0;
+                            if (Auth::check() && class_exists('\\App\\Models\\Reminder')) {
+                                try {
+                                    $failedReminders = \App\Models\Reminder::where('status', 'failed')
+                                        ->whereDate('updated_at', today())
+                                        ->count();
+                                } catch (\Exception $e) {
+                                    $failedReminders = 0;
+                                }
+                            }
+                        @endphp
+                        @if($failedReminders > 0)
+                            <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                                {{ $failedReminders }}
+                            </span>
+                        @endif
+                    </a>
+                </div>
+            </div>
             
-            <a href="{{ route('dashboard.marketing') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
-                <i class="fas fa-bullhorn mr-3"></i>
-                Marketing
-            </a>
+            <!-- Menu Leads com Submenu -->
+            <div class="relative">
+                <button onclick="toggleLeadsMenu()" 
+                        class="sidebar-link flex items-center justify-between w-full px-4 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-10 {{ request()->routeIs('dashboard.leads*') ? 'bg-white bg-opacity-20' : '' }}">
+                    <div class="flex items-center">
+                        <i class="fas fa-user-plus mr-3"></i>
+                        <span class="font-medium">Leads</span>
+                        @php
+                            $totalLeads = 0;
+                            if (Auth::check()) {
+                                try {
+                                    $totalLeads = \App\Models\Lead::count();
+                                } catch (\Exception $e) {
+                                    $totalLeads = 0;
+                                }
+                            }
+                        @endphp
+                        @if($totalLeads > 0)
+                            <span class="ml-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">{{ $totalLeads }}</span>
+                        @endif
+                    </div>
+                    <i id="leads-chevron" class="fas fa-chevron-down transform transition-transform duration-200 {{ request()->routeIs('dashboard.leads*') ? 'rotate-180' : '' }}"></i>
+                </button>
+                
+                <div id="leads-submenu" 
+                     class="mt-2 ml-4 space-y-1 {{ request()->routeIs('dashboard.leads*') ? 'block' : 'hidden' }}">
+                    
+                    <a href="{{ route('dashboard.leads') }}" 
+                       class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm hover:bg-white hover:bg-opacity-10 {{ request()->routeIs('dashboard.leads') && !request()->routeIs('dashboard.leads.extract') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-list mr-2"></i>
+                        Lista de Leads
+                    </a>
+                    
+                    <a href="{{ route('dashboard.leads.extract') }}" 
+                       class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm hover:bg-white hover:bg-opacity-10 {{ request()->routeIs('dashboard.leads.extract') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-download mr-2"></i>
+                        Extrair Leads
+                    </a>
+                </div>
+            </div>
+
+            <script>
+            function toggleLeadsMenu() {
+                const submenu = document.getElementById('leads-submenu');
+                const chevron = document.getElementById('leads-chevron');
+                
+                if (submenu.classList.contains('hidden')) {
+                    submenu.classList.remove('hidden');
+                    submenu.classList.add('block');
+                    chevron.classList.add('rotate-180');
+                } else {
+                    submenu.classList.add('hidden');
+                    submenu.classList.remove('block');
+                    chevron.classList.remove('rotate-180');
+                }
+            }
+
+            // Garantir que o submenu apareça se estivermos na rota de leads
+            document.addEventListener('DOMContentLoaded', function() {
+                const currentPath = window.location.pathname;
+                if (currentPath.includes('/leads')) {
+                    const submenu = document.getElementById('leads-submenu');
+                    const chevron = document.getElementById('leads-chevron');
+                    if (submenu && chevron) {
+                        submenu.classList.remove('hidden');
+                        submenu.classList.add('block');
+                        chevron.classList.add('rotate-180');
+                    }
+                }
+            });
+            </script>
+            
+            <!-- Menu Marketing com Submenu -->
+            <div class="relative" x-data="{ open: {{ request()->routeIs('dashboard.marketing*') || request()->routeIs('dashboard.reminders*') ? 'true' : 'false' }} }">
+                <button @click="open = !open" class="sidebar-link flex items-center justify-between w-full px-4 py-3 text-white rounded-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-bullhorn mr-3"></i>
+                        Marketing
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                </button>
+                
+                <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="mt-2 ml-4 space-y-1">
+                    <a href="{{ route('dashboard.marketing') }}" class="sidebar-link flex items-center px-4 py-2 text-white rounded-lg text-sm {{ request()->routeIs('dashboard.marketing') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-chart-line mr-3"></i>
+                        Dashboard Marketing
+                    </a>
+                    <a href="{{ route('reminders.index') }}" class="flex items-center px-3 py-2 text-white/80 rounded-lg text-sm hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('reminders.*') ? 'bg-white bg-opacity-20' : '' }}">
+                        <i class="fas fa-circle mr-2 text-xs"></i>
+                        Lembretes
+                    </a>
+                </div>
+            </div>
             
             <a href="{{ route('dashboard.configuracoes') }}" class="sidebar-link flex items-center px-4 py-3 text-white rounded-lg">
                 <i class="fas fa-cog mr-3"></i>

@@ -135,6 +135,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empresa</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contato</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Licenciado</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Origem</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
@@ -168,6 +169,23 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
+                            @if($lead->licenciado)
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                                        <i class="fas fa-user text-green-600 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900">{{ $lead->licenciado->name }}</div>
+                                        <div class="text-xs text-gray-500">{{ $lead->licenciado->email }}</div>
+                                    </div>
+                                </div>
+                            @else
+                                <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">
+                                    Não atribuído
+                                </span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ $lead->origem ?: 'N/A' }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -181,6 +199,9 @@
                                 </button>
                                 <button onclick="editLead({{ $lead->id }})" class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100 transition-colors duration-200" title="Editar">
                                     <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="assignLead({{ $lead->id }})" class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-100 transition-colors duration-200" title="Atribuir Licenciado">
+                                    <i class="fas fa-user-plus"></i>
                                 </button>
                                 <button onclick="deleteLead({{ $lead->id }})" class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-100 transition-colors duration-200" title="Excluir">
                                     <i class="fas fa-trash"></i>
@@ -199,7 +220,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-12 text-center">
+                        <td colspan="8" class="px-6 py-12 text-center">
                             <div class="text-gray-500">
                                 <i class="fas fa-users text-4xl mb-4"></i>
                                 <p class="text-lg font-medium">Nenhum lead encontrado</p>
@@ -517,6 +538,64 @@
                     <span>Enviar Email</span>
                 </button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Lead Modal -->
+<div id="assignLeadModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-0 border-0 w-11/12 md:w-1/2 lg:w-1/3 shadow-2xl rounded-2xl bg-white overflow-hidden">
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-plus text-white text-lg"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Atribuir Licenciado</h3>
+                </div>
+                <button onclick="closeAssignModal()" class="text-white/80 hover:text-white transition-colors duration-200 p-2 hover:bg-white/20 rounded-full">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Modal Body -->
+        <div class="p-6">
+            <div class="mb-4">
+                <p class="text-gray-600 mb-2">Lead:</p>
+                <div id="leadInfo" class="bg-gray-50 rounded-lg p-3 border">
+                    <!-- Lead info will be populated here -->
+                </div>
+            </div>
+            
+            <form id="assignForm" class="space-y-4">
+                <div class="space-y-2">
+                    <label for="licenciado_id" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                        <i class="fas fa-user text-indigo-500 mr-2"></i>Licenciado
+                    </label>
+                    <select id="licenciado_id" name="licenciado_id" 
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white">
+                        <option value="">Selecione um licenciado...</option>
+                        <!-- Options will be populated via JavaScript -->
+                    </select>
+                    <p class="text-sm text-gray-500">Deixe em branco para remover a atribuição</p>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Modal Footer -->
+        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+            <button onclick="closeAssignModal()" 
+                    class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-all duration-200 font-medium flex items-center space-x-2">
+                <i class="fas fa-times"></i>
+                <span>Cancelar</span>
+            </button>
+            <button onclick="saveAssignment()" 
+                    class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium flex items-center space-x-2 shadow-lg">
+                <i class="fas fa-check"></i>
+                <span>Atribuir</span>
+            </button>
         </div>
     </div>
 </div>
@@ -1034,12 +1113,135 @@ function showToast(message, type = 'info') {
     }, 4000);
 }
 
+// Assign Lead Functions
+let currentAssignLeadId = null;
+
+function assignLead(leadId) {
+    currentAssignLeadId = leadId;
+    
+    // Load lead info
+    fetch(`/leads/${leadId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const lead = data.lead;
+                document.getElementById('leadInfo').innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm mr-3">
+                            ${lead.nome.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                            <div class="font-medium text-gray-900">${lead.nome}</div>
+                            <div class="text-sm text-gray-500">${lead.email || 'Sem email'} • ${lead.empresa || 'Sem empresa'}</div>
+                        </div>
+                    </div>
+                `;
+                
+                // Set current licenciado if exists
+                document.getElementById('licenciado_id').value = lead.licenciado_id || '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Erro ao carregar dados do lead', 'error');
+        });
+    
+    // Load licenciados
+    loadLicenciados();
+    
+    // Show modal
+    document.getElementById('assignLeadModal').classList.remove('hidden');
+}
+
+function loadLicenciados() {
+    console.log('Carregando licenciados...');
+    fetch('/leads/licenciados', {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Dados recebidos:', data);
+            if (data.success) {
+                const select = document.getElementById('licenciado_id');
+                const currentValue = select.value;
+                
+                console.log('Licenciados encontrados:', data.licenciados.length);
+                
+                // Clear existing options except the first one
+                select.innerHTML = '<option value="">Selecione um licenciado...</option>';
+                
+                // Add licenciados
+                data.licenciados.forEach(licenciado => {
+                    const option = document.createElement('option');
+                    option.value = licenciado.id;
+                    option.textContent = `${licenciado.name} (${licenciado.email})`;
+                    select.appendChild(option);
+                });
+                
+                console.log('Licenciados carregados no select');
+                
+                // Restore current value
+                select.value = currentValue;
+            } else {
+                console.error('Erro na resposta:', data.message || 'Resposta sem sucesso');
+                showToast('Erro ao carregar licenciados: ' + (data.message || 'Erro desconhecido'), 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Erro ao carregar licenciados', 'error');
+        });
+}
+
+function closeAssignModal() {
+    document.getElementById('assignLeadModal').classList.add('hidden');
+    currentAssignLeadId = null;
+}
+
+function saveAssignment() {
+    const licenciadoId = document.getElementById('licenciado_id').value;
+    
+    fetch('/leads/assign', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            lead_id: currentAssignLeadId,
+            licenciado_id: licenciadoId || null
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message, 'success');
+            closeAssignModal();
+            location.reload(); // Reload to show updated assignment
+        } else {
+            showToast(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Erro ao atribuir lead', 'error');
+    });
+}
+
 // Close modals when clicking outside
 window.onclick = function(event) {
     const leadModal = document.getElementById('leadModal');
     const viewLeadModal = document.getElementById('viewLeadModal');
     const followUpModal = document.getElementById('followUpModal');
     const emailMarketingModal = document.getElementById('emailMarketingModal');
+    const assignLeadModal = document.getElementById('assignLeadModal');
     
     if (event.target === leadModal) {
         closeLeadModal();
@@ -1052,6 +1254,9 @@ window.onclick = function(event) {
     }
     if (event.target === emailMarketingModal) {
         closeEmailMarketingModal();
+    }
+    if (event.target === assignLeadModal) {
+        closeAssignModal();
     }
     
     // Close delete confirmation modal

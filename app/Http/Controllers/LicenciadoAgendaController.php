@@ -274,4 +274,86 @@ class LicenciadoAgendaController extends Controller
         
         return view('licenciado.agenda.pendentes', compact('agendas'));
     }
+    
+    /**
+     * Calendário moderno com múltiplas visualizações
+     */
+    public function calendarModern(Request $request)
+    {
+        $view = $request->get('view', 'month'); // day, week, month
+        $date = $request->get('date', now()->format('Y-m-d'));
+        $currentDate = Carbon::parse($date);
+        
+        switch ($view) {
+            case 'day':
+                return $this->dayView($currentDate);
+            case 'week':
+                return $this->weekView($currentDate);
+            default:
+                return $this->monthView($currentDate);
+        }
+    }
+    
+    /**
+     * Visualização do dia
+     */
+    private function dayView(Carbon $date)
+    {
+        $agendas = Agenda::doUsuario(Auth::id())
+                        ->whereDate('data_inicio', $date->format('Y-m-d'))
+                        ->with(['solicitante', 'destinatario'])
+                        ->orderBy('data_inicio')
+                        ->get();
+        
+        return view('licenciado.agenda.calendar-modern', [
+            'view' => 'day',
+            'date' => $date,
+            'agendas' => $agendas
+        ]);
+    }
+    
+    /**
+     * Visualização da semana
+     */
+    private function weekView(Carbon $date)
+    {
+        $startOfWeek = $date->copy()->startOfWeek();
+        $endOfWeek = $date->copy()->endOfWeek();
+        
+        $agendas = Agenda::doUsuario(Auth::id())
+                        ->whereBetween('data_inicio', [$startOfWeek, $endOfWeek])
+                        ->with(['solicitante', 'destinatario'])
+                        ->orderBy('data_inicio')
+                        ->get();
+        
+        return view('licenciado.agenda.calendar-modern', [
+            'view' => 'week',
+            'date' => $date,
+            'startOfWeek' => $startOfWeek,
+            'endOfWeek' => $endOfWeek,
+            'agendas' => $agendas
+        ]);
+    }
+    
+    /**
+     * Visualização do mês
+     */
+    private function monthView(Carbon $date)
+    {
+        $startOfMonth = $date->copy()->startOfMonth();
+        $endOfMonth = $date->copy()->endOfMonth();
+        
+        $agendas = Agenda::doUsuario(Auth::id())
+                        ->whereYear('data_inicio', $date->year)
+                        ->whereMonth('data_inicio', $date->month)
+                        ->with(['solicitante', 'destinatario'])
+                        ->orderBy('data_inicio')
+                        ->get();
+        
+        return view('licenciado.agenda.calendar-modern', [
+            'view' => 'month',
+            'date' => $date,
+            'agendas' => $agendas
+        ]);
+    }
 }

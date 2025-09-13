@@ -460,17 +460,28 @@ class PlanoController extends Controller
         try {
             $query = Plano::query();
 
-
-            // Filtro por adquirente
+            // Filtro por adquirente - Método corrigido e robusto
             if ($request->filled('adquirente')) {
                 $adquirente = $request->adquirente;
-                $query->where('adquirente', 'LIKE', "%{$adquirente}%");
+                
+                // Buscar adquirentes que correspondem ao filtro
+                $adquirenteIds = \App\Models\Adquirente::where('nome', 'LIKE', "%{$adquirente}%")->pluck('id');
+                
+                if ($adquirenteIds->isNotEmpty()) {
+                    // Usar whereIn com os IDs encontrados (mais seguro)
+                    $query->whereIn('adquirente_id', $adquirenteIds);
+                } else {
+                    // Se não encontrar adquirentes, filtrar para não retornar nada
+                    $query->where('id', -1); // Condição impossível para não retornar resultados
+                }
             }
 
             // Filtro por parceiro
             if ($request->filled('parceiro')) {
                 $parceiro = $request->parceiro;
-                $query->where('parceiro', 'LIKE', "%{$parceiro}%");
+                $query->whereHas('parceiro', function($q) use ($parceiro) {
+                    $q->where('nome', 'LIKE', "%{$parceiro}%");
+                });
             }
 
             // Filtro por nome
@@ -533,10 +544,14 @@ class PlanoController extends Controller
             
             switch ($sortBy) {
                 case 'adquirente':
-                    $query->orderBy('adquirente', $sortOrder);
+                    $query->join('adquirentes', 'planos.adquirente_id', '=', 'adquirentes.id')
+                          ->orderBy('adquirentes.nome', $sortOrder)
+                          ->select('planos.*');
                     break;
                 case 'parceiro':
-                    $query->orderBy('parceiro', $sortOrder);
+                    $query->join('operacoes', 'planos.parceiro_id', '=', 'operacoes.id')
+                          ->orderBy('operacoes.nome', $sortOrder)
+                          ->select('planos.*');
                     break;
                 case 'comissao_media':
                     $query->orderBy('comissao_media', $sortOrder);
@@ -545,7 +560,8 @@ class PlanoController extends Controller
                     $query->orderBy('nome', $sortOrder);
             }
 
-            $planos = $query->get();
+            // Incluir relacionamentos
+            $planos = $query->with(['adquirente', 'parceiro'])->get();
 
             return response()->json([
                 'success' => true,

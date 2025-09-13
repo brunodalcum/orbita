@@ -38,28 +38,6 @@
             <span class="font-medium">Dashboard</span>
         </a>
         
-        <!-- Estabelecimentos -->
-        <a href="{{ route('licenciado.estabelecimentos') }}" 
-           class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ $currentRoute === 'licenciado.estabelecimentos' ? 'bg-white/20 shadow-md' : 'hover:bg-white/10' }}">
-            <i class="fas fa-store mr-3 text-lg"></i>
-            <span class="font-medium">Estabelecimentos</span>
-        </a>
-        
-        <!-- Vendas -->
-        <a href="{{ route('licenciado.vendas') }}" 
-           class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ $currentRoute === 'licenciado.vendas' ? 'bg-white/20 shadow-md' : 'hover:bg-white/10' }}">
-            <i class="fas fa-shopping-cart mr-3 text-lg"></i>
-            <span class="font-medium">Vendas</span>
-            <span class="ml-auto bg-green-500 text-white text-xs px-2 py-1 rounded-full">R$ 23.5k</span>
-        </a>
-        
-        <!-- Comissões -->
-        <a href="{{ route('licenciado.comissoes') }}" 
-           class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all duration-200 {{ $currentRoute === 'licenciado.comissoes' ? 'bg-white/20 shadow-md' : 'hover:bg-white/10' }}">
-            <i class="fas fa-coins mr-3 text-lg"></i>
-            <span class="font-medium">Comissões</span>
-            <span class="ml-auto bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">R$ 1.2k</span>
-        </a>
 
         <!-- Menu Agenda com Submenu -->
         <div class="relative" x-data="{ open: {{ request()->routeIs('licenciado.agenda*') ? 'true' : 'false' }} }">
@@ -112,6 +90,83 @@
                     @if($pendentesCount > 0)
                         <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">{{ $pendentesCount }}</span>
                     @endif
+                </a>
+            </div>
+        </div>
+        
+        <!-- Menu Leads com Submenu -->
+        <div class="relative" x-data="{ open: {{ request()->routeIs('licenciado.leads*') ? 'true' : 'false' }} }">
+            <button @click="open = !open" 
+                    class="sidebar-link w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('licenciado.leads*') ? 'bg-white/20 shadow-md' : 'hover:bg-white/10' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-users mr-3 text-lg"></i>
+                    <span class="font-medium">Leads</span>
+                    @php
+                        $leadsCount = 0;
+                        if (Auth::check()) {
+                            $leadsCount = \App\Models\Lead::doLicenciado(Auth::id())->count();
+                        }
+                    @endphp
+                    @if($leadsCount > 0)
+                        <span class="ml-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">{{ $leadsCount }}</span>
+                    @endif
+                </div>
+                <i class="fas fa-chevron-down transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+            </button>
+            
+            <div x-show="open" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 transform -translate-y-2"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                 x-transition:leave-end="opacity-0 transform -translate-y-2"
+                 class="mt-2 ml-4 space-y-1">
+                
+                <a href="{{ route('licenciado.leads') }}" 
+                   class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ request()->routeIs('licenciado.leads') && !request()->routeIs('licenciado.leads.extract') ? 'bg-white/30 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fas fa-list mr-2"></i>
+                    Lista de Leads
+                </a>
+                
+                <a href="{{ route('licenciado.leads.extract') }}" 
+                   class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ request()->routeIs('licenciado.leads.extract') ? 'bg-white/30 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fas fa-download mr-2"></i>
+                    Extrair Leads
+                </a>
+            </div>
+        </div>
+        
+        <!-- Menu Planos com Submenu -->
+        <div class="relative" x-data="{ open: {{ request()->routeIs('tax-simulator.*') || request()->routeIs('licenciado.planos') ? 'true' : 'false' }} }">
+            <button @click="open = !open" 
+                    class="sidebar-link w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 {{ request()->routeIs('tax-simulator.*') || request()->routeIs('licenciado.planos') ? 'bg-white/20 shadow-md' : 'hover:bg-white/10' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-chart-line mr-3 text-lg"></i>
+                    <span class="font-medium">Planos</span>
+                </div>
+                <i class="fas fa-chevron-down transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+            </button>
+            
+            <div x-show="open" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 transform -translate-y-2"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                 x-transition:leave-end="opacity-0 transform -translate-y-2"
+                 class="mt-2 ml-4 space-y-1">
+                
+                <a href="{{ route('tax-simulator.index') }}" 
+                   class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ request()->routeIs('tax-simulator.*') ? 'bg-white/30 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fas fa-calculator mr-2"></i>
+                    Simulador de Taxas
+                </a>
+                
+                <a href="{{ route('licenciado.planos') }}" 
+                   class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ request()->routeIs('licenciado.planos') ? 'bg-white/30 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fas fa-list mr-2"></i>
+                    Lista de Planos
                 </a>
             </div>
         </div>

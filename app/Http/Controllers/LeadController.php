@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeLeadEmail;
 use App\Mail\MarketingEmail;
 use App\Models\EmailModelo;
+use App\Models\User;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -20,7 +21,7 @@ class LeadController extends Controller
      */
     public function index()
     {
-        $leads = Lead::orderBy('created_at', 'desc')->get();
+        $leads = Lead::with('licenciado')->orderBy('created_at', 'desc')->get();
         
         return view('dashboard.leads', compact('leads'));
     }
@@ -498,5 +499,235 @@ class LeadController extends Controller
                 'message' => 'Erro ao enviar email: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Get licenciados for assignment
+     */
+    public function getLicenciados(): JsonResponse
+    {
+        try {
+            // Buscar usuários com role de licenciado usando o relacionamento correto
+            $licenciados = User::byRole('licenciado')
+                              ->select('id', 'name', 'email')
+                              ->orderBy('name')
+                              ->get();
+            
+            return response()->json([
+                'success' => true,
+                'licenciados' => $licenciados
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao carregar licenciados: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Assign lead to licenciado
+     */
+    public function assignLead(Request $request): JsonResponse
+    {
+        $request->validate([
+            'lead_id' => 'required|exists:leads,id',
+            'licenciado_id' => 'nullable|exists:users,id'
+        ]);
+
+        try {
+            $lead = Lead::findOrFail($request->lead_id);
+            
+            // Verificar se o usuário é realmente um licenciado
+            if ($request->licenciado_id) {
+                $licenciado = User::byRole('licenciado')->findOrFail($request->licenciado_id);
+            }
+            
+            $lead->update([
+                'licenciado_id' => $request->licenciado_id
+            ]);
+            
+            $message = $request->licenciado_id 
+                ? 'Lead atribuído ao licenciado com sucesso!'
+                : 'Atribuição do lead removida com sucesso!';
+            
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'lead' => $lead->fresh('licenciado')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao atribuir lead: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Exibir página de extração de leads (Admin)
+     */
+    public function extract()
+    {
+        // Estatísticas gerais dos leads
+        $totalLeads = Lead::count();
+        $leadsAtivos = Lead::where('ativo', true)->count();
+        $leadsComLicenciado = Lead::whereNotNull('licenciado_id')->count();
+        $leadsSemLicenciado = Lead::whereNull('licenciado_id')->count();
+        
+        $leadsPorStatus = Lead::selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->toArray();
+            
+        $leadsPorOrigem = Lead::selectRaw('origem, COUNT(*) as total')
+            ->groupBy('origem')
+            ->pluck('total', 'origem')
+            ->toArray();
+        
+        return view('dashboard.leads.extract', compact(
+            'totalLeads', 
+            'leadsAtivos', 
+            'leadsComLicenciado', 
+            'leadsSemLicenciado',
+            'leadsPorStatus',
+            'leadsPorOrigem'
+        ));
+    }
+
+    /**
+     * Exportar leads baseado nos filtros (Admin)
+     */
+    public function export(Request $request)
+    {
+        // Construir query base
+        $query = Lead::with('licenciado');
+        
+        // Aplicar filtros
+        if ($request->filled('status')) {
+            $query->whereIn('status', $request->status);
+        }
+        
+        if ($request->filled('ativo')) {
+            $query->where('ativo', $request->ativo === '1');
+        }
+        
+        if ($request->filled('licenciado')) {
+            if ($request->licenciado === 'com_licenciado') {
+                $query->whereNotNull('licenciado_id');
+            } elseif ($request->licenciado === 'sem_licenciado') {
+                $query->whereNull('licenciado_id');
+            }
+        }
+        
+        if ($request->filled('origem')) {
+            $query->whereIn('origem', $request->origem);
+        }
+        
+        if ($request->filled('data_inicio')) {
+            $query->whereDate('created_at', '>=', $request->data_inicio);
+        }
+        
+        if ($request->filled('data_fim')) {
+            $query->whereDate('created_at', '<=', $request->data_fim);
+        }
+        
+        // Buscar leads
+        $leads = $query->orderBy('created_at', 'desc')->get();
+        
+        // Determinar formato de exportação
+        $formato = $request->get('formato', 'csv');
+        
+        if ($formato === 'csv') {
+            return $this->exportCsv($leads);
+        } elseif ($formato === 'excel') {
+            return $this->exportExcel($leads);
+        }
+        
+        return back()->with('error', 'Formato de exportação inválido.');
+    }
+
+    /**
+     * Exportar leads para CSV (Admin)
+     */
+    private function exportCsv($leads)
+    {
+        $filename = 'leads_admin_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+        
+        $callback = function() use ($leads) {
+            $file = fopen('php://output', 'w');
+            
+            // Cabeçalho CSV
+            fputcsv($file, [
+                'ID',
+                'Nome',
+                'Email',
+                'Telefone',
+                'Empresa',
+                'Status',
+                'Origem',
+                'Licenciado',
+                'Email Licenciado',
+                'Ativo',
+                'Data de Cadastro',
+                'Observações'
+            ]);
+            
+            // Dados dos leads
+            foreach ($leads as $lead) {
+                fputcsv($file, [
+                    $lead->id,
+                    $lead->nome,
+                    $lead->email,
+                    $lead->telefone,
+                    $lead->empresa,
+                    ucfirst($lead->status),
+                    $lead->origem,
+                    $lead->licenciado ? $lead->licenciado->name : 'Não atribuído',
+                    $lead->licenciado ? $lead->licenciado->email : '',
+                    $lead->ativo ? 'Sim' : 'Não',
+                    $lead->created_at->format('d/m/Y H:i'),
+                    $lead->observacoes
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Exportar leads para Excel (Admin)
+     */
+    private function exportExcel($leads)
+    {
+        $data = $leads->map(function($lead) {
+            return [
+                'ID' => $lead->id,
+                'Nome' => $lead->nome,
+                'Email' => $lead->email,
+                'Telefone' => $lead->telefone,
+                'Empresa' => $lead->empresa,
+                'Status' => ucfirst($lead->status),
+                'Origem' => $lead->origem,
+                'Licenciado' => $lead->licenciado ? $lead->licenciado->name : 'Não atribuído',
+                'Email Licenciado' => $lead->licenciado ? $lead->licenciado->email : '',
+                'Ativo' => $lead->ativo ? 'Sim' : 'Não',
+                'Data de Cadastro' => $lead->created_at->format('d/m/Y H:i'),
+                'Observações' => $lead->observacoes
+            ];
+        });
+        
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+            'filename' => 'leads_admin_' . date('Y-m-d_H-i-s') . '.xlsx'
+        ]);
     }
 }

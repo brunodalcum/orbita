@@ -156,10 +156,10 @@ class DynamicSidebar extends Component
             
             if ($this->user->hasPermission('leads.create')) {
                 $submenu[] = [
-                    'name' => 'Novo Lead',
-                    'route' => 'dashboard.leads',
+                    'name' => 'Extrair Leads',
+                    'route' => 'dashboard.leads.extract',
                     'permission' => 'leads.create',
-                    'action' => 'create'
+                    'action' => 'extract'
                 ];
             }
 
@@ -245,6 +245,13 @@ class DynamicSidebar extends Component
                     'route' => 'dashboard.planos',
                     'permission' => 'planos.view'
                 ];
+                
+                // Submenu Simulador de Taxas movido do Marketing
+                $submenu[] = [
+                    'name' => 'Simulador de Taxas',
+                    'route' => 'tax-simulator.index',
+                    'permission' => 'planos.view'
+                ];
             }
             
             if ($this->user->hasPermission('planos.create')) {
@@ -261,7 +268,7 @@ class DynamicSidebar extends Component
                 'icon' => 'fas fa-chart-line',
                 'route' => 'dashboard.planos',
                 'permissions' => ['planos.view', 'planos.create', 'planos.manage'],
-                'is_active' => request()->routeIs('dashboard.planos*'),
+                'is_active' => request()->routeIs('dashboard.planos*') || request()->routeIs('tax-simulator.*'),
                 'submenu' => $submenu
             ];
         }
@@ -350,6 +357,13 @@ class DynamicSidebar extends Component
                     'route' => 'dashboard.marketing.modelos',
                     'permission' => 'marketing.view'
                 ];
+                
+                // Submenu Lembretes conforme solicitado
+                $submenu[] = [
+                    'name' => 'Lembretes',
+                    'route' => 'reminders.index',
+                    'permission' => 'marketing.view'
+                ];
             }
             
             if ($this->user->hasPermission('marketing.create')) {
@@ -366,7 +380,7 @@ class DynamicSidebar extends Component
                 'icon' => 'fas fa-bullhorn',
                 'route' => 'dashboard.marketing',
                 'permissions' => ['marketing.view', 'marketing.create', 'marketing.manage'],
-                'is_active' => request()->routeIs('dashboard.marketing*'),
+                'is_active' => request()->routeIs('dashboard.marketing*') || request()->routeIs('reminders.*'),
                 'submenu' => $submenu
             ];
         }
@@ -630,11 +644,16 @@ class DynamicSidebar extends Component
                 'icon' => 'fas fa-chart-line',
                 'route' => 'dashboard.planos',
                 'permissions' => ['planos.view'],
-                'is_active' => request()->routeIs('dashboard.planos*'),
+                'is_active' => request()->routeIs('dashboard.planos*') || request()->routeIs('tax-simulator.*'),
                 'submenu' => [
                     [
                         'name' => 'Listar Planos',
                         'route' => 'dashboard.planos',
+                        'permission' => 'planos.view'
+                    ],
+                    [
+                        'name' => 'Simulador de Taxas',
+                        'route' => 'tax-simulator.index',
                         'permission' => 'planos.view'
                     ],
                     [
@@ -690,7 +709,7 @@ class DynamicSidebar extends Component
                 'icon' => 'fas fa-bullhorn',
                 'route' => 'dashboard.marketing',
                 'permissions' => ['marketing.view'],
-                'is_active' => request()->routeIs('dashboard.marketing*'),
+                'is_active' => request()->routeIs('dashboard.marketing*') || request()->routeIs('reminders.*'),
                 'submenu' => [
                     [
                         'name' => 'Dashboard Marketing',
@@ -705,6 +724,11 @@ class DynamicSidebar extends Component
                     [
                         'name' => 'Modelos de Email',
                         'route' => 'dashboard.marketing.modelos',
+                        'permission' => 'marketing.view'
+                    ],
+                    [
+                        'name' => 'Lembretes',
+                        'route' => 'reminders.index',
                         'permission' => 'marketing.view'
                     ],
                     [
