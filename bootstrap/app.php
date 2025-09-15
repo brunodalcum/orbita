@@ -20,6 +20,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'permission' => \App\Http\Middleware\CheckPermission::class,
             'redirect.role' => \App\Http\Middleware\RedirectByRole::class,
+            'impersonation' => \App\Http\Middleware\ImpersonationMiddleware::class,
+        ]);
+        
+        // Aplicar middleware de impersonação globalmente para rotas web
+        $middleware->web(append: [
+            \App\Http\Middleware\ImpersonationMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

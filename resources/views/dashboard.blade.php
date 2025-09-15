@@ -4,8 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - dspay</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
+    @php
+        $user = Auth::user();
+        $faviconUrl = 'images/dspay-logo.png'; // padrão
+        
+        if ($user) {
+            // Todos os usuários podem ter favicon personalizado
+            $branding = $user->getBrandingWithInheritance();
+            if (!empty($branding['favicon_url'])) {
+                $faviconUrl = 'storage/' . $branding['favicon_url'];
+            } elseif ($user->isSuperAdminNode()) {
+                // Super Admin usa favicon da Órbita como fallback
+                $faviconUrl = 'storage/branding/orbita/orbita-favicon.svg';
+            }
+        }
+    @endphp
+    
+    <link rel="icon" type="image/png" href="{{ asset($faviconUrl) }}?v={{ time() }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset($faviconUrl) }}?v={{ time() }}">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -24,16 +44,27 @@
             box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient);
+            color: var(--primary-text);
         }
         .stat-card-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
         }
         .stat-card-success {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: var(--accent-gradient);
+            color: white;
         }
         .stat-card-warning {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            color: white;
+        }
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .dashboard-card {
+            border-left: 4px solid var(--primary-color);
         }
     </style>
 </head>
@@ -45,11 +76,11 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
-                        <p class="text-gray-600">Bem-vindo ao painel de controle</p>
+                        <h1 class="text-2xl font-bold" style="color: var(--text-color);">Dashboard</h1>
+                        <p style="color: var(--secondary-color);">Bem-vindo ao painel de controle</p>
                     </div>
                     <div class="flex items-center space-x-4">
                         <button class="p-2 text-gray-400 hover:text-gray-600">

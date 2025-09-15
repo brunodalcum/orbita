@@ -6,8 +6,25 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('title', config('app.name', 'Laravel'))</title>
-        <link rel="icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
-        <link rel="shortcut icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
+        
+        @php
+            $user = Auth::user();
+            $faviconUrl = 'images/dspay-logo.png'; // padrão
+            
+            if ($user) {
+                // Todos os usuários podem ter favicon personalizado
+                $branding = $user->getBrandingWithInheritance();
+                if (!empty($branding['favicon_url'])) {
+                    $faviconUrl = 'storage/' . $branding['favicon_url'];
+                } elseif ($user->isSuperAdminNode()) {
+                    // Super Admin usa favicon da Órbita como fallback
+                    $faviconUrl = 'storage/branding/orbita/orbita-favicon.svg';
+                }
+            }
+        @endphp
+        
+        <link rel="icon" type="image/svg+xml" href="{{ asset($faviconUrl) }}?v={{ time() }}">
+        <link rel="shortcut icon" type="image/svg+xml" href="{{ asset($faviconUrl) }}?v={{ time() }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -31,6 +48,9 @@
                 body { font-family: 'Figtree', sans-serif; }
             </style>
         @endif
+        
+        <!-- Branding Dinâmico -->
+        <x-dynamic-branding />
 
         <!-- Styles -->
         @livewireStyles
@@ -40,6 +60,9 @@
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
+            <!-- Barra de impersonação -->
+            @include('components.impersonation-bar')
+            
             @livewire('navigation-menu')
 
             <!-- Page Heading -->

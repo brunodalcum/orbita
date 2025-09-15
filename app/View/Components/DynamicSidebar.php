@@ -467,6 +467,111 @@ class DynamicSidebar extends Component
             ];
         }
 
+        // Hierarquia White Label (apenas para Super Admin)
+        if ($this->user->isSuperAdmin()) {
+            $submenu = [];
+            
+            // Dashboard da Hierarquia
+            $submenu[] = [
+                'name' => 'Dashboard Hierarquia',
+                'route' => 'hierarchy.dashboard',
+                'permission' => 'hierarchy.view'
+            ];
+            
+            // Gerenciamento de Nós
+            $submenu[] = [
+                'name' => 'Gerenciar Nós',
+                'route' => 'hierarchy.management.index',
+                'permission' => 'hierarchy.manage'
+            ];
+            
+            // Criar Operação
+            $submenu[] = [
+                'name' => 'Nova Operação',
+                'route' => 'hierarchy.management.create',
+                'permission' => 'hierarchy.create'
+            ];
+            
+            // Criar White Label
+            $submenu[] = [
+                'name' => 'Novo White Label',
+                'route' => 'hierarchy.management.create',
+                'permission' => 'hierarchy.create'
+            ];
+            
+            // Árvore Hierárquica
+            $submenu[] = [
+                'name' => 'Árvore Hierárquica',
+                'route' => 'hierarchy.tree.index',
+                'permission' => 'hierarchy.view'
+            ];
+            
+            // Impersonação
+            $submenu[] = [
+                'name' => 'Impersonação',
+                'route' => 'hierarchy.impersonation',
+                'permission' => 'hierarchy.impersonate'
+            ];
+            
+            // Branding
+            $submenu[] = [
+                'name' => 'Branding',
+                'route' => 'hierarchy.branding',
+                'permission' => 'hierarchy.branding'
+            ];
+            
+            // Módulos
+            $submenu[] = [
+                'name' => 'Módulos',
+                'route' => 'hierarchy.modules',
+                'permission' => 'hierarchy.modules'
+            ];
+            
+            // Relatórios
+            $submenu[] = [
+                'name' => 'Relatórios',
+                'route' => 'hierarchy.reports.index',
+                'permission' => 'hierarchy.reports'
+            ];
+            
+            // Permissões
+            $submenu[] = [
+                'name' => 'Permissões',
+                'route' => 'hierarchy.permissions.index',
+                'permission' => 'hierarchy.permissions'
+            ];
+            
+            // Domínios
+            $submenu[] = [
+                'name' => 'Domínios',
+                'route' => 'hierarchy.domains.index',
+                'permission' => 'hierarchy.domains'
+            ];
+            
+            // Auditoria
+            $submenu[] = [
+                'name' => 'Auditoria',
+                'route' => 'hierarchy.audit.index',
+                'permission' => 'hierarchy.audit'
+            ];
+            
+            // Notificações
+            $submenu[] = [
+                'name' => 'Notificações',
+                'route' => 'hierarchy.notifications.index',
+                'permission' => 'hierarchy.notifications'
+            ];
+
+            $menuItems[] = [
+                'name' => 'Hierarquia White Label',
+                'icon' => 'fas fa-sitemap',
+                'route' => 'hierarchy.dashboard',
+                'permissions' => ['hierarchy.view', 'hierarchy.manage'],
+                'is_active' => request()->routeIs('hierarchy.*'),
+                'submenu' => $submenu
+            ];
+        }
+
         // Configurações do Sistema (apenas para Super Admin)
         if ($this->user->hasModulePermission('configuracoes') && $this->user->isSuperAdmin()) {
             $submenu = [];

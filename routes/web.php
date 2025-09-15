@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\HierarchyDashboardController;
+use App\Http\Controllers\HierarchyManagementController;
+use App\Http\Controllers\HierarchyTreeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,6 +41,97 @@ Route::middleware([
     'redirect.role',
 ])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    
+    // Rotas da Hierarquia White Label
+    Route::prefix('hierarchy')->name('hierarchy.')->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\HierarchyDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard/metrics', [App\Http\Controllers\HierarchyDashboardController::class, 'metricsApi'])->name('dashboard.metrics');
+        Route::get('/dashboard/activities', [App\Http\Controllers\HierarchyDashboardController::class, 'activitiesApi'])->name('dashboard.activities');
+        
+        // Rotas de impersonação
+        Route::get('/impersonation', function() { return view('hierarchy.impersonation'); })->name('impersonation');
+        
+        // Rotas de branding
+        Route::get('/branding', [App\Http\Controllers\HierarchyBrandingController::class, 'index'])->name('branding');
+        Route::post('/branding', [App\Http\Controllers\HierarchyBrandingController::class, 'store'])->name('branding.store');
+        Route::get('/branding/preview', [App\Http\Controllers\HierarchyBrandingController::class, 'preview'])->name('branding.preview');
+        Route::post('/branding/reset', [App\Http\Controllers\HierarchyBrandingController::class, 'reset'])->name('branding.reset');
+        Route::get('/branding/export-css', [App\Http\Controllers\HierarchyBrandingController::class, 'exportCss'])->name('branding.export-css');
+        
+        // Rotas de módulos
+        Route::get('/modules', [App\Http\Controllers\ModulesController::class, 'index'])->name('modules');
+        Route::post('/modules/{moduleKey}', [App\Http\Controllers\ModulesController::class, 'updateModule'])->name('modules.update');
+        Route::post('/modules/{moduleKey}/reset', [App\Http\Controllers\ModulesController::class, 'resetModule'])->name('modules.reset');
+        
+        // Rotas de gerenciamento de nós
+        Route::get('/management', [App\Http\Controllers\NodeManagementController::class, 'index'])->name('management.index');
+        Route::get('/management/create', [App\Http\Controllers\NodeManagementController::class, 'create'])->name('management.create');
+        Route::post('/management', [App\Http\Controllers\NodeManagementController::class, 'store'])->name('management.store');
+        Route::get('/management/{id}', [App\Http\Controllers\NodeManagementController::class, 'show'])->name('management.show');
+        Route::post('/management/{id}/toggle-status', [App\Http\Controllers\NodeManagementController::class, 'toggleStatus'])->name('management.toggle-status');
+        
+        // Rotas de relatórios
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('/', [App\Http\Controllers\ReportsController::class, 'index'])->name('index');
+            Route::get('/hierarchy', [App\Http\Controllers\ReportsController::class, 'hierarchy'])->name('hierarchy');
+            Route::get('/export', [App\Http\Controllers\ReportsController::class, 'export'])->name('export');
+            Route::get('/chart-data', [App\Http\Controllers\ReportsController::class, 'chartData'])->name('chart-data');
+        });
+        
+        // Rotas de permissões
+        Route::prefix('permissions')->name('permissions.')->group(function () {
+            Route::get('/', [App\Http\Controllers\PermissionsController::class, 'index'])->name('index');
+            Route::get('/{nodeType}/{nodeId}/manage', [App\Http\Controllers\PermissionsController::class, 'manage'])->name('manage');
+            Route::post('/{nodeType}/{nodeId}/update', [App\Http\Controllers\PermissionsController::class, 'update'])->name('update');
+            Route::post('/{nodeType}/{nodeId}/apply-defaults', [App\Http\Controllers\PermissionsController::class, 'applyDefaults'])->name('apply-defaults');
+        });
+        
+        // Rotas de domínios
+        Route::prefix('domains')->name('domains.')->group(function () {
+            Route::get('/', [App\Http\Controllers\DomainsController::class, 'index'])->name('index');
+            Route::get('/{nodeType}/{nodeId}/manage', [App\Http\Controllers\DomainsController::class, 'manage'])->name('manage');
+            Route::post('/store', [App\Http\Controllers\DomainsController::class, 'store'])->name('store');
+            Route::put('/{id}', [App\Http\Controllers\DomainsController::class, 'update'])->name('update');
+            Route::post('/{id}/verify', [App\Http\Controllers\DomainsController::class, 'verify'])->name('verify');
+            Route::post('/{id}/toggle-status', [App\Http\Controllers\DomainsController::class, 'toggleStatus'])->name('toggle-status');
+        });
+        
+        // Rotas de auditoria
+        Route::prefix('audit')->name('audit.')->group(function () {
+            Route::get('/', [App\Http\Controllers\AuditController::class, 'index'])->name('index');
+            Route::get('/{id}', [App\Http\Controllers\AuditController::class, 'show'])->name('show');
+            Route::get('/export', [App\Http\Controllers\AuditController::class, 'export'])->name('export');
+        });
+        
+        // Rotas de notificações
+        Route::prefix('notifications')->name('notifications.')->group(function () {
+            Route::get('/', [App\Http\Controllers\NotificationsController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\NotificationsController::class, 'create'])->name('create');
+            Route::post('/store', [App\Http\Controllers\NotificationsController::class, 'store'])->name('store');
+            Route::post('/{id}/read', [App\Http\Controllers\NotificationsController::class, 'markAsRead'])->name('mark-read');
+            Route::post('/mark-all-read', [App\Http\Controllers\NotificationsController::class, 'markAllAsRead'])->name('mark-all-read');
+            Route::delete('/{id}', [App\Http\Controllers\NotificationsController::class, 'destroy'])->name('destroy');
+            Route::get('/unread-count', [App\Http\Controllers\NotificationsController::class, 'getUnreadCount'])->name('unread-count');
+            Route::get('/recent', [App\Http\Controllers\NotificationsController::class, 'getRecent'])->name('recent');
+        });
+        
+        // Rotas de demonstração
+        Route::get('/demo', [App\Http\Controllers\HierarchyDemoController::class, 'index'])->name('demo');
+        Route::get('/demo/tree', [App\Http\Controllers\HierarchyDemoController::class, 'tree'])->name('demo.tree');
+        Route::post('/demo/impersonate/{userId}', [App\Http\Controllers\HierarchyDemoController::class, 'impersonate'])->name('demo.impersonate');
+        Route::get('/demo/modules/{userId}', [App\Http\Controllers\HierarchyDemoController::class, 'testModules'])->name('demo.modules');
+        Route::get('/demo/branding/{userId}', [App\Http\Controllers\HierarchyDemoController::class, 'testBranding'])->name('demo.branding');
+        Route::post('/demo/create-child/{parentId}', [App\Http\Controllers\HierarchyDemoController::class, 'createChild'])->name('demo.create-child');
+    });
+    
+    // Rotas de impersonação (fora do grupo hierarchy para evitar conflitos)
+    Route::prefix('impersonation')->name('impersonation.')->group(function () {
+        Route::post('/start/{userId}', [App\Http\Controllers\ImpersonationController::class, 'start'])->name('start');
+        Route::post('/stop', [App\Http\Controllers\ImpersonationController::class, 'stop'])->name('stop');
+        Route::get('/status', [App\Http\Controllers\ImpersonationController::class, 'status'])->name('status');
+        Route::get('/available-users', [App\Http\Controllers\ImpersonationController::class, 'availableUsers'])->name('available-users');
+        Route::get('/history', [App\Http\Controllers\ImpersonationController::class, 'history'])->name('history');
+    });
     
     // Dashboard específico para Licenciados
     Route::prefix('licenciado')->name('licenciado.')->group(function () {
@@ -592,3 +686,30 @@ Route::get('/auth/google/callback', [App\Http\Controllers\GoogleAuthController::
 Route::get('/agenda/confirmacao/{token}', [App\Http\Controllers\AgendaController::class, 'showConfirmation'])->name('agenda.confirmation.show');
 Route::post('/agenda/confirmacao/{token}/aceitar', [App\Http\Controllers\AgendaController::class, 'acceptInvitation'])->name('agenda.confirmation.accept');
 Route::post('/agenda/confirmacao/{token}/rejeitar', [App\Http\Controllers\AgendaController::class, 'rejectInvitation'])->name('agenda.confirmation.reject');
+
+// Rotas da Hierarquia White Label (protegidas por autenticação)
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+    Route::prefix('hierarchy')->name('hierarchy.')->group(function () {
+        Route::get('/dashboard', [HierarchyDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard/metrics', [HierarchyDashboardController::class, 'metricsApi'])->name('dashboard.metrics');
+        Route::get('/dashboard/activities', [HierarchyDashboardController::class, 'activitiesApi'])->name('dashboard.activities');
+        
+        // Gerenciamento de nós
+        Route::prefix('management')->name('management.')->group(function () {
+            Route::get('/', [HierarchyManagementController::class, 'index'])->name('index');
+            Route::get('/create', [HierarchyManagementController::class, 'create'])->name('create');
+            Route::post('/', [HierarchyManagementController::class, 'store'])->name('store');
+            Route::get('/{id}', [HierarchyManagementController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [HierarchyManagementController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [HierarchyManagementController::class, 'update'])->name('update');
+            Route::post('/{id}/toggle-status', [HierarchyManagementController::class, 'toggleStatus'])->name('toggle-status');
+        });
+        
+        // Visualização em árvore
+        Route::prefix('tree')->name('tree.')->group(function () {
+            Route::get('/', [HierarchyTreeController::class, 'index'])->name('index');
+            Route::get('/data', [HierarchyTreeController::class, 'treeDataApi'])->name('data');
+            Route::get('/search', [HierarchyTreeController::class, 'search'])->name('search');
+        });
+    });
+});
