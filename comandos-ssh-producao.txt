@@ -1,0 +1,87 @@
+# COMANDOS SSH PARA CORREÇÃO DE PERMISSÕES EM PRODUÇÃO
+# Execute UM POR VEZ no servidor srv971263.hstgr.cloud
+
+# 1. CONECTAR AO SERVIDOR
+ssh user@srv971263.hstgr.cloud
+
+# 2. NAVEGAR PARA O DIRETÓRIO
+cd /home/user/htdocs/srv971263.hstgr.cloud/
+
+# 3. VERIFICAR ESTADO ATUAL
+echo "=== VERIFICANDO ESTADO ATUAL ==="
+ls -la storage/
+ls -la bootstrap/
+ls -la storage/logs/ 2>/dev/null || echo "Diretório logs não existe"
+
+# 4. CRIAR ESTRUTURA COMPLETA (COM SUDO)
+echo "=== CRIANDO ESTRUTURA ==="
+sudo mkdir -p storage/app/public
+sudo mkdir -p storage/framework/cache/data
+sudo mkdir -p storage/framework/sessions
+sudo mkdir -p storage/framework/views
+sudo mkdir -p storage/logs
+sudo mkdir -p bootstrap/cache
+
+# 5. CRIAR ARQUIVO DE LOG
+echo "=== CRIANDO ARQUIVO DE LOG ==="
+sudo touch storage/logs/laravel.log
+
+# 6. DESCOBRIR USUÁRIO DO SERVIDOR WEB
+echo "=== IDENTIFICANDO USUÁRIO DO SERVIDOR WEB ==="
+ps aux | grep -E "(apache|nginx|httpd)" | head -5
+# OU
+ls -la /var/www/ 2>/dev/null | head -3
+# OU  
+cat /etc/passwd | grep -E "(www-data|nginx|apache)"
+
+# 7A. SE FOR APACHE (www-data)
+echo "=== APLICANDO PERMISSÕES PARA APACHE ==="
+sudo chown -R www-data:www-data storage/
+sudo chown -R www-data:www-data bootstrap/cache/
+
+# 7B. SE FOR NGINX
+echo "=== APLICANDO PERMISSÕES PARA NGINX ==="
+sudo chown -R nginx:nginx storage/
+sudo chown -R nginx:nginx bootstrap/cache/
+
+# 7C. SE NÃO SOUBER O USUÁRIO, USAR O USUÁRIO ATUAL
+echo "=== APLICANDO PERMISSÕES PARA USUÁRIO ATUAL ==="
+sudo chown -R $(whoami):$(whoami) storage/
+sudo chown -R $(whoami):$(whoami) bootstrap/cache/
+
+# 8. AJUSTAR PERMISSÕES NUMÉRICAS
+echo "=== AJUSTANDO PERMISSÕES NUMÉRICAS ==="
+sudo chmod -R 755 storage/
+sudo chmod -R 755 bootstrap/cache/
+sudo chmod 644 storage/logs/laravel.log
+
+# 9. LIMPAR CACHE ANTIGO
+echo "=== LIMPANDO CACHE ==="
+sudo rm -f storage/framework/views/*
+sudo rm -f bootstrap/cache/*.php
+sudo rm -f storage/framework/cache/data/*
+
+# 10. VERIFICAR RESULTADO
+echo "=== VERIFICANDO RESULTADO ==="
+ls -la storage/framework/views/
+ls -la bootstrap/cache/
+ls -la storage/logs/laravel.log
+
+# 11. TESTAR ESCRITA
+echo "=== TESTANDO ESCRITA ==="
+echo "teste views $(date)" | sudo tee storage/framework/views/test.txt > /dev/null && echo "✅ Views OK" || echo "❌ Views ERRO"
+echo "teste bootstrap $(date)" | sudo tee bootstrap/cache/test.txt > /dev/null && echo "✅ Bootstrap OK" || echo "❌ Bootstrap ERRO"
+echo "teste log $(date)" | sudo tee -a storage/logs/laravel.log > /dev/null && echo "✅ Log OK" || echo "❌ Log ERRO"
+
+# 12. LIMPAR ARQUIVOS DE TESTE
+sudo rm -f storage/framework/views/test.txt
+sudo rm -f bootstrap/cache/test.txt
+
+# 13. VERIFICAÇÃO FINAL
+echo "=== VERIFICAÇÃO FINAL ==="
+[ -w storage/framework/views ] && echo "✅ Views gravável" || echo "❌ Views não gravável"
+[ -w bootstrap/cache ] && echo "✅ Bootstrap gravável" || echo "❌ Bootstrap não gravável"
+[ -w storage/logs ] && echo "✅ Logs gravável" || echo "❌ Logs não gravável"
+
+echo "=== TESTE O SITE AGORA ==="
+echo "https://srv971263.hstgr.cloud/hierarchy/branding"
