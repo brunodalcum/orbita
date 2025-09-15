@@ -214,8 +214,9 @@
                     </div>
                 </div>
                 @endif
+            @endif
 
-                @if($selectedNodeId && $targetUser->isSuperAdminNode())
+            @if($selectedNodeId && $targetUser->isSuperAdminNode())
                 <!-- Aviso para edição do Super Admin -->
                 <div class="bg-purple-50 border-l-4 border-purple-400">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
