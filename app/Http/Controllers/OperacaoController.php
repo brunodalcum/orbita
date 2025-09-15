@@ -83,15 +83,37 @@ class OperacaoController extends Controller
 
     public function destroy($id)
     {
+        \Log::info('🗑️ Tentativa de exclusão de operação', [
+            'operacao_id' => $id,
+            'user_id' => auth()->id(),
+            'method' => request()->method(),
+            'url' => request()->url()
+        ]);
+
         try {
             $operacao = Operacao::findOrFail($id);
+            
+            \Log::info('✅ Operação encontrada para exclusão', [
+                'operacao_id' => $operacao->id,
+                'nome' => $operacao->nome,
+                'adquirente' => $operacao->adquirente
+            ]);
+            
             $operacao->delete();
+
+            \Log::info('✅ Operação excluída com sucesso', ['operacao_id' => $id]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Operação excluída com sucesso!'
             ]);
         } catch (\Exception $e) {
+            \Log::error('❌ Erro ao excluir operação', [
+                'operacao_id' => $id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao excluir operação: ' . $e->getMessage()

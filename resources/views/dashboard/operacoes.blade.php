@@ -604,8 +604,11 @@
         // Funções de Confirmação de Exclusão
         function deleteOperacao(id, nome) {
             deleteOperacaoId = id;
-            document.getElementById('deleteConfirmMessage').textContent = 
-                `Tem certeza que deseja excluir a operação "${nome}"?`;
+            // Atualizar a mensagem do modal
+            const modalText = document.querySelector('#deleteConfirmModal p');
+            if (modalText) {
+                modalText.textContent = `Tem certeza que deseja excluir a operação "${nome}"?`;
+            }
             document.getElementById('deleteConfirmModal').style.display = 'block';
         }
 
@@ -616,26 +619,45 @@
 
         function confirmDelete() {
             if (deleteOperacaoId) {
+                console.log('Iniciando exclusão da operação ID:', deleteOperacaoId);
+                
+                const csrfToken = document.querySelector('meta[name="csrf-token"]');
+                if (!csrfToken) {
+                    console.error('CSRF token não encontrado');
+                    showToast('Erro: Token de segurança não encontrado', 'error');
+                    closeDeleteConfirmModal();
+                    return;
+                }
+                
                 fetch(`/operacoes/${deleteOperacaoId}`, {
                     method: 'DELETE',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('Response data:', data);
                     if (data.success) {
                         showToast(data.message, 'success');
                         setTimeout(() => {
                             window.location.reload();
                         }, 1000);
                     } else {
-                        showToast(data.message, 'error');
+                        showToast(data.message || 'Erro ao excluir operação', 'error');
                     }
                 })
                 .catch(error => {
-                    showToast('Erro ao excluir operação', 'error');
+                    console.error('Erro na requisição:', error);
+                    showToast('Erro ao excluir operação: ' + error.message, 'error');
                 });
             }
             closeDeleteConfirmModal();
@@ -807,3 +829,4 @@
     </script>
 </body>
 </html>
+
