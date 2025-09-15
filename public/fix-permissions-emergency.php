@@ -18,15 +18,24 @@ echo "=====================================\n\n";
 
 $baseDir = dirname(__DIR__);
 
-// Diretórios que precisam de permissões
+// Todos os diretórios que precisam de permissões
 $directories = [
     $baseDir . '/storage',
+    $baseDir . '/storage/app',
+    $baseDir . '/storage/app/public',
     $baseDir . '/storage/framework',
-    $baseDir . '/storage/framework/views',
     $baseDir . '/storage/framework/cache',
+    $baseDir . '/storage/framework/cache/data',
     $baseDir . '/storage/framework/sessions',
+    $baseDir . '/storage/framework/views',
     $baseDir . '/storage/logs',
+    $baseDir . '/bootstrap',
     $baseDir . '/bootstrap/cache'
+];
+
+// Arquivos críticos que precisam existir
+$criticalFiles = [
+    $baseDir . '/storage/logs/laravel.log'
 ];
 
 echo "1. 🔍 VERIFICANDO DIRETÓRIOS:\n";
@@ -46,9 +55,28 @@ echo "\n2. 🔧 CRIANDO DIRETÓRIOS:\n";
 foreach ($directories as $dir) {
     if (!is_dir($dir)) {
         if (mkdir($dir, 0755, true)) {
-            echo "   ✅ Criado: " . basename($dir) . "\n";
+            echo "   ✅ Criado: " . str_replace($baseDir . '/', '', $dir) . "\n";
         } else {
-            echo "   ❌ Erro ao criar: " . basename($dir) . "\n";
+            echo "   ❌ Erro ao criar: " . str_replace($baseDir . '/', '', $dir) . "\n";
+        }
+    }
+}
+
+echo "\n2.1. 📄 CRIANDO ARQUIVOS CRÍTICOS:\n";
+
+foreach ($criticalFiles as $file) {
+    if (!file_exists($file)) {
+        // Garantir que o diretório pai existe
+        $dir = dirname($file);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+        
+        // Criar arquivo
+        if (touch($file)) {
+            echo "   ✅ Criado: " . str_replace($baseDir . '/', '', $file) . "\n";
+        } else {
+            echo "   ❌ Erro ao criar: " . str_replace($baseDir . '/', '', $file) . "\n";
         }
     }
 }
@@ -83,22 +111,48 @@ if (is_dir($bootstrapCache)) {
     echo "   ✅ {$removed} arquivos de bootstrap cache removidos\n";
 }
 
-echo "\n4. 🧪 TESTE DE ESCRITA:\n";
+echo "\n4. 🧪 TESTES DE ESCRITA:\n";
 
+// Teste 1: Views cache
 $testFile = $viewsDir . '/test_emergency.txt';
 $testContent = 'Teste emergência - ' . date('Y-m-d H:i:s');
 
 if (file_put_contents($testFile, $testContent)) {
-    echo "   ✅ Escrita bem-sucedida!\n";
+    echo "   ✅ Views cache: Escrita OK\n";
     unlink($testFile);
-    echo "   ✅ Arquivo de teste removido\n";
 } else {
-    echo "   ❌ Escrita falhou!\n";
+    echo "   ❌ Views cache: Escrita FALHOU\n";
+}
+
+// Teste 2: Bootstrap cache
+$testBootstrap = $baseDir . '/bootstrap/cache/test_emergency.txt';
+if (file_put_contents($testBootstrap, $testContent)) {
+    echo "   ✅ Bootstrap cache: Escrita OK\n";
+    unlink($testBootstrap);
+} else {
+    echo "   ❌ Bootstrap cache: Escrita FALHOU\n";
+}
+
+// Teste 3: Log file
+$logFile = $baseDir . '/storage/logs/laravel.log';
+$logMessage = "[" . date('Y-m-d H:i:s') . "] testing.INFO: Teste de escrita no log - emergência\n";
+if (file_put_contents($logFile, $logMessage, FILE_APPEND | LOCK_EX)) {
+    echo "   ✅ Log file: Escrita OK\n";
+} else {
+    echo "   ❌ Log file: Escrita FALHOU\n";
+}
+
+// Se algum teste falhou, mostrar comandos
+$anyFailed = !is_writable($viewsDir) || !is_writable($baseDir . '/bootstrap/cache') || !is_writable($baseDir . '/storage/logs');
+
+if ($anyFailed) {
     echo "\n🔧 EXECUTE NO SERVIDOR:\n";
     echo "   sudo chown -R www-data:www-data {$baseDir}/storage/\n";
     echo "   sudo chown -R www-data:www-data {$baseDir}/bootstrap/cache/\n";
     echo "   sudo chmod -R 755 {$baseDir}/storage/\n";
     echo "   sudo chmod -R 755 {$baseDir}/bootstrap/cache/\n";
+    echo "   sudo touch {$baseDir}/storage/logs/laravel.log\n";
+    echo "   sudo chmod 644 {$baseDir}/storage/logs/laravel.log\n";
 }
 
 echo "\n5. 📋 STATUS FINAL:\n";
