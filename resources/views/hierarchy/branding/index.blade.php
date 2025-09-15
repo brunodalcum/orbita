@@ -200,7 +200,6 @@
                     </div>
                 </div>
                 @endif
-            @endif
 
             @if($selectedNodeId && $targetUser->isSuperAdminNode())
                 <!-- Aviso para edição do Super Admin -->
