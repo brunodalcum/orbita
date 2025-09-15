@@ -45,18 +45,21 @@ class HierarchyBrandingController extends Controller
         $colorPresets = $this->getColorPresets();
         
         // Para Super Admin, obter lista de nós disponíveis (incluindo ele mesmo)
-        $availableNodes = [];
+        $availableNodes = collect();
         if ($user->isSuperAdminNode()) {
-            // Incluir o próprio Super Admin no seletor
-            $availableNodes = User::where(function($query) use ($user) {
-                $query->whereIn('node_type', ['operacao', 'white_label', 'licenciado_l1', 'licenciado_l2', 'licenciado_l3'])
-                      ->where('is_active', true);
-            })
-            ->orWhere('id', $user->id) // Incluir o próprio Super Admin
-            ->orderByRaw("CASE WHEN id = {$user->id} THEN 0 ELSE 1 END") // Super Admin primeiro
-            ->orderBy('node_type')
-            ->orderBy('name')
-            ->get();
+            // Sempre incluir o próprio Super Admin primeiro
+            $availableNodes->push($user);
+            
+            // Buscar outros nós ativos
+            $otherNodes = User::whereIn('node_type', ['operacao', 'white_label', 'licenciado_l1', 'licenciado_l2', 'licenciado_l3'])
+                ->where('is_active', true)
+                ->where('id', '!=', $user->id) // Excluir o Super Admin (já adicionado)
+                ->orderBy('node_type')
+                ->orderBy('name')
+                ->get();
+            
+            // Adicionar outros nós à coleção
+            $availableNodes = $availableNodes->merge($otherNodes);
         }
         
         return view('hierarchy.branding.index', compact(
@@ -125,20 +128,20 @@ class HierarchyBrandingController extends Controller
                 'node_id' => $targetUser->id
             ]);
 
-                // Processar uploads de imagens
-                if ($request->hasFile('logo')) {
+            // Processar uploads de imagens
+            if ($request->hasFile('logo')) {
                     $logoPath = $this->processImageUpload($request->file('logo'), 'logo', 300, 100);
-                    $branding->logo_url = $logoPath;
-                }
+                $branding->logo_url = $logoPath;
+            }
 
-                if ($request->hasFile('logo_small')) {
+            if ($request->hasFile('logo_small')) {
                     $logoSmallPath = $this->processImageUpload($request->file('logo_small'), 'logo_small', 150, 50);
-                    $branding->logo_small_url = $logoSmallPath;
-                }
+                $branding->logo_small_url = $logoSmallPath;
+            }
 
-                if ($request->hasFile('favicon')) {
+            if ($request->hasFile('favicon')) {
                     $faviconPath = $this->processImageUpload($request->file('favicon'), 'favicon', 32, 32);
-                    $branding->favicon_url = $faviconPath;
+                $branding->favicon_url = $faviconPath;
                 }
 
             // Atualizar cores (sempre salvar se enviado, mesmo que seja valor padrão)

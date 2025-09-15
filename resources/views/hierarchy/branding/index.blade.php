@@ -106,7 +106,7 @@
                     </div>
                 </div>
 
-                @if($user->isSuperAdminNode() && count($availableNodes) > 0)
+                @if($user->isSuperAdminNode())
                 <!-- Seletor de Nó para Super Admin -->
                 <div class="bg-white border-b">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -122,8 +122,18 @@
                                     <option value="">Selecione um nó...</option>
                                     
                                     @php
+                                        // Garantir que sempre temos o Super Admin no seletor
+                                        if ($availableNodes->isEmpty()) {
+                                            $availableNodes = collect([$user]);
+                                        }
+                                        
                                         $superAdminNodes = $availableNodes->where('node_type', 'super_admin');
                                         $otherNodes = $availableNodes->where('node_type', '!=', 'super_admin')->groupBy('node_type');
+                                        
+                                        // Se não há Super Admin na coleção, adicionar o usuário atual
+                                        if ($superAdminNodes->isEmpty() && $user->isSuperAdminNode()) {
+                                            $superAdminNodes = collect([$user]);
+                                        }
                                     @endphp
                                     
                                     <!-- Super Admin primeiro -->
@@ -138,17 +148,38 @@
                                     @endif
                                     
                                     <!-- Outros nós -->
-                                    @foreach($otherNodes as $nodeType => $nodes)
-                                        <optgroup label="{{ ucfirst(str_replace('_', ' ', $nodeType)) }}">
-                                            @foreach($nodes as $node)
-                                                <option value="{{ $node->id }}" {{ $selectedNodeId == $node->id ? 'selected' : '' }}>
-                                                    {{ $node->name }} ({{ $node->email }})
-                                                </option>
-                                            @endforeach
+                                    @if($otherNodes->count() > 0)
+                                        @foreach($otherNodes as $nodeType => $nodes)
+                                            <optgroup label="{{ ucfirst(str_replace('_', ' ', $nodeType)) }}">
+                                                @foreach($nodes as $node)
+                                                    <option value="{{ $node->id }}" {{ $selectedNodeId == $node->id ? 'selected' : '' }}>
+                                                        {{ $node->name }} ({{ $node->email }})
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    @else
+                                        <optgroup label="Informação">
+                                            <option disabled>Nenhuma operação ou white label cadastrado ainda</option>
+                                            <option disabled>Acesse "Gerenciar Nós" para criar operações</option>
                                         </optgroup>
-                                    @endforeach
+                                    @endif
                                 </select>
                             </div>
+                            
+                            @if($otherNodes->count() === 0)
+                            <!-- Link para criar operações quando não há nenhuma -->
+                            <div class="flex items-center">
+                                <a href="{{ route('hierarchy.management.create', ['type' => 'operacao']) }}" 
+                                   class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                    </svg>
+                                    Criar Primeira Operação
+                                </a>
+                            </div>
+                            @endif
+                            
                             @if($selectedNodeId)
                             <div class="flex items-center space-x-2">
                                 <div class="flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
