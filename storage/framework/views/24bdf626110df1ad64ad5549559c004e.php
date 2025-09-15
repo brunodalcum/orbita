@@ -3,17 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Configuração de Branding - dspay</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
+    <link rel="icon" type="image/png" href="<?php echo e(asset('images/dspay-logo.png')); ?>">
+    <link rel="shortcut icon" type="image/png" href="<?php echo e(asset('images/dspay-logo.png')); ?>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <!-- Branding Dinâmico -->
-    <x-dynamic-branding />
+    <?php if (isset($component)) { $__componentOriginal9ddf4d6754b0e3c33300f8613a00c4e4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9ddf4d6754b0e3c33300f8613a00c4e4 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.dynamic-branding','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('dynamic-branding'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9ddf4d6754b0e3c33300f8613a00c4e4)): ?>
+<?php $attributes = $__attributesOriginal9ddf4d6754b0e3c33300f8613a00c4e4; ?>
+<?php unset($__attributesOriginal9ddf4d6754b0e3c33300f8613a00c4e4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9ddf4d6754b0e3c33300f8613a00c4e4)): ?>
+<?php $component = $__componentOriginal9ddf4d6754b0e3c33300f8613a00c4e4; ?>
+<?php unset($__componentOriginal9ddf4d6754b0e3c33300f8613a00c4e4); ?>
+<?php endif; ?>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -65,7 +84,26 @@
 <body class="bg-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar Dinâmico -->
-        <x-dynamic-sidebar />
+        <?php if (isset($component)) { $__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec = $attributes; } ?>
+<?php $component = App\View\Components\DynamicSidebar::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('dynamic-sidebar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\DynamicSidebar::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec)): ?>
+<?php $attributes = $__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec; ?>
+<?php unset($__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec)): ?>
+<?php $component = $__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec; ?>
+<?php unset($__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec); ?>
+<?php endif; ?>
         
         <!-- Main Content -->
         <div class="flex-1 flex flex-col ml-64 main-content">
@@ -77,7 +115,8 @@
                             <div class="flex items-center">
                                 <h1 class="text-xl font-semibold text-gray-900">Configuração de Branding</h1>
                                 <span class="ml-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {{ ucfirst(str_replace('_', ' ', $user->node_type)) }}
+                                    <?php echo e(ucfirst(str_replace('_', ' ', $user->node_type))); ?>
+
                                 </span>
                             </div>
                             <div class="flex items-center space-x-4">
@@ -95,7 +134,7 @@
                                     Exportar CSS
                                 </button>
                                 
-                                <a href="{{ route('hierarchy.dashboard') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href="<?php echo e(route('hierarchy.dashboard')); ?>" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                                     </svg>
@@ -107,7 +146,7 @@
                 </div>
 
 
-                @if($user->isSuperAdminNode())
+                <?php if($user->isSuperAdminNode()): ?>
                 <!-- Seletor de Nó para Super Admin -->
                 <div class="bg-white border-b">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -122,7 +161,7 @@
                                 <select id="node-selector" onchange="selectNode(this.value)" class="block w-80 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     <option value="">Selecione um nó...</option>
                                     
-                                    @php
+                                    <?php
                                         // Garantir que sempre temos o Super Admin no seletor
                                         if ($availableNodes->isEmpty()) {
                                             $availableNodes = collect([$user]);
@@ -135,43 +174,43 @@
                                         if ($superAdminNodes->isEmpty() && $user->isSuperAdminNode()) {
                                             $superAdminNodes = collect([$user]);
                                         }
-                                    @endphp
+                                    ?>
                                     
                                     <!-- Super Admin primeiro -->
-                                    @if($superAdminNodes->count() > 0)
+                                    <?php if($superAdminNodes->count() > 0): ?>
                                         <optgroup label="Super Admin">
-                                            @foreach($superAdminNodes as $node)
-                                                <option value="{{ $node->id }}" {{ $selectedNodeId == $node->id ? 'selected' : '' }}>
-                                                    {{ $node->name }} ({{ $node->email }}) - Super Admin
+                                            <?php $__currentLoopData = $superAdminNodes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $node): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($node->id); ?>" <?php echo e($selectedNodeId == $node->id ? 'selected' : ''); ?>>
+                                                    <?php echo e($node->name); ?> (<?php echo e($node->email); ?>) - Super Admin
                                                 </option>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </optgroup>
-                                    @endif
+                                    <?php endif; ?>
                                     
                                     <!-- Outros nós -->
-                                    @if($otherNodes->count() > 0)
-                                        @foreach($otherNodes as $nodeType => $nodes)
-                                            <optgroup label="{{ ucfirst(str_replace('_', ' ', $nodeType)) }}">
-                                                @foreach($nodes as $node)
-                                                    <option value="{{ $node->id }}" {{ $selectedNodeId == $node->id ? 'selected' : '' }}>
-                                                        {{ $node->name }} ({{ $node->email }})
+                                    <?php if($otherNodes->count() > 0): ?>
+                                        <?php $__currentLoopData = $otherNodes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $nodeType => $nodes): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <optgroup label="<?php echo e(ucfirst(str_replace('_', ' ', $nodeType))); ?>">
+                                                <?php $__currentLoopData = $nodes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $node): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($node->id); ?>" <?php echo e($selectedNodeId == $node->id ? 'selected' : ''); ?>>
+                                                        <?php echo e($node->name); ?> (<?php echo e($node->email); ?>)
                                                     </option>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </optgroup>
-                                        @endforeach
-                                    @else
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php else: ?>
                                         <optgroup label="Informação">
                                             <option disabled>Nenhuma operação ou white label cadastrado ainda</option>
                                             <option disabled>Acesse "Gerenciar Nós" para criar operações</option>
                                         </optgroup>
-                                    @endif
+                                    <?php endif; ?>
                                 </select>
                             </div>
                             
-                            @if($otherNodes->count() === 0)
+                            <?php if($otherNodes->count() === 0): ?>
                             <!-- Link para criar operações quando não há nenhuma -->
                             <div class="flex items-center">
-                                <a href="{{ route('hierarchy.management.create', ['type' => 'operacao']) }}" 
+                                <a href="<?php echo e(route('hierarchy.management.create', ['type' => 'operacao'])); ?>" 
                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
@@ -179,28 +218,30 @@
                                     Criar Primeira Operação
                                 </a>
                             </div>
-                            @endif
+                            <?php endif; ?>
                             
-                            @if($selectedNodeId)
+                            <?php if($selectedNodeId): ?>
                             <div class="flex items-center space-x-2">
                                 <div class="flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                     </svg>
-                                    Editando: {{ $targetUser->name }}
+                                    Editando: <?php echo e($targetUser->name); ?>
+
                                 </div>
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $targetUser->isSuperAdminNode() ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
-                                    {{ $targetUser->isSuperAdminNode() ? 'Super Admin' : ucfirst(str_replace('_', ' ', $targetUser->node_type)) }}
+                                    <?php echo e($targetUser->isSuperAdminNode() ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'); ?>">
+                                    <?php echo e($targetUser->isSuperAdminNode() ? 'Super Admin' : ucfirst(str_replace('_', ' ', $targetUser->node_type))); ?>
+
                                 </span>
                             </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                @endif
+                <?php endif; ?>
 
-                @if($selectedNodeId && $targetUser->isSuperAdminNode())
+                <?php if($selectedNodeId && $targetUser->isSuperAdminNode()): ?>
                 <!-- Aviso para edição do Super Admin -->
                 <div class="bg-purple-50 border-l-4 border-purple-400">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -219,7 +260,7 @@
                         </div>
                     </div>
                 </div>
-                @elseif($selectedNodeId)
+                <?php elseif($selectedNodeId): ?>
                 <!-- Aviso para edição de outros nós -->
                 <div class="bg-blue-50 border-l-4 border-blue-400">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -231,14 +272,14 @@
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm text-blue-700">
-                                    <strong>Editando {{ $targetUser->name }}:</strong> As alterações de branding serão aplicadas especificamente a este nó 
-                                    ({{ $targetUser->isSuperAdminNode() ? 'Super Admin' : ucfirst(str_replace('_', ' ', $targetUser->node_type)) }}).
+                                    <strong>Editando <?php echo e($targetUser->name); ?>:</strong> As alterações de branding serão aplicadas especificamente a este nó 
+                                    (<?php echo e($targetUser->isSuperAdminNode() ? 'Super Admin' : ucfirst(str_replace('_', ' ', $targetUser->node_type))); ?>).
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                @endif
+                <?php endif; ?>
 
     <!-- Conteúdo principal -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-16">
@@ -246,7 +287,7 @@
             <!-- Coluna principal - Configurações -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Herança -->
-                @if($parentBranding)
+                <?php if($parentBranding): ?>
                 <div class="bg-white shadow rounded-lg branding-section">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <div class="flex items-center justify-between">
@@ -273,7 +314,7 @@
                         </div>
                     </div>
                 </div>
-                @endif
+                <?php endif; ?>
 
                 <!-- Presets de cores -->
                 <div class="bg-white shadow rounded-lg branding-section" x-show="!inheritFromParent">
@@ -282,18 +323,18 @@
                     </div>
                     <div class="p-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            @foreach($colorPresets as $key => $preset)
-                            <div @click="applyColorPreset('{{ $key }}')" class="cursor-pointer group">
+                            <?php $__currentLoopData = $colorPresets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $preset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div @click="applyColorPreset('<?php echo e($key); ?>')" class="cursor-pointer group">
                                 <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-indigo-300 transition-colors duration-200 group-hover:shadow-md">
                                     <div class="flex items-center space-x-3 mb-3">
-                                        <div class="w-6 h-6 rounded-full" style="background-color: {{ $preset['primary_color'] }}"></div>
-                                        <div class="w-6 h-6 rounded-full" style="background-color: {{ $preset['secondary_color'] }}"></div>
-                                        <div class="w-6 h-6 rounded-full" style="background-color: {{ $preset['accent_color'] }}"></div>
+                                        <div class="w-6 h-6 rounded-full" style="background-color: <?php echo e($preset['primary_color']); ?>"></div>
+                                        <div class="w-6 h-6 rounded-full" style="background-color: <?php echo e($preset['secondary_color']); ?>"></div>
+                                        <div class="w-6 h-6 rounded-full" style="background-color: <?php echo e($preset['accent_color']); ?>"></div>
                                     </div>
-                                    <h3 class="text-sm font-medium text-gray-900">{{ $preset['name'] }}</h3>
+                                    <h3 class="text-sm font-medium text-gray-900"><?php echo e($preset['name']); ?></h3>
                                 </div>
                             </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                 </div>
@@ -357,9 +398,9 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Família da Fonte</label>
                             <select x-model="fontFamily" @change="updatePreview()" class="w-full border border-gray-300 rounded-md px-3 py-2">
-                                @foreach($availableFonts as $key => $font)
-                                <option value="{{ $key }}">{{ $font }}</option>
-                                @endforeach
+                                <?php $__currentLoopData = $availableFonts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $font): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($key); ?>"><?php echo e($font); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
                     </div>
@@ -476,39 +517,39 @@
                     </div>
                     <div class="p-6">
                         <div id="preview-container" class="border border-gray-200 rounded-lg overflow-hidden">
-                            <iframe id="preview-frame" src="{{ route('hierarchy.branding.preview') }}" class="w-full h-96 border-0"></iframe>
+                            <iframe id="preview-frame" src="<?php echo e(route('hierarchy.branding.preview')); ?>" class="w-full h-96 border-0"></iframe>
                         </div>
                     </div>
                 </div>
 
                 <!-- Informações sobre herança -->
-                @if($parentBranding)
+                <?php if($parentBranding): ?>
                 <div class="bg-white shadow rounded-lg branding-section">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900">Branding Herdado</h3>
                     </div>
                     <div class="p-6">
                         <div class="space-y-3">
-                            @if(isset($parentBranding['primary_color']))
+                            <?php if(isset($parentBranding['primary_color'])): ?>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-600">Cor Primária:</span>
                                 <div class="flex items-center space-x-2">
-                                    <div class="w-4 h-4 rounded-full border" style="background-color: {{ $parentBranding['primary_color'] }}"></div>
-                                    <span class="text-sm font-mono">{{ $parentBranding['primary_color'] }}</span>
+                                    <div class="w-4 h-4 rounded-full border" style="background-color: <?php echo e($parentBranding['primary_color']); ?>"></div>
+                                    <span class="text-sm font-mono"><?php echo e($parentBranding['primary_color']); ?></span>
                                 </div>
                             </div>
-                            @endif
+                            <?php endif; ?>
                             
-                            @if(isset($parentBranding['font_family']))
+                            <?php if(isset($parentBranding['font_family'])): ?>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-600">Fonte:</span>
-                                <span class="text-sm">{{ $parentBranding['font_family'] }}</span>
+                                <span class="text-sm"><?php echo e($parentBranding['font_family']); ?></span>
                             </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -517,19 +558,19 @@
 <script>
 function brandingManager() {
     return {
-        inheritFromParent: @json(isset($currentBranding['inherit_from_parent']) ? $currentBranding['inherit_from_parent'] : false),
+        inheritFromParent: <?php echo json_encode(isset($currentBranding['inherit_from_parent']) ? $currentBranding['inherit_from_parent'] : false, 15, 512) ?>,
         colors: {
-            primary_color: @json(isset($currentBranding['primary_color']) ? $currentBranding['primary_color'] : '#3B82F6'),
-            secondary_color: @json(isset($currentBranding['secondary_color']) ? $currentBranding['secondary_color'] : '#6B7280'),
-            accent_color: @json(isset($currentBranding['accent_color']) ? $currentBranding['accent_color'] : '#10B981'),
-            text_color: @json(isset($currentBranding['text_color']) ? $currentBranding['text_color'] : '#1F2937'),
-            background_color: @json(isset($currentBranding['background_color']) ? $currentBranding['background_color'] : '#FFFFFF')
+            primary_color: <?php echo json_encode(isset($currentBranding['primary_color']) ? $currentBranding['primary_color'] : '#3B82F6', 15, 512) ?>,
+            secondary_color: <?php echo json_encode(isset($currentBranding['secondary_color']) ? $currentBranding['secondary_color'] : '#6B7280', 15, 512) ?>,
+            accent_color: <?php echo json_encode(isset($currentBranding['accent_color']) ? $currentBranding['accent_color'] : '#10B981', 15, 512) ?>,
+            text_color: <?php echo json_encode(isset($currentBranding['text_color']) ? $currentBranding['text_color'] : '#1F2937', 15, 512) ?>,
+            background_color: <?php echo json_encode(isset($currentBranding['background_color']) ? $currentBranding['background_color'] : '#FFFFFF', 15, 512) ?>
         },
-        fontFamily: @json(isset($currentBranding['font_family']) ? $currentBranding['font_family'] : 'Inter'),
-        customCss: @json(isset($currentBranding['custom_css']) ? $currentBranding['custom_css'] : ''),
-        logoPreview: @json(isset($currentBranding['logo_url']) && $currentBranding['logo_url'] ? asset('storage/' . $currentBranding['logo_url']) : null),
-        logoSmallPreview: @json(isset($currentBranding['logo_small_url']) && $currentBranding['logo_small_url'] ? asset('storage/' . $currentBranding['logo_small_url']) : null),
-        faviconPreview: @json(isset($currentBranding['favicon_url']) && $currentBranding['favicon_url'] ? asset('storage/' . $currentBranding['favicon_url']) : null),
+        fontFamily: <?php echo json_encode(isset($currentBranding['font_family']) ? $currentBranding['font_family'] : 'Inter', 15, 512) ?>,
+        customCss: <?php echo json_encode(isset($currentBranding['custom_css']) ? $currentBranding['custom_css'] : '', 15, 512) ?>,
+        logoPreview: <?php echo json_encode(isset($currentBranding['logo_url']) && $currentBranding['logo_url'] ? asset('storage/' . $currentBranding['logo_url']) : null, 15, 512) ?>,
+        logoSmallPreview: <?php echo json_encode(isset($currentBranding['logo_small_url']) && $currentBranding['logo_small_url'] ? asset('storage/' . $currentBranding['logo_small_url']) : null, 15, 512) ?>,
+        faviconPreview: <?php echo json_encode(isset($currentBranding['favicon_url']) && $currentBranding['favicon_url'] ? asset('storage/' . $currentBranding['favicon_url']) : null, 15, 512) ?>,
         saving: false,
         uploadedFiles: {},
         
@@ -544,7 +585,7 @@ function brandingManager() {
         },
         
         applyColorPreset(preset) {
-            const presets = @json($colorPresets);
+            const presets = <?php echo json_encode($colorPresets, 15, 512) ?>;
             if (presets[preset]) {
                 this.colors = { ...presets[preset] };
                 this.updatePreview();
@@ -565,7 +606,7 @@ function brandingManager() {
                     custom_css: this.customCss
                 });
                 
-                iframe.src = '{{ route("hierarchy.branding.preview") }}?' + params.toString();
+                iframe.src = '<?php echo e(route("hierarchy.branding.preview")); ?>?' + params.toString();
             }
         },
         
@@ -622,7 +663,7 @@ function brandingManager() {
                     });
                 }
                 
-                const response = await fetch('{{ route("hierarchy.branding.store") }}', {
+                const response = await fetch('<?php echo e(route("hierarchy.branding.store")); ?>', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -660,7 +701,7 @@ function brandingManager() {
                 const nodeId = urlParams.get('node_id');
                 const requestData = nodeId ? { node_id: nodeId } : {};
                 
-                const response = await fetch('{{ route("hierarchy.branding.reset") }}', {
+                const response = await fetch('<?php echo e(route("hierarchy.branding.reset")); ?>', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -686,7 +727,7 @@ function brandingManager() {
         },
         
         exportCss() {
-            window.open('{{ route("hierarchy.branding.export-css") }}', '_blank');
+            window.open('<?php echo e(route("hierarchy.branding.export-css")); ?>', '_blank');
         },
         
         showNotification(message, type) {
@@ -724,3 +765,4 @@ function selectNode(nodeId) {
     </div>
 </body>
 </html>
+<?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/hierarchy/branding/index.blade.php ENDPATH**/ ?>
