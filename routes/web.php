@@ -690,26 +690,27 @@ Route::post('/agenda/confirmacao/{token}/rejeitar', [App\Http\Controllers\Agenda
 // Rotas da Hierarquia White Label (protegidas por autenticação)
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::prefix('hierarchy')->name('hierarchy.')->group(function () {
-        Route::get('/dashboard', [HierarchyDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/dashboard/metrics', [HierarchyDashboardController::class, 'metricsApi'])->name('dashboard.metrics');
-        Route::get('/dashboard/activities', [HierarchyDashboardController::class, 'activitiesApi'])->name('dashboard.activities');
+        Route::get('/dashboard', [App\Http\Controllers\HierarchyDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard/metrics', [App\Http\Controllers\HierarchyDashboardController::class, 'metricsApi'])->name('dashboard.metrics');
+        Route::get('/dashboard/activities', [App\Http\Controllers\HierarchyDashboardController::class, 'activitiesApi'])->name('dashboard.activities');
         
         // Gerenciamento de nós
         Route::prefix('management')->name('management.')->group(function () {
-            Route::get('/', [HierarchyManagementController::class, 'index'])->name('index');
-            Route::get('/create', [HierarchyManagementController::class, 'create'])->name('create');
-            Route::post('/', [HierarchyManagementController::class, 'store'])->name('store');
-            Route::get('/{id}', [HierarchyManagementController::class, 'show'])->name('show');
-            Route::get('/{id}/edit', [HierarchyManagementController::class, 'edit'])->name('edit');
-            Route::put('/{id}', [HierarchyManagementController::class, 'update'])->name('update');
-            Route::post('/{id}/toggle-status', [HierarchyManagementController::class, 'toggleStatus'])->name('toggle-status');
+            Route::get('/', [App\Http\Controllers\HierarchyManagementController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\HierarchyManagementController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\HierarchyManagementController::class, 'store'])->name('store');
+            Route::get('/{id}', [App\Http\Controllers\HierarchyManagementController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [App\Http\Controllers\HierarchyManagementController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [App\Http\Controllers\HierarchyManagementController::class, 'update'])->name('update');
+            Route::post('/{id}/toggle-status', [App\Http\Controllers\HierarchyManagementController::class, 'toggleStatus'])->name('toggle-status');
         });
         
         // Visualização em árvore
         Route::prefix('tree')->name('tree.')->group(function () {
-            Route::get('/', [HierarchyTreeController::class, 'index'])->name('index');
-            Route::get('/data', [HierarchyTreeController::class, 'treeDataApi'])->name('data');
-            Route::get('/search', [HierarchyTreeController::class, 'search'])->name('search');
+            Route::get('/', [App\Http\Controllers\HierarchyTreeController::class, 'index'])->name('index');
+            Route::get('/data', [App\Http\Controllers\HierarchyTreeController::class, 'treeDataApi'])->name('data');
+            Route::get('/search', [App\Http\Controllers\HierarchyTreeController::class, 'search'])->name('search');
         });
     });
 });
+

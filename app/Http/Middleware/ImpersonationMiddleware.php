@@ -27,7 +27,7 @@ class ImpersonationMiddleware
                 // Impersonação expirou, limpar sessão
                 Session::forget('impersonating');
                 
-                return redirect()->route('hierarchy.dashboard')
+                return redirect()->route('dashboard')
                     ->with('warning', 'Sua sessão de impersonação expirou por segurança.');
             }
             

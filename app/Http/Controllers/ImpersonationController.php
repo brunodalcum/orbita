@@ -61,11 +61,11 @@ class ImpersonationController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => "Agora você está operando como {$targetUser->name}",
-                'redirect_url' => route('hierarchy.dashboard')
+                'redirect_url' => route('dashboard')
             ]);
         }
 
-        return redirect()->route('hierarchy.dashboard')->with('success', "Agora você está operando como {$targetUser->name}");
+        return redirect()->route('dashboard')->with('success', "Agora você está operando como {$targetUser->name}");
     }
 
     /**
@@ -111,11 +111,11 @@ class ImpersonationController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => "Você voltou a operar como {$originalUser->name}",
-                'redirect_url' => route('hierarchy.dashboard')
+                'redirect_url' => route('dashboard')
             ]);
         }
 
-        return redirect()->route('hierarchy.dashboard')->with('success', "Você voltou a operar como {$originalUser->name}");
+        return redirect()->route('dashboard')->with('success', "Você voltou a operar como {$originalUser->name}");
     }
 
     /**

@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class DynamicSidebar extends Component
 {
@@ -471,12 +472,14 @@ class DynamicSidebar extends Component
         if ($this->user->isSuperAdmin()) {
             $submenu = [];
             
-            // Dashboard da Hierarquia
-            $submenu[] = [
-                'name' => 'Dashboard Hierarquia',
-                'route' => 'hierarchy.dashboard',
-                'permission' => 'hierarchy.view'
-            ];
+            // Dashboard da Hierarquia (verificar se a rota existe)
+            if (Route::has('hierarchy.dashboard')) {
+                $submenu[] = [
+                    'name' => 'Dashboard Hierarquia',
+                    'route' => 'hierarchy.dashboard',
+                    'permission' => 'hierarchy.view'
+                ];
+            }
             
             // Gerenciamento de Nós
             $submenu[] = [
