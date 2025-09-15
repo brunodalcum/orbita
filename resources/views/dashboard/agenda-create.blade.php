@@ -3,6 +3,8 @@
 @section('title', 'Nova Reunião')
 
 @section('content')
+<!-- Branding Dinâmico -->
+<x-dynamic-branding />
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header com animação -->
