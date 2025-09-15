@@ -106,6 +106,7 @@
                     </div>
                 </div>
 
+
                 @if($user->isSuperAdminNode())
                 <!-- Seletor de Nó para Super Admin -->
                 <div class="bg-white border-b">
@@ -512,23 +513,24 @@
         </div>
     </div>
 </div>
+@endif
 
 <script>
 function brandingManager() {
     return {
-        inheritFromParent: @json($currentBranding['inherit_from_parent'] ?? false),
+        inheritFromParent: @json(isset($currentBranding['inherit_from_parent']) ? $currentBranding['inherit_from_parent'] : false),
         colors: {
-            primary_color: @json($currentBranding['primary_color'] ?? '#3B82F6'),
-            secondary_color: @json($currentBranding['secondary_color'] ?? '#6B7280'),
-            accent_color: @json($currentBranding['accent_color'] ?? '#10B981'),
-            text_color: @json($currentBranding['text_color'] ?? '#1F2937'),
-            background_color: @json($currentBranding['background_color'] ?? '#FFFFFF')
+            primary_color: @json(isset($currentBranding['primary_color']) ? $currentBranding['primary_color'] : '#3B82F6'),
+            secondary_color: @json(isset($currentBranding['secondary_color']) ? $currentBranding['secondary_color'] : '#6B7280'),
+            accent_color: @json(isset($currentBranding['accent_color']) ? $currentBranding['accent_color'] : '#10B981'),
+            text_color: @json(isset($currentBranding['text_color']) ? $currentBranding['text_color'] : '#1F2937'),
+            background_color: @json(isset($currentBranding['background_color']) ? $currentBranding['background_color'] : '#FFFFFF')
         },
-        fontFamily: @json($currentBranding['font_family'] ?? 'Inter'),
-        customCss: @json($currentBranding['custom_css'] ?? ''),
-        logoPreview: @json(($currentBranding['logo_url'] ?? null) ? asset('storage/' . $currentBranding['logo_url']) : null),
-        logoSmallPreview: @json(($currentBranding['logo_small_url'] ?? null) ? asset('storage/' . $currentBranding['logo_small_url']) : null),
-        faviconPreview: @json(($currentBranding['favicon_url'] ?? null) ? asset('storage/' . $currentBranding['favicon_url']) : null),
+        fontFamily: @json(isset($currentBranding['font_family']) ? $currentBranding['font_family'] : 'Inter'),
+        customCss: @json(isset($currentBranding['custom_css']) ? $currentBranding['custom_css'] : ''),
+        logoPreview: @json(isset($currentBranding['logo_url']) && $currentBranding['logo_url'] ? asset('storage/' . $currentBranding['logo_url']) : null),
+        logoSmallPreview: @json(isset($currentBranding['logo_small_url']) && $currentBranding['logo_small_url'] ? asset('storage/' . $currentBranding['logo_small_url']) : null),
+        faviconPreview: @json(isset($currentBranding['favicon_url']) && $currentBranding['favicon_url'] ? asset('storage/' . $currentBranding['favicon_url']) : null),
         saving: false,
         uploadedFiles: {},
         
