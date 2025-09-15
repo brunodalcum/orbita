@@ -107,21 +107,7 @@
                 </div>
 
 
-                <!-- DEBUG: Informações do usuário -->
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" style="margin: 10px;">
-                    <strong>🔍 DEBUG SELETOR:</strong><br>
-                    Usuário: {{ $user->name ?? 'N/A' }} ({{ $user->email ?? 'N/A' }})<br>
-                    Node Type: {{ $user->node_type ?? 'N/A' }}<br>
-                    isSuperAdminNode(): {{ $user && method_exists($user, 'isSuperAdminNode') && $user->isSuperAdminNode() ? 'TRUE' : 'FALSE' }}<br>
-                    Available Nodes: {{ isset($availableNodes) ? $availableNodes->count() : 'N/A' }}<br>
-                    Condição passa: {{ $user && method_exists($user, 'isSuperAdminNode') && $user->isSuperAdminNode() ? 'SIM - Seletor deve aparecer' : 'NÃO - Seletor não aparece' }}
-                </div>
-
-                @if($user->isSuperAdminNode())
-                <!-- DEBUG: Seletor sendo renderizado -->
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" style="margin: 10px;">
-                    <strong>✅ SELETOR RENDERIZADO:</strong> A condição @if($user->isSuperAdminNode()) passou!
-                </div>
+            @if($user->isSuperAdminNode())
                 
                 <!-- Seletor de Nó para Super Admin -->
                 <div class="bg-white border-b">
