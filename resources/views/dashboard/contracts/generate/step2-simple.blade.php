@@ -6,6 +6,9 @@
     <title>Gerar Contrato - Etapa 3 - DSPay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -14,17 +17,17 @@
         <div class="max-w-4xl mx-auto">
             <!-- Header -->
             <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
-                <h1 class="text-2xl font-bold text-gray-800 mb-2">
-                    <i class="fas fa-file-contract text-blue-600 mr-3"></i>
+                <h1 class="text-2xl font-bold " style="color: var(--text-color);" mb-2">
+                    <i class="fas fa-file-contract " style="color: var(--primary-color);" mr-3"></i>
                     Gerar Contrato - Etapa 3
                 </h1>
-                <p class="text-gray-600">Revisar e gerar o contrato final</p>
+                <p class="" style="color: var(--secondary-color);"">Revisar e gerar o contrato final</p>
             </div>
 
             <!-- Licensee Info -->
             <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                    <i class="fas fa-user-check text-green-600 mr-2"></i>
+                    <i class="fas fa-user-check " style="color: var(--primary-color);" mr-2"></i>
                     Licenciado Selecionado
                 </h3>
                 
@@ -54,7 +57,7 @@
             <!-- Contract Preview -->
             <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                    <i class="fas fa-eye text-blue-600 mr-2"></i>
+                    <i class="fas fa-eye " style="color: var(--primary-color);" mr-2"></i>
                     Preview do Contrato
                 </h3>
                 
@@ -71,7 +74,7 @@
             <!-- Generation Form -->
             <div class="bg-white rounded-lg shadow-sm border p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                    <i class="fas fa-cog text-blue-600 mr-2"></i>
+                    <i class="fas fa-cog " style="color: var(--primary-color);" mr-2"></i>
                     Gerar Contrato
                 </h3>
 

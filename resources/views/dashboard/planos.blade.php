@@ -11,6 +11,9 @@
     <link href="{{ asset('app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -24,7 +27,7 @@
             border-left: 4px solid white;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient); color: var(--primary-text);
             transition: all 0.3s ease;
         }
         .btn-primary:hover {
@@ -109,6 +112,19 @@
         .step-content {
             min-height: 300px;
         }
+            
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -119,11 +135,11 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Planos</h1>
-                        <p class="text-gray-600">Gerencie os planos comerciais e taxas das operações</p>
+                        <h1 class="text-2xl font-bold" style="color: var(--text-color);">Planos</h1>
+                        <p style="color: var(--secondary-color);">Gerencie os planos comerciais e taxas das operações</p>
                     </div>
                     <div class="flex items-center space-x-4">
                         <button class="p-2 text-gray-400 hover:text-gray-600">
@@ -148,7 +164,7 @@
                 <nav class="flex mb-6" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 md:space-x-3">
                         <li class="inline-flex items-center">
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:" style="color: var(--primary-color);"">
                                 <i class="fas fa-home mr-2"></i>
                                 Dashboard
                             </a>
@@ -168,7 +184,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <h2 class="text-xl font-semibold text-gray-800">Lista de Planos</h2>
-                                <p class="text-sm text-gray-600">Total de {{ $planos->count() }} planos cadastrados</p>
+                                <p style="color: var(--secondary-color);">Total de {{ $planos->count() }} planos cadastrados</p>
                             </div>
                             <button 
                                 onclick="openAddPlanModal()" 
@@ -507,7 +523,7 @@
                 <div class="mt-4">
                     <div class="flex items-center justify-center space-x-4">
                         <div class="step-indicator active" data-step="1">
-                            <div class="w-8 h-8 bg-white text-blue-600 rounded-full flex items-center justify-center font-bold text-sm">1</div>
+                            <div class="w-8 h-8 bg-white " style="color: var(--primary-color);" rounded-full flex items-center justify-center font-bold text-sm">1</div>
                             <span class="text-xs mt-1">Informações</span>
                         </div>
                         <div class="w-8 h-1 bg-white/30 rounded"></div>
@@ -568,11 +584,11 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Liquidação *</label>
                                 <div class="flex space-x-4">
                                     <label class="flex items-center">
-                                        <input type="radio" name="modalidade" value="D+1" class="mr-2 text-blue-600 focus:ring-blue-500" required>
+                                        <input type="radio" name="modalidade" value="D+1" class="mr-2 " style="color: var(--primary-color);" focus:ring-blue-500" required>
                                         <span class="text-sm text-gray-700">D+1</span>
                                     </label>
                                     <label class="flex items-center">
-                                        <input type="radio" name="modalidade" value="D30" class="mr-2 text-blue-600 focus:ring-blue-500" required>
+                                        <input type="radio" name="modalidade" value="D30" class="mr-2 " style="color: var(--primary-color);" focus:ring-blue-500" required>
                                         <span class="text-sm text-gray-700">D30</span>
                                     </label>
                                 </div>
@@ -581,15 +597,15 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Parcelamento *</label>
                                 <div class="flex space-x-4">
                                     <label class="flex items-center">
-                                        <input type="radio" name="parcelamento" value="12" class="mr-2 text-blue-600 focus:ring-blue-500" required>
+                                        <input type="radio" name="parcelamento" value="12" class="mr-2 " style="color: var(--primary-color);" focus:ring-blue-500" required>
                                         <span class="text-sm text-gray-700">12x</span>
                                     </label>
                                     <label class="flex items-center">
-                                        <input type="radio" name="parcelamento" value="18" class="mr-2 text-blue-600 focus:ring-blue-500" required>
+                                        <input type="radio" name="parcelamento" value="18" class="mr-2 " style="color: var(--primary-color);" focus:ring-blue-500" required>
                                         <span class="text-sm text-gray-700">18x</span>
                                     </label>
                                     <label class="flex items-center">
-                                        <input type="radio" name="parcelamento" value="21" class="mr-2 text-blue-600 focus:ring-blue-500" required>
+                                        <input type="radio" name="parcelamento" value="21" class="mr-2 " style="color: var(--primary-color);" focus:ring-blue-500" required>
                                         <span class="text-sm text-gray-700">21x</span>
                                     </label>
                                 </div>
@@ -602,15 +618,15 @@
                         <h4 class="text-lg font-semibold text-gray-800 mb-4">Tipo de Transação</h4>
                         <div class="space-y-3">
                             <label class="flex items-center">
-                                <input type="radio" name="tipo" value="Mundo físico" class="mr-3 text-blue-600 focus:ring-blue-500" required>
+                                <input type="radio" name="tipo" value="Mundo físico" class="mr-3 " style="color: var(--primary-color);" focus:ring-blue-500" required>
                                 <span class="text-sm text-gray-700">Mundo físico</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="tipo" value="Online" class="mr-3 text-blue-600 focus:ring-blue-500" required>
+                                <input type="radio" name="tipo" value="Online" class="mr-3 " style="color: var(--primary-color);" focus:ring-blue-500" required>
                                 <span class="text-sm text-gray-700">Online</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="tipo" value="Tap To Pay" class="mr-3 text-blue-600 focus:ring-blue-500" required>
+                                <input type="radio" name="tipo" value="Tap To Pay" class="mr-3 " style="color: var(--primary-color);" focus:ring-blue-500" required>
                                 <span class="text-sm text-gray-700">Tap To Pay</span>
                             </label>
                         </div>
@@ -683,10 +699,10 @@
                     <!-- Seção de Comissões -->
                     <div class="mt-8">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                            <i class="fas fa-percentage mr-2 text-green-600"></i>
+                            <i class="fas fa-percentage mr-2 " style="color: var(--accent-color);""></i>
                             Comissões do Licenciado
                         </h3>
-                        <p class="text-sm text-gray-600 mb-4">
+                        <p style="color: var(--secondary-color);">
                             Defina o percentual de comissão que o licenciado receberá para cada modalidade de transação.
                         </p>
                         
@@ -1010,10 +1026,10 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                 <div class="flex items-center justify-center space-x-2">
-                    <button onclick="viewPlan(${plano.id})" class="text-blue-600 hover:text-blue-900" title="Visualizar">
+                    <button onclick="viewPlan(${plano.id})" class="" style="color: var(--primary-color);" hover:text-blue-900" title="Visualizar">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button onclick="editPlan(${plano.id})" class="text-indigo-600 hover:text-indigo-900" title="Editar">
+                    <button onclick="editPlan(${plano.id})" class="" style="color: var(--primary-color);" hover:text-indigo-900" title="Editar">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button onclick="deletePlan(${plano.id})" class="text-red-600 hover:text-red-900" title="Excluir">
@@ -1187,10 +1203,10 @@
             if (stepNumber <= step) {
                 indicator.classList.add('active');
                 circle.classList.remove('bg-white/30', 'text-white');
-                circle.classList.add('bg-white', 'text-blue-600');
+                circle.classList.add('bg-white', '" style="color: var(--primary-color);"');
             } else {
                 indicator.classList.remove('active');
-                circle.classList.remove('bg-white', 'text-blue-600');
+                circle.classList.remove('bg-white', '" style="color: var(--primary-color);"');
                 circle.classList.add('bg-white/30', 'text-white');
             }
         });
@@ -1566,7 +1582,7 @@
                                 </div>
                                 <div>
                                     <span class="text-sm font-medium text-gray-600">Taxa Média:</span>
-                                    <p class="text-sm font-bold text-green-600">${parseFloat(plan.taxa).toFixed(2)}%</p>
+                                    <p class="text-sm font-bold " style="color: var(--accent-color);"">${parseFloat(plan.taxa).toFixed(2)}%</p>
                                 </div>
                                 <div>
                                     <span class="text-sm font-medium text-gray-600">Status:</span>
@@ -1662,7 +1678,7 @@
                             <div class="mb-4">
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-medium text-gray-600">Comissão Média:</span>
-                                    <span class="text-lg font-bold text-blue-600">${parseFloat(plan.comissao_media || 0).toFixed(2)}%</span>
+                                    <span class="text-lg font-bold " style="color: var(--primary-color);"">${parseFloat(plan.comissao_media || 0).toFixed(2)}%</span>
                                 </div>
                             </div>
                             ${plan.comissoes_detalhadas ? generateComissoesTable(plan.comissoes_detalhadas) : '<p class="text-sm text-gray-500 italic">Nenhuma comissão definida para este plano</p>'}
@@ -2065,7 +2081,7 @@
                     <div class="bg-white rounded-lg p-3 border border-gray-200">
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-medium text-gray-700">${bandeiraNome}</span>
-                            <span class="text-sm font-bold text-green-600">${parseFloat(taxa).toFixed(2)}%</span>
+                            <span class="text-sm font-bold " style="color: var(--accent-color);"">${parseFloat(taxa).toFixed(2)}%</span>
                         </div>
                     </div>
                 `;
@@ -2089,7 +2105,7 @@
                     <div class="bg-white rounded-lg p-3 border border-gray-200">
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-medium text-gray-700">${bandeiraNome}</span>
-                            <span class="text-sm font-bold text-green-600">${parseFloat(taxa).toFixed(2)}%</span>
+                            <span class="text-sm font-bold " style="color: var(--accent-color);"">${parseFloat(taxa).toFixed(2)}%</span>
                         </div>
                     </div>
                 `;
@@ -2118,7 +2134,7 @@
                         <div class="bg-white rounded-lg p-2 border border-gray-200">
                             <div class="text-center">
                                 <div class="text-xs text-gray-500">${parcela}x</div>
-                                <div class="text-sm font-bold text-green-600">${parseFloat(taxa).toFixed(2)}%</div>
+                                <div class="text-sm font-bold " style="color: var(--accent-color);"">${parseFloat(taxa).toFixed(2)}%</div>
                             </div>
                         </div>
                     `;
@@ -2155,7 +2171,7 @@
                     <div class="bg-white rounded-lg p-3 border border-blue-200">
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-medium text-gray-700">${bandeiraNome}</span>
-                            <span class="text-sm font-bold text-blue-600">${parseFloat(comissao).toFixed(2)}%</span>
+                            <span class="text-sm font-bold " style="color: var(--primary-color);"">${parseFloat(comissao).toFixed(2)}%</span>
                         </div>
                     </div>
                 `;
@@ -2179,7 +2195,7 @@
                     <div class="bg-white rounded-lg p-3 border border-blue-200">
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-medium text-gray-700">${bandeiraNome}</span>
-                            <span class="text-sm font-bold text-blue-600">${parseFloat(comissao).toFixed(2)}%</span>
+                            <span class="text-sm font-bold " style="color: var(--primary-color);"">${parseFloat(comissao).toFixed(2)}%</span>
                         </div>
                     </div>
                 `;
@@ -2208,7 +2224,7 @@
                         <div class="bg-white rounded-lg p-2 border border-blue-200">
                             <div class="text-center">
                                 <div class="text-xs text-gray-500">${parcela}x</div>
-                                <div class="text-sm font-bold text-blue-600">${parseFloat(comissao).toFixed(2)}%</div>
+                                <div class="text-sm font-bold " style="color: var(--primary-color);"">${parseFloat(comissao).toFixed(2)}%</div>
                             </div>
                         </div>
                     `;

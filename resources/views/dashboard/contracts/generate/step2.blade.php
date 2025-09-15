@@ -11,6 +11,9 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     @endif
     
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -22,7 +25,7 @@
         
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center space-x-4">
                         <a href="{{ route('contracts.generate.index') }}"
@@ -31,11 +34,11 @@
                         </a>
                         <div class="h-6 border-l border-gray-300"></div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-800">
-                                <i class="fas fa-file-contract text-blue-600 mr-3"></i>
+                            <h1 class="text-2xl font-bold " style="color: var(--text-color);"">
+                                <i class="fas fa-file-contract " style="color: var(--primary-color);" mr-3"></i>
                                 Gerar Contrato
                             </h1>
-                            <p class="text-gray-600 mt-1">Etapa 3 de 3 • Revisar e Gerar</p>
+                            <p class="" style="color: var(--secondary-color);" mt-1">Etapa 3 de 3 • Revisar e Gerar</p>
                         </div>
                     </div>
                 </div>
@@ -87,7 +90,7 @@
                                 <!-- Licensee Info -->
                                 <div class="bg-white rounded-lg shadow-sm border p-6">
                                     <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                                        <i class="fas fa-user text-blue-600 mr-2"></i>
+                                        <i class="fas fa-user " style="color: var(--primary-color);" mr-2"></i>
                                         Licenciado
                                     </h3>
                                     
@@ -112,7 +115,7 @@
                                 <!-- Template Info -->
                                 <div class="bg-white rounded-lg shadow-sm border p-6">
                                     <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                                        <i class="fas fa-file-alt text-green-600 mr-2"></i>
+                                        <i class="fas fa-file-alt " style="color: var(--primary-color);" mr-2"></i>
                                         Template
                                     </h3>
                                     
@@ -164,7 +167,7 @@
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <h3 class="text-lg font-semibold text-gray-800">Preview do Contrato</h3>
-                                            <p class="text-gray-600 mt-1">Revise o contrato antes de gerar</p>
+                                            <p class="" style="color: var(--secondary-color);" mt-1">Revise o contrato antes de gerar</p>
                                         </div>
                                         <div class="flex items-center space-x-2">
                                             <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">

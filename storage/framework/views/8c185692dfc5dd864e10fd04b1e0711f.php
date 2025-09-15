@@ -3,17 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Licenciados - dspay</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/dspay-logo.png') }}">
+    <link rel="icon" type="image/png" href="<?php echo e(asset('images/dspay-logo.png')); ?>">
+    <link rel="shortcut icon" type="image/png" href="<?php echo e(asset('images/dspay-logo.png')); ?>">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="{{ asset('app.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('app.css')); ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Branding Dinâmico -->
-    <x-dynamic-branding />
+    <?php if (isset($component)) { $__componentOriginal9ddf4d6754b0e3c33300f8613a00c4e4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9ddf4d6754b0e3c33300f8613a00c4e4 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.dynamic-branding','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('dynamic-branding'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9ddf4d6754b0e3c33300f8613a00c4e4)): ?>
+<?php $attributes = $__attributesOriginal9ddf4d6754b0e3c33300f8613a00c4e4; ?>
+<?php unset($__attributesOriginal9ddf4d6754b0e3c33300f8613a00c4e4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9ddf4d6754b0e3c33300f8613a00c4e4)): ?>
+<?php $component = $__componentOriginal9ddf4d6754b0e3c33300f8613a00c4e4; ?>
+<?php unset($__componentOriginal9ddf4d6754b0e3c33300f8613a00c4e4); ?>
+<?php endif; ?>
     
     <style>
         /* Estilos para os filtros */
@@ -72,7 +91,26 @@
 <body class="bg-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar Dinâmico -->
-        <x-dynamic-sidebar />
+        <?php if (isset($component)) { $__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec = $attributes; } ?>
+<?php $component = App\View\Components\DynamicSidebar::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('dynamic-sidebar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\DynamicSidebar::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec)): ?>
+<?php $attributes = $__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec; ?>
+<?php unset($__attributesOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec)): ?>
+<?php $component = $__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec; ?>
+<?php unset($__componentOriginal58bfc5a96c4a22dbbb3ff0b16eeb91ec); ?>
+<?php endif; ?>
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
@@ -100,7 +138,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Total de Licenciados</p>
-                                <p class="text-3xl font-bold">{{ $stats['total'] ?? 0 }}</p>
+                                <p class="text-3xl font-bold"><?php echo e($stats['total'] ?? 0); ?></p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-users mr-1"></i>
                                     Cadastros ativos
@@ -116,7 +154,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Aprovados</p>
-                                <p class="text-3xl font-bold">{{ $stats['aprovados'] ?? 0 }}</p>
+                                <p class="text-3xl font-bold"><?php echo e($stats['aprovados'] ?? 0); ?></p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-check mr-1"></i>
                                     Licenciados ativos
@@ -132,7 +170,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Em Análise</p>
-                                <p class="text-3xl font-bold">{{ $stats['em_analise'] ?? 0 }}</p>
+                                <p class="text-3xl font-bold"><?php echo e($stats['em_analise'] ?? 0); ?></p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-clock mr-1"></i>
                                     Aguardando aprovação
@@ -148,7 +186,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-white/80 text-sm">Recusados</p>
-                                <p class="text-3xl font-bold">{{ $stats['recusados'] ?? 0 }}</p>
+                                <p class="text-3xl font-bold"><?php echo e($stats['recusados'] ?? 0); ?></p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-times mr-1"></i>
                                     Cadastros recusados
@@ -176,7 +214,7 @@
                     </div>
                     
                     <div id="filters-content" class="p-6">
-                        <form method="GET" action="{{ route('dashboard.licenciados') }}" id="filters-form">
+                        <form method="GET" action="<?php echo e(route('dashboard.licenciados')); ?>" id="filters-form">
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 filter-grid">
                                 <!-- Filtro por Nome -->
                                 <div>
@@ -186,7 +224,7 @@
                                     </label>
                                     <input type="text" 
                                            name="nome" 
-                                           value="{{ request('nome') }}"
+                                           value="<?php echo e(request('nome')); ?>"
                                            placeholder="Digite o nome..."
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
                                 </div>
@@ -199,11 +237,12 @@
                                     </label>
                                     <select name="cidade" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
                                         <option value="">Todas as cidades</option>
-                                        @foreach($cidades as $cidade)
-                                            <option value="{{ $cidade }}" {{ request('cidade') == $cidade ? 'selected' : '' }}>
-                                                {{ $cidade }}
+                                        <?php $__currentLoopData = $cidades; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cidade): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($cidade); ?>" <?php echo e(request('cidade') == $cidade ? 'selected' : ''); ?>>
+                                                <?php echo e($cidade); ?>
+
                                             </option>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
 
@@ -215,11 +254,12 @@
                                     </label>
                                     <select name="estado" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
                                         <option value="">Todos os estados</option>
-                                        @foreach($estados as $estado)
-                                            <option value="{{ $estado }}" {{ request('estado') == $estado ? 'selected' : '' }}>
-                                                {{ $estado }}
+                                        <?php $__currentLoopData = $estados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $estado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($estado); ?>" <?php echo e(request('estado') == $estado ? 'selected' : ''); ?>>
+                                                <?php echo e($estado); ?>
+
                                             </option>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
 
@@ -231,11 +271,12 @@
                                     </label>
                                     <select name="operacao" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
                                         <option value="">Todas as operações</option>
-                                        @foreach($operacoes as $operacao)
-                                            <option value="{{ $operacao->id }}" {{ request('operacao') == $operacao->id ? 'selected' : '' }}>
-                                                {{ $operacao->nome }}
+                                        <?php $__currentLoopData = $operacoes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $operacao): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($operacao->id); ?>" <?php echo e(request('operacao') == $operacao->id ? 'selected' : ''); ?>>
+                                                <?php echo e($operacao->nome); ?>
+
                                             </option>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
 
@@ -247,14 +288,14 @@
                                     </label>
                                     <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
                                         <option value="">Todos os status</option>
-                                        <option value="aprovado" {{ request('status') == 'aprovado' ? 'selected' : '' }}>Aprovado</option>
-                                        <option value="em_analise" {{ request('status') == 'em_analise' ? 'selected' : '' }}>Em Análise</option>
-                                        <option value="recusado" {{ request('status') == 'recusado' ? 'selected' : '' }}>Recusado</option>
-                                        <option value="ativo" {{ request('status') == 'ativo' ? 'selected' : '' }}>Ativo</option>
-                                        <option value="inativo" {{ request('status') == 'inativo' ? 'selected' : '' }}>Inativo</option>
-                                        <option value="pendente" {{ request('status') == 'pendente' ? 'selected' : '' }}>Pendente</option>
-                                        <option value="risco" {{ request('status') == 'risco' ? 'selected' : '' }}>Risco</option>
-                                        <option value="vencendo" {{ request('status') == 'vencendo' ? 'selected' : '' }}>Vencendo</option>
+                                        <option value="aprovado" <?php echo e(request('status') == 'aprovado' ? 'selected' : ''); ?>>Aprovado</option>
+                                        <option value="em_analise" <?php echo e(request('status') == 'em_analise' ? 'selected' : ''); ?>>Em Análise</option>
+                                        <option value="recusado" <?php echo e(request('status') == 'recusado' ? 'selected' : ''); ?>>Recusado</option>
+                                        <option value="ativo" <?php echo e(request('status') == 'ativo' ? 'selected' : ''); ?>>Ativo</option>
+                                        <option value="inativo" <?php echo e(request('status') == 'inativo' ? 'selected' : ''); ?>>Inativo</option>
+                                        <option value="pendente" <?php echo e(request('status') == 'pendente' ? 'selected' : ''); ?>>Pendente</option>
+                                        <option value="risco" <?php echo e(request('status') == 'risco' ? 'selected' : ''); ?>>Risco</option>
+                                        <option value="vencendo" <?php echo e(request('status') == 'vencendo' ? 'selected' : ''); ?>>Vencendo</option>
                                     </select>
                                 </div>
                             </div>
@@ -268,7 +309,7 @@
                                     </label>
                                     <input type="date" 
                                            name="data_inicial" 
-                                           value="{{ request('data_inicial') }}"
+                                           value="<?php echo e(request('data_inicial')); ?>"
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
                                 </div>
 
@@ -279,7 +320,7 @@
                                     </label>
                                     <input type="date" 
                                            name="data_final" 
-                                           value="{{ request('data_final') }}"
+                                           value="<?php echo e(request('data_final')); ?>"
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent filter-input">
                                 </div>
                             </div>
@@ -291,7 +332,7 @@
                                         <i class="fas fa-search mr-2"></i>
                                         Aplicar Filtros
                                     </button>
-                                    <a href="{{ route('dashboard.licenciados') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
+                                    <a href="<?php echo e(route('dashboard.licenciados')); ?>" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
                                         <i class="fas fa-times mr-2"></i>
                                         Limpar Filtros
                                     </a>
@@ -299,7 +340,7 @@
                                 
                                 <div class="text-sm text-gray-500">
                                     <i class="fas fa-info-circle mr-1"></i>
-                                    <span class="results-counter">{{ $licenciados->count() }}</span> licenciado(s) encontrado(s)
+                                    <span class="results-counter"><?php echo e($licenciados->count()); ?></span> licenciado(s) encontrado(s)
                                 </div>
                             </div>
                         </form>
@@ -330,55 +371,57 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @if(isset($licenciados) && $licenciados->count() > 0)
-                                    @foreach($licenciados as $licenciado)
+                                <?php if(isset($licenciados) && $licenciados->count() > 0): ?>
+                                    <?php $__currentLoopData = $licenciados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $licenciado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr class="hover:bg-gray-50">
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm font-medium text-gray-900">{{ $licenciado->razao_social }}</div>
-                                                <div class="text-sm text-gray-500">{{ $licenciado->nome_fantasia }}</div>
+                                                <div class="text-sm font-medium text-gray-900"><?php echo e($licenciado->razao_social); ?></div>
+                                                <div class="text-sm text-gray-500"><?php echo e($licenciado->nome_fantasia); ?></div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $licenciado->cnpj_cpf_formatado }}
+                                                <?php echo e($licenciado->cnpj_cpf_formatado); ?>
+
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                @if($licenciado->status == 'aprovado')
+                                                <?php if($licenciado->status == 'aprovado'): ?>
                                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                                                         Aprovado
                                                     </span>
-                                                @elseif($licenciado->status == 'em_analise')
+                                                <?php elseif($licenciado->status == 'em_analise'): ?>
                                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                                         Em Análise
                                                     </span>
-                                                @else
+                                                <?php else: ?>
                                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
                                                         Recusado
                                                     </span>
-                                                @endif
+                                                <?php endif; ?>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $licenciado->created_at->format('d/m/Y') }}
+                                                <?php echo e($licenciado->created_at->format('d/m/Y')); ?>
+
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 <div class="flex space-x-2">
-                                                    <a href="{{ route('licenciados.gerenciar', $licenciado->id) }}" 
+                                                    <a href="<?php echo e(route('licenciados.gerenciar', $licenciado->id)); ?>" 
                                                        class="inline-flex items-center px-3 py-2 text-sm font-medium " style="color: var(--primary-color);" bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors duration-200" 
                                                        title="Gerenciar Licenciado">
                                                         <i class="fas fa-eye mr-1"></i>
                                                         <span class="hidden sm:inline">Gerenciar</span>
                                                     </a>
-                                                    <button onclick="editLicenciado({{ $licenciado->id }})" 
+                                                    <button onclick="editLicenciado(<?php echo e($licenciado->id); ?>)" 
                                                             class="inline-flex items-center px-3 py-2 text-sm font-medium " style="color: var(--accent-color);" bg-green-50 hover:bg-green-100 rounded-lg transition-colors duration-200" 
                                                             title="Editar Licenciado">
                                                         <i class="fas fa-edit mr-1"></i>
                                                         <span class="hidden sm:inline">Editar</span>
                                                     </button>
-                                                    <button onclick="openStatusModal({{ $licenciado->id }}, {{ json_encode($licenciado->razao_social) }}, '{{ $licenciado->status }}')" 
+                                                    <button onclick="openStatusModal(<?php echo e($licenciado->id); ?>, <?php echo e(json_encode($licenciado->razao_social)); ?>, '<?php echo e($licenciado->status); ?>')" 
                                                             class="inline-flex items-center px-3 py-2 text-sm font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors duration-200" 
                                                             title="Alterar Status">
                                                         <i class="fas fa-cogs mr-1"></i>
                                                         <span class="hidden sm:inline">Status</span>
                                                     </button>
-                                                    <button onclick="deleteLicenciado({{ $licenciado->id }}, {{ json_encode($licenciado->razao_social) }})" 
+                                                    <button onclick="deleteLicenciado(<?php echo e($licenciado->id); ?>, <?php echo e(json_encode($licenciado->razao_social)); ?>)" 
                                                             class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors duration-200" 
                                                             title="Excluir Licenciado">
                                                         <i class="fas fa-trash mr-1"></i>
@@ -387,15 +430,15 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @else
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php else: ?>
                                     <tr>
                                         <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                                             <i class="fas fa-inbox text-4xl mb-2"></i>
                                             <p>Nenhum licenciado cadastrado ainda</p>
                                         </td>
                                     </tr>
-                                @endif
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -455,7 +498,7 @@
 
             <!-- Form Content -->
             <form id="licenciadoForm" enctype="multipart/form-data">
-                @csrf
+                <?php echo csrf_field(); ?>
                 
                 <!-- Área de Erros de Validação -->
                 <div id="validationErrors" class="hidden bg-red-50 border-l-4 border-red-400 p-4 mx-6 mt-4">
@@ -2654,4 +2697,4 @@
         }
     </style>
 </body>
-</html>
+</html><?php /**PATH /Applications/MAMP/htdocs/orbita/resources/views/dashboard/licenciados.blade.php ENDPATH**/ ?>

@@ -8,6 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     <style>
         body { font-family: 'Inter', sans-serif; }
         .card { 
@@ -25,10 +28,14 @@
             height: calc(100% - 1rem);
             background: #e5e7eb;
         }
-        .timeline-item.active::after { background: #3b82f6; }
+        .timeline-item.active::after { background: var(--primary-color); }
         .progress-bar { 
-            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); 
+            background: var(--accent-gradient);
             transition: width 0.5s ease-in-out;
+        }
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
         }
         .step-indicator {
             width: 2rem;

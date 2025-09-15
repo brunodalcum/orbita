@@ -15,7 +15,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <h1 class="text-2xl font-bold text-gray-900">Gerar Contrato</h1>
-                                <p class="text-gray-600 mt-1">Processo de geração de contratos em 3 etapas</p>
+                                <p class="" style="color: var(--secondary-color);" mt-1">Processo de geração de contratos em 3 etapas</p>
                             </div>
                             <a href="{{ route('contracts.index') }}" 
                                class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
@@ -55,7 +55,7 @@
                     <div class="bg-white rounded-lg shadow-sm border">
                         <div class="p-6 border-b">
                             <h3 class="text-lg font-semibold text-gray-800">Selecionar Licenciado</h3>
-                            <p class="text-gray-600 mt-1">Escolha o licenciado para o qual deseja gerar o contrato</p>
+                            <p class="" style="color: var(--secondary-color);" mt-1">Escolha o licenciado para o qual deseja gerar o contrato</p>
                             <div class="mt-3 flex items-center space-x-4 text-xs text-gray-500">
                                 <span class="flex items-center">
                                     <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>

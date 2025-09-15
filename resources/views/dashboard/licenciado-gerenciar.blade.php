@@ -11,6 +11,9 @@
     <link href="{{ asset('app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
@@ -20,11 +23,11 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Gerenciar Licenciado</h1>
-                        <p class="text-gray-600">Centro de gestão e controle do licenciado</p>
+                        <h1 class="text-2xl font-bold" style="color: var(--text-color);">Gerenciar Licenciado</h1>
+                        <p style="color: var(--secondary-color);">Centro de gestão e controle do licenciado</p>
                     </div>
                     <div class="flex items-center space-x-4">
                         <a href="{{ route('dashboard.licenciados') }}" 
@@ -89,10 +92,10 @@
                 <div class="bg-white rounded-2xl shadow-xl border border-gray-100 mb-8 overflow-hidden">
                     <div class="bg-gradient-to-r from-gray-50 to-blue-50 px-6 py-4 border-b border-gray-200">
                         <h3 class="text-xl font-bold text-gray-900 flex items-center">
-                            <i class="fas fa-cogs text-blue-600 mr-3"></i>
+                            <i class="fas fa-cogs " style="color: var(--primary-color);" mr-3"></i>
                             Ações de Controle
                         </h3>
-                        <p class="text-gray-600 text-sm mt-1">Gerencie o status do licenciado com ações diretas</p>
+                        <p style="color: var(--secondary-color);">Gerencie o status do licenciado com ações diretas</p>
                     </div>
                     
                     <div class="p-6">
@@ -147,10 +150,10 @@
                         <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
                                 <h3 class="text-xl font-bold text-gray-900 flex items-center">
-                                    <i class="fas fa-building text-blue-600 mr-3"></i>
+                                    <i class="fas fa-building " style="color: var(--primary-color);" mr-3"></i>
                                     Dados Cadastrais
                                 </h3>
-                                <p class="text-gray-600 text-sm mt-1">Informações principais da empresa</p>
+                                <p style="color: var(--secondary-color);">Informações principais da empresa</p>
                             </div>
                         
                         <div class="p-6">
@@ -242,10 +245,10 @@
                     <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                         <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-4 border-b border-gray-200">
                             <h3 class="text-xl font-bold text-gray-900 flex items-center">
-                                <i class="fas fa-cogs text-green-600 mr-3"></i>
+                                <i class="fas fa-cogs " style="color: var(--accent-color);" mr-3"></i>
                                 Operações Vinculadas
                             </h3>
-                            <p class="text-gray-600 text-sm mt-1">Serviços e produtos disponíveis para este licenciado</p>
+                            <p style="color: var(--secondary-color);">Serviços e produtos disponíveis para este licenciado</p>
                         </div>
                         
                         <div class="p-6">
@@ -264,7 +267,7 @@
                                                     <div class="ml-4 flex-1">
                                                         <h4 class="font-bold text-gray-900 text-lg">{{ $operacao->nome }}</h4>
                                                         @if($operacao->adquirente)
-                                                            <p class="text-sm text-gray-600 mt-1">
+                                                            <p style="color: var(--secondary-color);">
                                                                 <i class="fas fa-building mr-1"></i>
                                                                 {{ $operacao->adquirente }}
                                                             </p>
@@ -299,7 +302,7 @@
                                         <i class="fas fa-file-alt text-purple-600 mr-3"></i>
                                         Documentos
                                     </h3>
-                                    <p class="text-gray-600 text-sm mt-1">Gestão completa de documentos e arquivos</p>
+                                    <p style="color: var(--secondary-color);">Gestão completa de documentos e arquivos</p>
                                 </div>
                                 <button onclick="openDocumentModal()" 
                                         class="group relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
@@ -338,7 +341,7 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <h4 class="font-bold text-gray-900">{{ $info['nome'] }}</h4>
-                                                    <p class="text-sm text-gray-600">{{ $info['desc'] }}</p>
+                                                    <p style="color: var(--secondary-color);">{{ $info['desc'] }}</p>
                                                 </div>
                                             </div>
                                             
@@ -372,7 +375,7 @@
                     <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                         <div class="bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 border-b border-gray-200">
                             <h3 class="text-xl font-bold text-gray-900 flex items-center">
-                                <i class="fas fa-chart-line text-indigo-600 mr-3"></i>
+                                <i class="fas fa-chart-line " style="color: var(--primary-color);" mr-3"></i>
                                 Status & Estatísticas
                             </h3>
                         </div>
@@ -396,7 +399,7 @@
                                             </div>
                                             <div class="ml-3">
                                                 <p class="text-sm font-medium text-gray-700">Data de Cadastro</p>
-                                                <p class="text-lg font-bold text-blue-600">{{ $licenciado->data_cadastro_formatada }}</p>
+                                                <p class="text-lg font-bold " style="color: var(--primary-color);"">{{ $licenciado->data_cadastro_formatada }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -408,7 +411,7 @@
                                             </div>
                                             <div class="ml-3">
                                                 <p class="text-sm font-medium text-gray-700">Última Atualização</p>
-                                                <p class="text-lg font-bold text-green-600">{{ $licenciado->updated_at->format('d/m/Y H:i') }}</p>
+                                                <p class="text-lg font-bold " style="color: var(--accent-color);"">{{ $licenciado->updated_at->format('d/m/Y H:i') }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -426,7 +429,7 @@
                                         <i class="fas fa-comments text-emerald-600 mr-3"></i>
                                         Follow-ups
                                     </h3>
-                                    <p class="text-gray-600 text-sm mt-1">Histórico de interações</p>
+                                    <p style="color: var(--secondary-color);">Histórico de interações</p>
                                 </div>
                                 <button onclick="openFollowUpModal()" 
                                         class="group relative overflow-hidden bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:shadow-lg">
@@ -521,7 +524,7 @@
                             Cancelar
                         </button>
                         <button type="submit" 
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                                class="px-4 py-2 btn-primary rounded-lg transition-colors">
                             <i class="fas fa-upload mr-2"></i>
                             Upload
                         </button>
@@ -576,7 +579,7 @@
                             Cancelar
                         </button>
                         <button type="submit" 
-                                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
+                                class="px-4 py-2 btn-success rounded-lg transition-colors">
                             <i class="fas fa-plus mr-2"></i>
                             Adicionar
                         </button>
@@ -594,6 +597,19 @@
         
         #documentModal.show, #followUpModal.show {
             display: flex !important;
+        }
+            
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
         }
     </style>
 

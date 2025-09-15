@@ -11,6 +11,9 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     @endif
     
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -22,7 +25,7 @@
         
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center space-x-4">
                         <a href="{{ route('contracts.generate.index') }}"
@@ -31,11 +34,11 @@
                         </a>
                         <div class="h-6 border-l border-gray-300"></div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-800">
-                                <i class="fas fa-file-contract text-blue-600 mr-3"></i>
+                            <h1 class="text-2xl font-bold " style="color: var(--text-color);"">
+                                <i class="fas fa-file-contract " style="color: var(--primary-color);" mr-3"></i>
                                 Gerar Contrato
                             </h1>
-                            <p class="text-gray-600 mt-1">Etapa 2 de 3 • Escolher Template</p>
+                            <p class="" style="color: var(--secondary-color);" mt-1">Etapa 2 de 3 • Escolher Template</p>
                         </div>
                     </div>
                 </div>
@@ -83,7 +86,7 @@
                         <div class="lg:col-span-1">
                             <div class="bg-white rounded-lg shadow-sm border p-6 sticky top-6">
                                 <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                                    <i class="fas fa-user-check text-green-600 mr-2"></i>
+                                    <i class="fas fa-user-check " style="color: var(--primary-color);" mr-2"></i>
                                     Licenciado Selecionado
                                 </h3>
                                 
@@ -116,7 +119,7 @@
                                     <div class="pt-3 border-t">
                                         <label class="text-sm font-medium text-gray-600">Representante</label>
                                         <p class="text-gray-900">{{ $licenciado->representante_nome }}</p>
-                                        <p class="text-sm text-gray-600">{{ $licenciado->representante_cargo ?: 'Representante Legal' }}</p>
+                                        <p class="text-sm " style="color: var(--secondary-color);"">{{ $licenciado->representante_cargo ?: 'Representante Legal' }}</p>
                                     </div>
                                     @endif
                                 </div>
@@ -128,7 +131,7 @@
                             <div class="bg-white rounded-lg shadow-sm border">
                                 <div class="p-6 border-b">
                                     <h3 class="text-lg font-semibold text-gray-800">Escolher Template de Contrato</h3>
-                                    <p class="text-gray-600 mt-1">Selecione o modelo de contrato que será usado</p>
+                                    <p class="" style="color: var(--secondary-color);" mt-1">Selecione o modelo de contrato que será usado</p>
                                 </div>
 
                                 <div class="p-6">
@@ -147,7 +150,7 @@
                                                         </div>
                                                         
                                                         @if($template->description)
-                                                        <p class="text-sm text-gray-600 mt-1">{{ $template->description }}</p>
+                                                        <p class="text-sm " style="color: var(--secondary-color);" mt-1">{{ $template->description }}</p>
                                                         @endif
                                                         
                                                         <div class="flex items-center space-x-4 mt-2 text-xs text-gray-500">

@@ -10,10 +10,10 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 flex items-center">
-                        <i class="fas fa-calendar-alt text-blue-600 mr-3"></i>
+                        <i class="fas fa-calendar-alt " style="color: var(--primary-color);" mr-3"></i>
                         Calendário
                     </h1>
-                    <p class="text-gray-600 mt-2">Visualize todos os seus compromissos do mês</p>
+                    <p style="color: var(--secondary-color);">Visualize todos os seus compromissos do mês</p>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center bg-white rounded-lg shadow-sm border border-gray-200">
@@ -46,10 +46,10 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-calendar-check text-blue-600 text-xl"></i>
+                        <i class="fas fa-calendar-check " style="color: var(--primary-color);" text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Total do Mês</p>
+                        <p style="color: var(--secondary-color);">Total do Mês</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->count() }}</p>
                     </div>
                 </div>
@@ -57,10 +57,10 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-green-100 rounded-lg">
-                        <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        <i class="fas fa-check-circle " style="color: var(--accent-color);" text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Confirmados</p>
+                        <p style="color: var(--secondary-color);">Confirmados</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('status', 'confirmado')->count() }}</p>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                         <i class="fas fa-clock text-yellow-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Pendentes</p>
+                        <p style="color: var(--secondary-color);">Pendentes</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('status', 'pendente')->count() }}</p>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                         <i class="fas fa-video text-purple-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Online</p>
+                        <p style="color: var(--secondary-color);">Online</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('tipo_reuniao', 'online')->count() }}</p>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                         
                         <div class="min-h-[120px] border border-gray-200 rounded-lg p-2 {{ $isCurrentMonth ? 'bg-white' : 'bg-gray-50' }} {{ $isToday ? 'ring-2 ring-blue-500' : '' }} hover:bg-blue-50 transition-colors">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-sm font-medium {{ $isCurrentMonth ? 'text-gray-900' : 'text-gray-400' }} {{ $isToday ? 'text-blue-600 font-bold' : '' }}">
+                                <span class="text-sm font-medium {{ $isCurrentMonth ? 'text-gray-900' : 'text-gray-400' }} {{ $isToday ? '" style="color: var(--primary-color);" font-bold' : '' }}">
                                     {{ $currentDate->day }}
                                 </span>
                                 @if($dayAgendas->count() > 0)
@@ -232,7 +232,7 @@ function viewAgenda(id) {
                     <div class="space-y-6">
                         <div>
                             <h4 class="text-2xl font-bold text-gray-900 mb-2">${agenda.titulo}</h4>
-                            ${agenda.descricao ? `<p class="text-gray-600">${agenda.descricao}</p>` : ''}
+                            ${agenda.descricao ? `<p style="color: var(--secondary-color);">${agenda.descricao}</p>` : ''}
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -241,11 +241,11 @@ function viewAgenda(id) {
                                     <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Data e Hora</span>
                                     <div class="mt-1">
                                         <p class="text-gray-900 font-medium">
-                                            <i class="fas fa-calendar mr-2 text-blue-600"></i>
+                                            <i class="fas fa-calendar mr-2 " style="color: var(--primary-color);""></i>
                                             ${new Date(agenda.data_inicio).toLocaleDateString('pt-BR')}
                                         </p>
                                         <p class="text-gray-900">
-                                            <i class="fas fa-clock mr-2 text-blue-600"></i>
+                                            <i class="fas fa-clock mr-2 " style="color: var(--primary-color);""></i>
                                             ${new Date(agenda.data_inicio).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})} - 
                                             ${new Date(agenda.data_fim).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}
                                         </p>
@@ -255,7 +255,7 @@ function viewAgenda(id) {
                                 <div>
                                     <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Tipo de Reunião</span>
                                     <p class="mt-1 text-gray-900 font-medium">
-                                        <i class="fas ${agenda.tipo_reuniao === 'online' ? 'fa-video' : agenda.tipo_reuniao === 'presencial' ? 'fa-handshake' : 'fa-users'} mr-2 text-blue-600"></i>
+                                        <i class="fas ${agenda.tipo_reuniao === 'online' ? 'fa-video' : agenda.tipo_reuniao === 'presencial' ? 'fa-handshake' : 'fa-users'} mr-2 " style="color: var(--primary-color);""></i>
                                         ${agenda.tipo_reuniao.charAt(0).toUpperCase() + agenda.tipo_reuniao.slice(1)}
                                     </p>
                                 </div>
@@ -280,7 +280,7 @@ function viewAgenda(id) {
                                         <div class="mt-1 space-y-2">
                                             ${agenda.participantes.map(p => `
                                                 <div class="flex items-center">
-                                                    <i class="fas fa-user mr-2 text-blue-600"></i>
+                                                    <i class="fas fa-user mr-2 " style="color: var(--primary-color);""></i>
                                                     <span class="text-gray-900">${p}</span>
                                                 </div>
                                             `).join('')}
@@ -292,7 +292,7 @@ function viewAgenda(id) {
                                     <div>
                                         <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Link da Reunião</span>
                                         <div class="mt-1">
-                                            <a href="${agenda.meet_link}" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                                            <a href="${agenda.meet_link}" target="_blank" class="inline-flex items-center " style="color: var(--primary-color);" hover:text-blue-800 font-medium">
                                                 <i class="fab fa-google mr-2"></i>
                                                 Abrir Google Meet
                                                 <i class="fas fa-external-link-alt ml-2 text-sm"></i>
@@ -402,5 +402,18 @@ document.addEventListener('DOMContentLoaded', function() {
             font-size: 1.5rem;
         }
     }
-</style>
+        
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
+        }
+    </style>
 @endpush

@@ -10,7 +10,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 flex items-center">
-                        <i class="fas fa-calendar-day text-blue-600 mr-3"></i>
+                        <i class="fas fa-calendar-day " style="color: var(--primary-color);" mr-3"></i>
                         @if($isToday && !$hasDateFilter)
                             Compromissos de Hoje
                         @elseif($hasDateFilter)
@@ -19,7 +19,7 @@
                             Lista de Compromissos
                         @endif
                     </h1>
-                    <p class="text-gray-600 mt-2">
+                    <p style="color: var(--secondary-color);">
                         @if($isToday && !$hasDateFilter)
                             Seus compromissos agendados para hoje
                         @elseif($hasDateFilter)
@@ -47,7 +47,7 @@
                     
                     @if(request('data'))
                         <div class="text-sm text-gray-600 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
-                            <i class="fas fa-filter mr-2 text-blue-600"></i>
+                            <i class="fas fa-filter mr-2 " style="color: var(--primary-color);""></i>
                             Filtrado por: <strong>{{ \Carbon\Carbon::parse(request('data'))->format('d/m/Y') }}</strong>
                         </div>
                     @endif
@@ -80,7 +80,7 @@
         <!-- Alerts -->
         @if(session('success'))
             <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
-                <i class="fas fa-check-circle mr-3 text-green-600"></i>
+                <i class="fas fa-check-circle mr-3 " style="color: var(--accent-color);""></i>
                 {{ session('success') }}
             </div>
         @endif
@@ -97,10 +97,10 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-calendar-day text-blue-600 text-xl"></i>
+                        <i class="fas fa-calendar-day " style="color: var(--primary-color);" text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Hoje</p>
+                        <p style="color: var(--secondary-color);">Hoje</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->count() }}</p>
                     </div>
                 </div>
@@ -108,10 +108,10 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-green-100 rounded-lg">
-                        <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        <i class="fas fa-check-circle " style="color: var(--accent-color);" text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Confirmados</p>
+                        <p style="color: var(--secondary-color);">Confirmados</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('status', 'confirmado')->count() }}</p>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                         <i class="fas fa-clock text-yellow-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Pendentes</p>
+                        <p style="color: var(--secondary-color);">Pendentes</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('status', 'pendente')->count() }}</p>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                         <i class="fas fa-video text-purple-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Online</p>
+                        <p style="color: var(--secondary-color);">Online</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('tipo_reuniao', 'online')->count() }}</p>
                     </div>
                 </div>
@@ -156,7 +156,7 @@
             <!-- Contador de resultados -->
             <div class="mb-6 flex items-center justify-between">
                 <div class="text-sm text-gray-600">
-                    <i class="fas fa-calendar-check mr-2 text-blue-600"></i>
+                    <i class="fas fa-calendar-check mr-2 " style="color: var(--primary-color);""></i>
                     @if($isToday && !$hasDateFilter)
                         <strong>{{ $agendas->count() }}</strong> compromisso(s) para <strong>hoje</strong> ({{ \Carbon\Carbon::parse($dataAtual)->format('d/m/Y') }})
                     @elseif($hasDateFilter)
@@ -182,7 +182,7 @@
                                     <div class="flex-shrink-0">
                                     @if($agenda->status === 'concluida')
                                             <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                                <i class="fas fa-check-circle " style="color: var(--accent-color);" text-xl"></i>
                                             </div>
                                     @elseif($agenda->status === 'agendada')
                                             <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -203,7 +203,7 @@
                                     <div class="flex-1">
                                         <h3 class="text-lg font-semibold text-gray-900">{{ $agenda->titulo }}</h3>
                                         @if($agenda->descricao)
-                                            <p class="text-gray-600 mt-1">{{ Str::limit($agenda->descricao, 100) }}</p>
+                                            <p style="color: var(--secondary-color);">{{ Str::limit($agenda->descricao, 100) }}</p>
                                         @endif
                                         
                                         <div class="flex items-center space-x-6 mt-3">
@@ -267,7 +267,7 @@
                                 <div class="flex items-center space-x-2">
                                     @if($agenda->meet_link)
                                         <a href="{{ $agenda->meet_link }}" target="_blank" 
-                                           class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors"
+                                           class="p-2 " style="color: var(--accent-color);" hover:bg-green-100 rounded-lg transition-colors"
                                            title="Abrir Google Meet"
                                            onclick="event.stopPropagation()">
                                             <i class="fab fa-google text-lg"></i>
@@ -281,7 +281,7 @@
                                     </button>
                                     
                                     <button onclick="event.stopPropagation(); editAgenda({{ $agenda->id }})" 
-                                            class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                                            class="p-2 " style="color: var(--primary-color);" hover:bg-blue-100 rounded-lg transition-colors"
                                             title="Editar">
                                         <i class="fas fa-edit text-lg"></i>
                                     </button>
@@ -379,21 +379,21 @@
                     
                     @if($isToday && !$hasDateFilter)
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum compromisso para hoje</h3>
-                        <p class="text-gray-600 mb-6">
+                        <p style="color: var(--secondary-color);">
                             Você não tem compromissos agendados para hoje ({{ \Carbon\Carbon::parse($dataAtual)->format('d/m/Y') }}).
                             <br>
                             <span class="text-sm">Use o filtro de data acima para ver compromissos de outros dias.</span>
                         </p>
                     @elseif($hasDateFilter)
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum compromisso para {{ \Carbon\Carbon::parse($dataAtual)->format('d/m/Y') }}</h3>
-                        <p class="text-gray-600 mb-6">
+                        <p style="color: var(--secondary-color);">
                             Não há compromissos agendados para esta data.
                             <br>
                             <span class="text-sm">Tente selecionar outra data ou limpe o filtro para ver todos os compromissos.</span>
                         </p>
                     @else
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum compromisso encontrado</h3>
-                        <p class="text-gray-600 mb-6">Não há compromissos agendados.</p>
+                        <p style="color: var(--secondary-color);">Não há compromissos agendados.</p>
                     @endif
                     
                     <div class="flex items-center justify-center space-x-4">
@@ -527,7 +527,7 @@
                 <h3 class="text-xl font-semibold text-gray-900">Confirmar Ação</h3>
             </div>
             <div class="p-6">
-                <p id="confirmMessage" class="text-gray-600 mb-6">Tem certeza que deseja realizar esta ação?</p>
+                <p style="color: var(--secondary-color);">Tem certeza que deseja realizar esta ação?</p>
                 <div class="flex justify-end space-x-4">
                     <button onclick="closeConfirmModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
                         Cancelar
@@ -606,7 +606,7 @@ function viewAgenda(id) {
                         <h4 class="text-xl font-bold">${agenda.titulo}</h4>
                         <p><strong>Data:</strong> ${new Date(agenda.data_inicio).toLocaleString('pt-BR')}</p>
                         <p><strong>Status:</strong> ${agenda.status}</p>
-                        ${agenda.meet_link ? `<a href="${agenda.meet_link}" target="_blank" class="text-blue-600">Google Meet</a>` : ''}
+                        ${agenda.meet_link ? `<a href="${agenda.meet_link}" target="_blank" class="" style="color: var(--primary-color);"">Google Meet</a>` : ''}
                     </div>
                 `;
                 document.getElementById('viewAgendaModal').classList.remove('hidden');
@@ -676,7 +676,20 @@ function showToast(message, type = 'info') {
             gap: 0.5rem;
         }
     }
-</style>
+        
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
+        }
+    </style>
 @endpush
 
 <!-- Modal de Confirmação de Exclusão -->
@@ -687,7 +700,7 @@ function showToast(message, type = 'info') {
                 <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-4">Confirmar Exclusão</h3>
-            <p class="text-gray-600 mb-6">
+            <p style="color: var(--secondary-color);">
                 Tem certeza que deseja excluir a reunião 
                 <strong id="deleteAgendaTitle" class="text-gray-900"></strong>?
                 <br><br>
@@ -715,7 +728,7 @@ function showToast(message, type = 'info') {
         <div class="p-8">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-2xl font-bold text-gray-900 flex items-center">
-                    <i class="fas fa-calendar-alt text-blue-600 mr-3"></i>
+                    <i class="fas fa-calendar-alt " style="color: var(--primary-color);" mr-3"></i>
                     Detalhes da Reunião
                 </h3>
                 <button onclick="closeDetailsModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
@@ -736,7 +749,7 @@ function showToast(message, type = 'info') {
         <div class="p-8">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-2xl font-bold text-gray-900 flex items-center">
-                    <i class="fas fa-edit text-blue-600 mr-3"></i>
+                    <i class="fas fa-edit " style="color: var(--primary-color);" mr-3"></i>
                     Editar Reunião
                 </h3>
                 <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-2xl">

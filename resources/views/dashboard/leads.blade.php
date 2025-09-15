@@ -10,6 +10,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -22,6 +25,19 @@
             background: rgba(255, 255, 255, 0.2);
             border-left: 4px solid white;
         }
+            
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -32,11 +48,11 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Leads</h1>
-                        <p class="text-gray-600">Gerencie todos os leads da sua empresa</p>
+                        <h1 class="text-2xl font-bold" style="color: var(--text-color);">Leads</h1>
+                        <p style="color: var(--secondary-color);">Gerencie todos os leads da sua empresa</p>
                     </div>
                     <div class="flex items-center space-x-4">
                         <button class="p-2 text-gray-400 hover:text-gray-600">
@@ -62,7 +78,7 @@
                     <div class="flex justify-between items-center mb-8">
                         <div>
                             <h1 class="text-3xl font-bold text-gray-900">Leads</h1>
-                            <p class="text-gray-600">Gerencie todos os leads da sua empresa</p>
+                            <p style="color: var(--secondary-color);">Gerencie todos os leads da sua empresa</p>
                         </div>
                         <button onclick="openAddLeadModal()" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                             <i class="fas fa-plus mr-2"></i>
@@ -75,11 +91,11 @@
         <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-600 text-sm font-medium">Total de Leads</p>
+                    <p style="color: var(--secondary-color);">Total de Leads</p>
                     <p class="text-3xl font-bold text-gray-900">{{ $leads->count() }}</p>
                 </div>
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-users text-blue-600 text-xl"></i>
+                    <i class="fas fa-users " style="color: var(--primary-color);" text-xl"></i>
                 </div>
             </div>
         </div>
@@ -87,11 +103,11 @@
         <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-600 text-sm font-medium">Novos</p>
-                    <p class="text-3xl font-bold text-blue-600">{{ $leads->where('status', 'novo')->count() }}</p>
+                    <p style="color: var(--secondary-color);">Novos</p>
+                    <p class="text-3xl font-bold " style="color: var(--primary-color);"">{{ $leads->where('status', 'novo')->count() }}</p>
                 </div>
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-star text-blue-600 text-xl"></i>
+                    <i class="fas fa-star " style="color: var(--primary-color);" text-xl"></i>
                 </div>
             </div>
         </div>
@@ -99,11 +115,11 @@
         <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-600 text-sm font-medium">Qualificados</p>
-                    <p class="text-3xl font-bold text-green-600">{{ $leads->where('status', 'qualificado')->count() }}</p>
+                    <p style="color: var(--secondary-color);">Qualificados</p>
+                    <p class="text-3xl font-bold " style="color: var(--accent-color);"">{{ $leads->where('status', 'qualificado')->count() }}</p>
                 </div>
                 <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                    <i class="fas fa-check-circle " style="color: var(--accent-color);" text-xl"></i>
                 </div>
             </div>
         </div>
@@ -111,7 +127,7 @@
         <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-600 text-sm font-medium">Fechados</p>
+                    <p style="color: var(--secondary-color);">Fechados</p>
                     <p class="text-3xl font-bold text-purple-600">{{ $leads->where('status', 'fechado')->count() }}</p>
                 </div>
                 <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -172,7 +188,7 @@
                             @if($lead->licenciado)
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-2">
-                                        <i class="fas fa-user text-green-600 text-xs"></i>
+                                        <i class="fas fa-user " style="color: var(--accent-color);" text-xs"></i>
                                     </div>
                                     <div>
                                         <div class="text-sm font-medium text-gray-900">{{ $lead->licenciado->name }}</div>
@@ -194,13 +210,13 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center space-x-2">
-                                <button onclick="viewLead({{ $lead->id }})" class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-100 transition-colors duration-200" title="Visualizar">
+                                <button onclick="viewLead({{ $lead->id }})" class="" style="color: var(--primary-color);" hover:text-blue-900 p-1 rounded hover:bg-blue-100 transition-colors duration-200" title="Visualizar">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button onclick="editLead({{ $lead->id }})" class="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100 transition-colors duration-200" title="Editar">
+                                <button onclick="editLead({{ $lead->id }})" class="" style="color: var(--accent-color);" hover:text-green-900 p-1 rounded hover:bg-green-100 transition-colors duration-200" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button onclick="assignLead({{ $lead->id }})" class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-100 transition-colors duration-200" title="Atribuir Licenciado">
+                                <button onclick="assignLead({{ $lead->id }})" class="" style="color: var(--primary-color);" hover:text-indigo-900 p-1 rounded hover:bg-indigo-100 transition-colors duration-200" title="Atribuir Licenciado">
                                     <i class="fas fa-user-plus"></i>
                                 </button>
                                 <button onclick="deleteLead({{ $lead->id }})" class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-100 transition-colors duration-200" title="Excluir">
@@ -408,7 +424,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h4 class="text-lg font-semibold text-gray-800" id="followup-lead-nome">Nome do Lead</h4>
-                        <p class="text-sm text-gray-600" id="followup-lead-empresa">Empresa</p>
+                        <p style="color: var(--secondary-color);">Empresa</p>
                     </div>
                     <div class="text-right">
                         <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800" id="followup-lead-status">Status</span>
@@ -563,7 +579,7 @@
         <!-- Modal Body -->
         <div class="p-6">
             <div class="mb-4">
-                <p class="text-gray-600 mb-2">Lead:</p>
+                <p style="color: var(--secondary-color);">Lead:</p>
                 <div id="leadInfo" class="bg-gray-50 rounded-lg p-3 border">
                     <!-- Lead info will be populated here -->
                 </div>

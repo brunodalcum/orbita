@@ -13,7 +13,7 @@
                         <i class="fas fa-clock text-orange-600 mr-4"></i>
                         Aprovação de Compromissos
                     </h1>
-                    <p class="text-gray-600 mt-2">Gerencie as solicitações de reuniões pendentes de aprovação</p>
+                    <p style="color: var(--secondary-color);">Gerencie as solicitações de reuniões pendentes de aprovação</p>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-2">
@@ -31,7 +31,7 @@
         <!-- Alertas -->
         @if(session('success'))
             <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
-                <i class="fas fa-check-circle mr-3 text-green-600"></i>
+                <i class="fas fa-check-circle mr-3 " style="color: var(--accent-color);""></i>
                 {{ session('success') }}
             </div>
         @endif
@@ -88,7 +88,7 @@
                                         </div>
 
                                         @if($agenda->descricao)
-                                            <p class="text-gray-600 mb-3">{{ Str::limit($agenda->descricao, 150) }}</p>
+                                            <p style="color: var(--secondary-color);">{{ Str::limit($agenda->descricao, 150) }}</p>
                                         @endif
                                         
                                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
@@ -151,11 +151,11 @@
                                         @if($agenda->meet_link)
                                             <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
                                                 <div class="flex items-center">
-                                                    <i class="fas fa-video text-blue-600 mr-2"></i>
+                                                    <i class="fas fa-video " style="color: var(--primary-color);" mr-2"></i>
                                                     <span class="text-sm font-medium text-blue-800">Link da Reunião:</span>
                                                 </div>
                                                 <a href="{{ $agenda->meet_link }}" target="_blank" 
-                                                   class="text-blue-600 hover:text-blue-800 text-sm break-all">
+                                                   class="" style="color: var(--primary-color);" hover:text-blue-800 text-sm break-all">
                                                     {{ $agenda->meet_link }}
                                                 </a>
                                             </div>
@@ -222,10 +222,10 @@
                 <!-- Estado Vazio -->
                 <div class="p-12 text-center">
                     <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-check-circle text-green-600 text-3xl"></i>
+                        <i class="fas fa-check-circle " style="color: var(--accent-color);" text-3xl"></i>
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">Nenhuma solicitação pendente!</h3>
-                    <p class="text-gray-600 mb-6">Todas as solicitações de reunião foram processadas.</p>
+                    <p style="color: var(--secondary-color);">Todas as solicitações de reunião foram processadas.</p>
                     <a href="{{ route('dashboard.agenda') }}" 
                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
                         <i class="fas fa-calendar mr-2"></i>
@@ -243,7 +243,7 @@
         <div class="p-8">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-2xl font-bold text-gray-900 flex items-center">
-                    <i class="fas fa-eye text-blue-600 mr-3"></i>
+                    <i class="fas fa-eye " style="color: var(--primary-color);" mr-3"></i>
                     Detalhes da Solicitação
                 </h3>
                 <button onclick="closeViewAgendaModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
@@ -391,7 +391,7 @@ function viewAgenda(agendaId) {
                         ${agenda.meet_link ? `
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Link da Reunião</label>
-                            <a href="${agenda.meet_link}" target="_blank" class="text-blue-600 hover:text-blue-800 break-all">${agenda.meet_link}</a>
+                            <a href="${agenda.meet_link}" target="_blank" class="" style="color: var(--primary-color);" hover:text-blue-800 break-all">${agenda.meet_link}</a>
                         </div>
                         ` : ''}
                         

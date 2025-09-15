@@ -10,6 +10,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -125,7 +128,7 @@
             transform: scale(1.02);
         }
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient); color: var(--primary-text);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -219,7 +222,7 @@
             50% { transform: translateY(-20px) rotate(180deg); }
         }
         .header-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient); color: var(--primary-text);
             position: relative;
             overflow: hidden;
         }
@@ -232,6 +235,19 @@
             bottom: 0;
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="header-grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23header-grain)"/></svg>');
             pointer-events: none;
+        }
+            
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
         }
     </style>
 </head>
@@ -270,7 +286,7 @@
                     <nav class="flex mb-8" aria-label="Breadcrumb">
                         <ol class="inline-flex items-center space-x-2">
                             <li class="inline-flex items-center">
-                                <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+                                <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-600 hover:" style="color: var(--primary-color);" transition-colors">
                                     <i class="fas fa-home mr-2"></i>
                                     Dashboard
                                 </a>
@@ -298,7 +314,7 @@
                                 <i class="fas fa-cogs text-white text-2xl"></i>
                             </div>
                             <h2 class="text-3xl font-bold text-gray-800 mb-3">Configurações do Sistema</h2>
-                            <p class="text-gray-600 text-lg max-w-2xl mx-auto">Configure as informações básicas e personalize a identidade visual do seu portal</p>
+                            <p style="color: var(--secondary-color);">Configure as informações básicas e personalize a identidade visual do seu portal</p>
                         </div>
 
                         <form id="configForm" enctype="multipart/form-data" class="space-y-8">
@@ -334,12 +350,12 @@
                                 <div class="upload-area rounded-2xl p-8 text-center">
                                     <div class="mb-6">
                                         <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl mb-4">
-                                            <i class="fas fa-cloud-upload-alt text-3xl text-green-600"></i>
+                                            <i class="fas fa-cloud-upload-alt text-3xl " style="color: var(--accent-color);""></i>
                                         </div>
                                     </div>
                                     <div class="mb-6">
                                         <p class="text-lg text-gray-700 mb-2">
-                                            <span class="font-semibold text-green-600">Clique para fazer upload</span> ou arraste e solte
+                                            <span class="font-semibold " style="color: var(--accent-color);"">Clique para fazer upload</span> ou arraste e solte
                                         </p>
                                         <p class="text-sm text-gray-500">PNG, JPG, GIF até 2MB</p>
                                     </div>

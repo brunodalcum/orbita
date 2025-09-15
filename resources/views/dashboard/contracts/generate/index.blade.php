@@ -11,6 +11,9 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     @endif
     
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -22,7 +25,7 @@
         
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center space-x-4">
                         <a href="{{ route('contracts.index') }}"
@@ -31,11 +34,11 @@
                         </a>
                         <div class="h-6 border-l border-gray-300"></div>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-800">
-                                <i class="fas fa-file-contract text-blue-600 mr-3"></i>
+                            <h1 class="text-2xl font-bold " style="color: var(--text-color);"">
+                                <i class="fas fa-file-contract " style="color: var(--primary-color);" mr-3"></i>
                                 Gerar Contrato
                             </h1>
-                            <p class="text-gray-600 mt-1">Etapa 1 de 3 • Selecionar Licenciado</p>
+                            <p class="" style="color: var(--secondary-color);" mt-1">Etapa 1 de 3 • Selecionar Licenciado</p>
                         </div>
                     </div>
                 </div>
@@ -80,7 +83,7 @@
                     <div class="bg-white rounded-lg shadow-sm border">
                         <div class="p-6 border-b">
                             <h3 class="text-lg font-semibold text-gray-800">Selecionar Licenciado</h3>
-                            <p class="text-gray-600 mt-1">Escolha o licenciado para o qual deseja gerar o contrato</p>
+                            <p class="" style="color: var(--secondary-color);" mt-1">Escolha o licenciado para o qual deseja gerar o contrato</p>
                             <div class="mt-3 flex items-center space-x-4 text-xs text-gray-500">
                                 <span class="flex items-center">
                                     <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>

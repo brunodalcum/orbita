@@ -10,10 +10,10 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 flex items-center">
-                        <i class="fas fa-list-alt text-blue-600 mr-3"></i>
+                        <i class="fas fa-list-alt " style="color: var(--primary-color);" mr-3"></i>
                         Lista de Compromissos
                     </h1>
-                    <p class="text-gray-600 mt-2">Gerencie todos os seus compromissos e reuniões</p>
+                    <p style="color: var(--secondary-color);">Gerencie todos os seus compromissos e reuniões</p>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center bg-white rounded-lg shadow-sm border border-gray-200">
@@ -35,10 +35,10 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-calendar-day text-blue-600 text-xl"></i>
+                        <i class="fas fa-calendar-day " style="color: var(--primary-color);" text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Hoje</p>
+                        <p style="color: var(--secondary-color);">Hoje</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->count() }}</p>
                     </div>
                 </div>
@@ -46,10 +46,10 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-green-100 rounded-lg">
-                        <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        <i class="fas fa-check-circle " style="color: var(--accent-color);" text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Confirmados</p>
+                        <p style="color: var(--secondary-color);">Confirmados</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('status', 'confirmado')->count() }}</p>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                         <i class="fas fa-clock text-yellow-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Pendentes</p>
+                        <p style="color: var(--secondary-color);">Pendentes</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('status', 'pendente')->count() }}</p>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                         <i class="fas fa-video text-purple-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm text-gray-600">Online</p>
+                        <p style="color: var(--secondary-color);">Online</p>
                         <p class="text-2xl font-bold text-gray-900">{{ $agendas->where('tipo_reuniao', 'online')->count() }}</p>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                                     <div class="flex-shrink-0">
                                         @if($agenda->status === 'confirmado')
                                             <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                                <i class="fas fa-check-circle " style="color: var(--accent-color);" text-xl"></i>
                                             </div>
                                         @elseif($agenda->status === 'pendente')
                                             <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -122,7 +122,7 @@
                                     <div class="flex-1">
                                         <h3 class="text-lg font-semibold text-gray-900">{{ $agenda->titulo }}</h3>
                                         @if($agenda->descricao)
-                                            <p class="text-gray-600 mt-1">{{ Str::limit($agenda->descricao, 100) }}</p>
+                                            <p style="color: var(--secondary-color);">{{ Str::limit($agenda->descricao, 100) }}</p>
                                         @endif
                                         
                                         <div class="flex items-center space-x-6 mt-3">
@@ -159,7 +159,7 @@
                                 <div class="flex items-center space-x-2">
                                     @if($agenda->meet_link)
                                         <a href="{{ $agenda->meet_link }}" target="_blank" 
-                                           class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors"
+                                           class="p-2 " style="color: var(--accent-color);" hover:bg-green-100 rounded-lg transition-colors"
                                            title="Abrir Google Meet"
                                            onclick="event.stopPropagation()">
                                             <i class="fab fa-google text-lg"></i>
@@ -167,7 +167,7 @@
                                     @endif
                                     
                                     <button onclick="event.stopPropagation(); editAgenda({{ $agenda->id }})" 
-                                            class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                                            class="p-2 " style="color: var(--primary-color);" hover:bg-blue-100 rounded-lg transition-colors"
                                             title="Editar">
                                         <i class="fas fa-edit text-lg"></i>
                                     </button>
@@ -200,7 +200,7 @@
                         <i class="fas fa-calendar-times text-gray-400 text-2xl"></i>
                     </div>
                     <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum compromisso encontrado</h3>
-                    <p class="text-gray-600 mb-6">Não há compromissos agendados para esta data.</p>
+                    <p style="color: var(--secondary-color);">Não há compromissos agendados para esta data.</p>
                     <button onclick="openAddAgendaModal()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
                         <i class="fas fa-plus mr-2"></i>
                         Agendar Primeira Reunião
@@ -258,5 +258,18 @@ function changeDate(newDate) {
             gap: 0.5rem;
         }
     }
-</style>
+        
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
+        }
+    </style>
 @endpush

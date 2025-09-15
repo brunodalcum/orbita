@@ -8,11 +8,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
+    
     <style>
         body { font-family: 'Inter', sans-serif; }
         .card { 
             background: white; 
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        }
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
         }
     </style>
 </head>
@@ -24,18 +32,18 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div class="flex items-center">
-                        <a href="{{ route('contracts.index') }}" class="mr-4 text-gray-600 hover:text-gray-800">
+                        <a href="{{ route('contracts.index') }}" class="mr-4 hover:opacity-80" style="color: var(--secondary-color);">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-800">
-                                <i class="fas fa-plus text-green-600 mr-3"></i>
+                            <h1 class="text-2xl font-bold" style="color: var(--text-color);">
+                                <i class="fas fa-plus mr-3" style="color: var(--primary-color);"></i>
                                 Novo Contrato
                             </h1>
-                            <p class="text-gray-600 mt-1">Criar um novo contrato para licenciado</p>
+                            <p class="mt-1" style="color: var(--secondary-color);">Criar um novo contrato para licenciado</p>
                         </div>
                     </div>
                 </div>

@@ -11,12 +11,15 @@
     <link href="{{ asset('app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient); color: var(--primary-text);
             transition: all 0.3s ease;
         }
         .btn-primary:hover {
@@ -90,6 +93,19 @@
             transform: translateY(-2px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
+            
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -100,11 +116,11 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Operações</h1>
-                        <p class="text-gray-600">Gerencie as operações do sistema</p>
+                        <h1 class="text-2xl font-bold" style="color: var(--text-color);">Operações</h1>
+                        <p style="color: var(--secondary-color);">Gerencie as operações do sistema</p>
                     </div>
                     <div class="flex items-center space-x-4">
                         <button class="p-2 text-gray-400 hover:text-gray-600">
@@ -129,7 +145,7 @@
                 <nav class="flex mb-6" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 md:space-x-3">
                         <li class="inline-flex items-center">
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:" style="color: var(--primary-color);"">
                                 <i class="fas fa-home mr-2"></i>
                                 Dashboard
                             </a>
@@ -149,7 +165,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <h2 class="text-xl font-semibold text-gray-800">Lista de Operações</h2>
-                                <p class="text-sm text-gray-600">Total de {{ $operacoes->count() }} operações cadastradas</p>
+                                <p style="color: var(--secondary-color);">Total de {{ $operacoes->count() }} operações cadastradas</p>
                             </div>
                             <button 
                                 onclick="openModal()" 
@@ -175,7 +191,7 @@
                                                         <i class="fas fa-cogs text-white text-lg"></i>
                                                     </div>
                                                     <div class="ml-3">
-                                                        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                                                        <h3 class="text-lg font-semibold text-gray-800 group-hover:" style="color: var(--primary-color);" transition-colors">
                                                             {{ $operacao->nome }}
                                                         </h3>
                                                         <p class="text-sm text-gray-500">ID: #{{ $operacao->id }}</p>
@@ -184,14 +200,14 @@
                                                 <div class="flex items-center space-x-1">
                                                     <button 
                                                         onclick="editOperacao({{ $operacao->id }}, '{{ $operacao->nome }}', '{{ $operacao->adquirente }}')"
-                                                        class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                                                        class="p-2 text-gray-400 hover:" style="color: var(--primary-color);" hover:bg-blue-50 rounded-lg transition-all duration-200"
                                                         title="Editar"
                                                     >
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                     <button 
                                                         onclick="openPlanosModal({{ $operacao->id }}, '{{ $operacao->nome }}')"
-                                                        class="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200"
+                                                        class="p-2 text-gray-400 hover:" style="color: var(--accent-color);" hover:bg-green-50 rounded-lg transition-all duration-200"
                                                         title="Planos"
                                                     >
                                                         <i class="fas fa-list-alt"></i>
@@ -210,7 +226,7 @@
                                             <div class="space-y-3">
                                                 <div class="flex items-center p-3 bg-blue-50 rounded-lg">
                                                     <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                                                        <i class="fas fa-building text-blue-600 text-sm"></i>
+                                                        <i class="fas fa-building " style="color: var(--primary-color);" text-sm"></i>
                                                     </div>
                                                     <div>
                                                         <p class="text-xs font-medium text-blue-800 uppercase tracking-wide">Adquirente</p>
@@ -220,7 +236,7 @@
 
                                                 <div class="flex items-center p-3 bg-green-50 rounded-lg">
                                                     <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                                                        <i class="fas fa-calendar-alt text-green-600 text-sm"></i>
+                                                        <i class="fas fa-calendar-alt " style="color: var(--accent-color);" text-sm"></i>
                                                     </div>
                                                     <div>
                                                         <p class="text-xs font-medium text-green-800 uppercase tracking-wide">Data de Cadastro</p>
@@ -351,7 +367,7 @@
             <div class="mb-4">
                 <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">Confirmar Exclusão</h3>
-                <p class="text-gray-600" id="deleteConfirmMessage">
+                <p style="color: var(--secondary-color);">
                     Tem certeza que deseja excluir esta operação?
                 </p>
             </div>
@@ -389,7 +405,7 @@
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <h4 class="text-lg font-semibold text-gray-800" id="operacaoNomePlanos"></h4>
-                        <p class="text-sm text-gray-600">Gerencie os planos desta operação</p>
+                        <p style="color: var(--secondary-color);">Gerencie os planos desta operação</p>
                     </div>
                     <button 
                         onclick="openNovoPlanoModal()"

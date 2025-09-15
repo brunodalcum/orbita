@@ -11,6 +11,9 @@
     <link href="{{ asset('app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Branding Dinâmico -->
+    <x-dynamic-branding />
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -24,7 +27,7 @@
             border-left: 4px solid white;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-gradient); color: var(--primary-text);
             transition: all 0.3s ease;
         }
         .btn-primary:hover {
@@ -93,6 +96,19 @@
             text-align: center;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
+            
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -103,11 +119,11 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Adquirentes</h1>
-                        <p class="text-gray-600">Gerencie os adquirentes do sistema</p>
+                        <h1 class="text-2xl font-bold" style="color: var(--text-color);">Adquirentes</h1>
+                        <p style="color: var(--secondary-color);">Gerencie os adquirentes do sistema</p>
                     </div>
                     <div class="flex items-center space-x-4">
                         <button class="p-2 text-gray-400 hover:text-gray-600">
@@ -132,7 +148,7 @@
                 <nav class="flex mb-6" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 md:space-x-3">
                         <li class="inline-flex items-center">
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:" style="color: var(--primary-color);"">
                                 <i class="fas fa-home mr-2"></i>
                                 Dashboard
                             </a>
@@ -152,7 +168,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <h2 class="text-xl font-semibold text-gray-800">Lista de Adquirentes</h2>
-                                <p class="text-sm text-gray-600">Total de {{ $adquirentes->count() }} adquirentes cadastrados</p>
+                                <p style="color: var(--secondary-color);">Total de {{ $adquirentes->count() }} adquirentes cadastrados</p>
                             </div>
                             <button 
                                 onclick="openAddAdquirenteModal()" 
@@ -293,7 +309,7 @@
                         <button type="button" onclick="closeAdquirenteModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">
                             Cancelar
                         </button>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                        <button type="submit" class="btn-primary px-4 py-2 rounded-md">
                             Salvar
                         </button>
                     </div>
@@ -606,6 +622,19 @@
     .toast.error {
         background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     }
-</style>
+        
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
+        }
+    </style>
 </body>
 </html>

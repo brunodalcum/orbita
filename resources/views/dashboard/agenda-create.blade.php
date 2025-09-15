@@ -14,7 +14,7 @@
                 <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
                     Nova Reunião
                 </h1>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                <p style="color: var(--secondary-color);">
                     ✨ Crie uma reunião incrível e envie convites automáticos para todos os participantes
                 </p>
             </div>
@@ -22,7 +22,7 @@
             <!-- Breadcrumb -->
             <div class="flex items-center justify-center mb-6">
                 <nav class="flex items-center space-x-2 text-sm bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
-                    <a href="{{ route('dashboard.agenda') }}" class="text-blue-600 hover:text-blue-800 font-medium flex items-center transition-colors">
+                    <a href="{{ route('dashboard.agenda') }}" class="" style="color: var(--primary-color);" hover:text-blue-800 font-medium flex items-center transition-colors">
                         <i class="fas fa-calendar-alt mr-1"></i>
                         Agenda
                     </a>
@@ -46,7 +46,7 @@
                             <!-- Assunto -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">
-                                    <i class="fas fa-heading text-blue-600 mr-2"></i>
+                                    <i class="fas fa-heading " style="color: var(--primary-color);" mr-2"></i>
                                     Assunto da Reunião *
                                 </label>
                                 <input type="text" 
@@ -63,8 +63,8 @@
 
                             <!-- Licenciado -->
                             <div class="group">
-                                <label class="block text-sm font-semibold text-gray-700 mb-3 group-focus-within:text-blue-600 transition-colors">
-                                    <i class="fas fa-user-tie text-blue-600 mr-2"></i>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3 group-focus-within:" style="color: var(--primary-color);" transition-colors">
+                                    <i class="fas fa-user-tie " style="color: var(--primary-color);" mr-2"></i>
                                     Licenciado
                                 </label>
                                 <div class="relative">
@@ -93,7 +93,7 @@
                                         </div>
                                         <div>
                                             <p class="font-semibold text-green-800" id="licenciadoNome"></p>
-                                            <p class="text-sm text-green-600" id="licenciadoEmail"></p>
+                                            <p class="text-sm " style="color: var(--accent-color);"" id="licenciadoEmail"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                             <!-- Participantes Adicionais -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">
-                                    <i class="fas fa-users text-blue-600 mr-2"></i>
+                                    <i class="fas fa-users " style="color: var(--primary-color);" mr-2"></i>
                                     Participantes Adicionais
                                 </label>
                                 <div>
@@ -134,7 +134,7 @@
                             <!-- Formato da Reunião -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">
-                                    <i class="fas fa-video text-blue-600 mr-2"></i>
+                                    <i class="fas fa-video " style="color: var(--primary-color);" mr-2"></i>
                                     Formato da Reunião *
                                 </label>
                                 <div class="grid grid-cols-1 gap-4">
@@ -142,7 +142,7 @@
                                         <input type="radio" 
                                                name="tipo_reuniao" 
                                                value="online" 
-                                               class="text-blue-600 focus:ring-blue-500 w-5 h-5"
+                                               class="" style="color: var(--primary-color);" focus:ring-blue-500 w-5 h-5"
                                                {{ old('tipo_reuniao', 'online') == 'online' ? 'checked' : '' }}>
                                         <div class="ml-4 flex-1">
                                             <div class="flex items-center mb-2">
@@ -151,7 +151,7 @@
                                                 </div>
                                                 <span class="font-semibold text-gray-900 text-lg">Online (Google Meet)</span>
                                             </div>
-                                            <p class="text-sm text-gray-600 ml-13">✨ Link do Meet será gerado automaticamente</p>
+                                            <p style="color: var(--secondary-color);">✨ Link do Meet será gerado automaticamente</p>
                                         </div>
                                         <div class="text-blue-500">
                                             <i class="fas fa-check-circle text-2xl opacity-0 transition-opacity duration-300"></i>
@@ -162,7 +162,7 @@
                                         <input type="radio" 
                                                name="tipo_reuniao" 
                                                value="presencial" 
-                                               class="text-green-600 focus:ring-green-500 w-5 h-5"
+                                               class="" style="color: var(--accent-color);" focus:ring-green-500 w-5 h-5"
                                                {{ old('tipo_reuniao') == 'presencial' ? 'checked' : '' }}>
                                         <div class="ml-4 flex-1">
                                             <div class="flex items-center mb-2">
@@ -171,7 +171,7 @@
                                                 </div>
                                                 <span class="font-semibold text-gray-900 text-lg">Presencial</span>
                                             </div>
-                                            <p class="text-sm text-gray-600 ml-13">🏢 Reunião no escritório ou local físico</p>
+                                            <p style="color: var(--secondary-color);">🏢 Reunião no escritório ou local físico</p>
                                         </div>
                                         <div class="text-green-500">
                                             <i class="fas fa-check-circle text-2xl opacity-0 transition-opacity duration-300"></i>
@@ -191,7 +191,7 @@
                                                 </div>
                                                 <span class="font-semibold text-gray-900 text-lg">Híbrida</span>
                                             </div>
-                                            <p class="text-sm text-gray-600 ml-13">🌐 Alguns presenciais, outros online</p>
+                                            <p style="color: var(--secondary-color);">🌐 Alguns presenciais, outros online</p>
                                         </div>
                                         <div class="text-purple-500">
                                             <i class="fas fa-check-circle text-2xl opacity-0 transition-opacity duration-300"></i>
@@ -245,7 +245,7 @@
                             <!-- Link do Google Meet -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">
-                                    <i class="fab fa-google text-blue-600 mr-2"></i>
+                                    <i class="fab fa-google " style="color: var(--primary-color);" mr-2"></i>
                                     Link do Google Meet (Opcional)
                                 </label>
                                 <div class="relative">
@@ -274,7 +274,7 @@
                             <!-- Observações -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">
-                                    <i class="fas fa-sticky-note text-blue-600 mr-2"></i>
+                                    <i class="fas fa-sticky-note " style="color: var(--primary-color);" mr-2"></i>
                                     Observações
                                 </label>
                                 <textarea name="descricao" 
@@ -345,7 +345,7 @@
                     
                     <!-- Aviso sobre o botão -->
                     <div class="mt-4 text-center">
-                        <p class="text-sm text-gray-600 flex items-center justify-center">
+                        <p style="color: var(--secondary-color);">
                             <i class="fas fa-info-circle mr-2 text-blue-500"></i>
                             Preencha todos os campos obrigatórios e clique em "Salvar Reunião"
                         </p>
@@ -608,11 +608,11 @@ function showToast(message, type = 'info') {
     const toastMessage = document.getElementById('toastMessage');
     
     if (type === 'success') {
-        toastIcon.className = 'fas fa-check-circle text-green-600 text-xl';
+        toastIcon.className = 'fas fa-check-circle " style="color: var(--accent-color);" text-xl';
     } else if (type === 'error') {
         toastIcon.className = 'fas fa-exclamation-circle text-red-600 text-xl';
     } else {
-        toastIcon.className = 'fas fa-info-circle text-blue-600 text-xl';
+        toastIcon.className = 'fas fa-info-circle " style="color: var(--primary-color);" text-xl';
     }
     
     toastMessage.textContent = message;
@@ -903,5 +903,18 @@ function previewReuniao() {
     .shadow-custom-lg {
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
-</style>
+        
+        /* Estilos dinâmicos do dashboard */
+        .dashboard-header {
+            background: var(--background-color);
+            color: var(--text-color);
+        }
+        .stat-card {
+            background: var(--primary-gradient);
+            color: var(--primary-text);
+        }
+        .progress-bar {
+            background: var(--accent-gradient);
+        }
+    </style>
 @endpush
