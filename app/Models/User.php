@@ -260,7 +260,8 @@ class User extends Authenticatable
      */
     public function branding(): HasOne
     {
-        return $this->hasOne(NodeBranding::class, 'node_id');
+        return $this->hasOne(NodeBranding::class, 'node_id')
+                    ->where('node_type', $this->node_type ?? 'user');
     }
     
     /**
@@ -436,13 +437,13 @@ class User extends Authenticatable
         
         // Super Admin usa logomarca da Órbita por padrão, mas permite personalização
         if ($this->isSuperAdminNode()) {
-            // Se não há branding personalizado, usar logo da Órbita
-            if (!$nodeBranding || $nodeBranding->inherit_from_parent) {
+            // Se não há branding personalizado OU se está configurado para herdar, usar logo da Órbita
+            if (!$nodeBranding || ($nodeBranding->inherit_from_parent && !$nodeBranding->logo_url)) {
                 $finalBranding['logo_url'] = 'branding/orbita/orbita-logo.svg';
                 $finalBranding['logo_small_url'] = 'branding/orbita/orbita-logo-small.svg';
                 $finalBranding['favicon_url'] = 'branding/orbita/orbita-favicon.svg';
             }
-            // Se há branding personalizado, manter as configurações personalizadas
+            // Se há branding personalizado e não está herdando, usar as configurações personalizadas
         }
         
         return $finalBranding;
