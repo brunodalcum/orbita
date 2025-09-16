@@ -63,10 +63,8 @@
     <!-- CSS ABRANGENTE - BRANDING EM TODAS AS PÁGINAS -->
     <!-- CSS ESPECÍFICO PARA ELEMENTOS TEIMOSOS -->
     <link href="{{ asset('css/specific-elements-fix.css') }}" rel="stylesheet">
-    <!-- SISTEMA UNIFICADO DE BRANDING -->
-    <!-- SISTEMA SIMPLES DE BRANDING -->
-    <link href="{{ asset('css/simple-branding.css') }}" rel="stylesheet">
-    <x-simple-branding />
+    <!-- CSS Mínimo para Funcionalidade Básica -->
+    <link href="{{ asset('css/minimal-functionality.css') }}" rel="stylesheet">
 </head>
     <body class="font-sans antialiased">
         <x-banner />

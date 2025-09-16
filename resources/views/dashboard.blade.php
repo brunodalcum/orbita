@@ -1,4 +1,4 @@
-<x-simple-branding />
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -140,14 +140,14 @@ input:focus, select:focus, textarea:focus {
 
 <style>
 /* CORREÇÃO ESPECÍFICA PARA ESTA PÁGINA */
-.dashboard-page .flex.items-center.justify-between:not(.sidebar-gradient *) {
+. .flex.items-center.justify-between:not(.sidebar-gradient *) {
     background: var(--primary-gradient) !important;
     color: var(--primary-text) !important;
 }
-.dashboard-page .flex.items-center.justify-between:not(.sidebar-gradient *) * {
+. .flex.items-center.justify-between:not(.sidebar-gradient *) * {
     color: var(--primary-text) !important;
 }
-.dashboard-page .w-12.h-12:not(.sidebar-gradient *) {
+. .w-12.h-12:not(.sidebar-gradient *) {
     background-color: var(--primary-light) !important;
     color: var(--primary-color) !important;
 }
@@ -156,7 +156,7 @@ input:focus, select:focus, textarea:focus {
 }
 </style>
 </head>
-<body class="dashboard-page bg-gray-50">
+<body class=" bg-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar Dinâmico -->
         <x-dynamic-sidebar />

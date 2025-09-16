@@ -14,35 +14,35 @@
     $badgeClass = '';
     if ($user) {
         if ($user->isSuperAdminNode()) {
-            $nodeTypeClass = 'super-admin-sidebar';
+            $nodeTypeClass = 'super-admin-w-64 flex-shrink-0 bg-gray-800';
             $badgeClass = 'super-admin-badge';
         } elseif ($user->node_type === 'operacao') {
-            $nodeTypeClass = 'operacao-sidebar';
+            $nodeTypeClass = 'operacao-w-64 flex-shrink-0 bg-gray-800';
             $badgeClass = 'operacao-badge';
         } elseif ($user->node_type === 'white_label') {
-            $nodeTypeClass = 'white-label-sidebar';
+            $nodeTypeClass = 'white-label-w-64 flex-shrink-0 bg-gray-800';
             $badgeClass = 'white-label-badge';
         }
     }
     
     // Usar cores CSS dinâmicas
-    $textColor = 'white'; // Padrão para sidebar com gradiente
+    $textColor = 'white'; // Padrão para w-64 flex-shrink-0 bg-gray-800 com gradiente
 @endphp
 
-<div class="w-64 flex-shrink-0 relative sidebar {{ $nodeTypeClass }}">
+<div class="w-64 flex-shrink-0 relative w-64 flex-shrink-0 bg-gray-800 {{ $nodeTypeClass }}">
     <div class="p-6">
         <!-- Logo -->
         <div class="flex items-center justify-center mb-8 w-full">
-            <div class="logo-container sidebar-logo-container">
+            <div class="logo-container w-64 flex-shrink-0 bg-gray-800-logo-container">
                 @if($logoUrl)
                     <img src="{{ asset('storage/' . $logoUrl) }}?v={{ time() }}" 
                          alt="Logo" 
-                         class="sidebar-logo"
+                         class="w-64 flex-shrink-0 bg-gray-800-logo"
                          onerror="this.onerror=null;this.src='{{ asset('storage/branding/orbita/orbita-logo-small.svg') }}';">
                 @else
                     <img src="{{ asset('images/dspay-logo.png') }}" 
                          alt="dspay" 
-                         class="sidebar-logo"
+                         class="w-64 flex-shrink-0 bg-gray-800-logo"
                          onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzMzNjZFRiIvPgo8dGV4dCB4PSIyMCIgeT0iMjYiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5EU1BBWTwvdGV4dD4KPC9zdmc+';">
                 @endif
             </div>
@@ -71,7 +71,7 @@
                 <div class="menu-item">
                     <!-- Item Principal -->
                     <a href="{{ route($item['route']) }}" 
-                       class="flex items-center px-4 py-3 rounded-lg transition-all duration-200 sidebar-menu-item {{ $item['is_active'] ? 'sidebar-menu-active' : 'sidebar-menu-hover' }}"
+                       class="flex items-center px-4 py-3 rounded-lg transition-all duration-200 w-64 flex-shrink-0 bg-gray-800-menu-item {{ $item['is_active'] ? 'w-64 flex-shrink-0 bg-gray-800-menu-active' : 'w-64 flex-shrink-0 bg-gray-800-menu-hover' }}"
                        style="color: {{ $textColor }};">
                         <i class="{{ $item['icon'] }} mr-3"></i>
                         <span class="font-medium">{{ $item['name'] }}</span>
@@ -88,7 +88,7 @@
                         <div class="submenu ml-4 mt-2 space-y-1 {{ $item['is_active'] ? '' : 'hidden' }}" id="submenu-{{ $loop->index }}">
                             @foreach($item['submenu'] as $subItem)
                                 <a href="{{ $subItem['route'] === 'dashboard.agenda' && isset($subItem['action']) && $subItem['action'] === 'create' ? route('dashboard.agenda.create') : route($subItem['route']) . (isset($subItem['action']) ? '#' . $subItem['action'] : '') }}" 
-                                   class="flex items-center px-3 py-2 rounded-lg text-sm sidebar-submenu-item transition-all duration-200"
+                                   class="flex items-center px-3 py-2 rounded-lg text-sm w-64 flex-shrink-0 bg-gray-800-submenu-item transition-all duration-200"
                                    style="color: {{ $textColor }}; opacity: 0.8;">
                                     <i class="fas fa-circle mr-2 text-xs"></i>
                                     {{ $subItem['name'] }}

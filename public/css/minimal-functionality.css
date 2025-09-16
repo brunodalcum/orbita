@@ -1,0 +1,32 @@
+/* CSS MÍNIMO - APENAS FUNCIONALIDADE BÁSICA */
+/* Sem modificações de branding - design original */
+
+/* Garantir que a sidebar funcione */
+.w-64.flex-shrink-0 {
+    background-color: #1f2937;
+    color: white;
+}
+
+.w-64.flex-shrink-0 a {
+    color: white;
+    text-decoration: none;
+}
+
+.w-64.flex-shrink-0 a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Manter funcionalidade básica dos botões */
+button, .btn {
+    transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Inputs básicos */
+input:focus, select:focus, textarea:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}

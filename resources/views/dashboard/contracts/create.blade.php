@@ -1,4 +1,4 @@
-<x-simple-branding />
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -12,7 +12,6 @@
     
     <!-- Branding Dinâmico -->
 
-    
 <style>
 /* CORREÇÃO AGRESSIVA DE CORES - GERADO AUTOMATICAMENTE */
 :root {

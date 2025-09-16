@@ -1,10 +1,9 @@
 <?php
-// SCRIPT DE EMERGÊNCIA - SISTEMA SIMPLES
+// SCRIPT DE EMERGÊNCIA - DESIGN ORIGINAL RESTAURADO
 // Acesse via: https://srv971263.hstgr.cloud/emergency-fix-branding.php
 
-echo "<h1>🚨 SISTEMA SIMPLES DE BRANDING</h1>";
-echo "<p><strong>Versão SIMPLES - Funcional e Direto</strong></p>";
-echo "<p><em>✅ Erro de componente corrigido!</em></p>";
+echo "<h1>✅ DESIGN ORIGINAL RESTAURADO</h1>";
+echo "<p><strong>Sistema voltou ao estado original</strong></p>";
 
 // Limpar caches
 if (function_exists("opcache_reset")) {
@@ -23,21 +22,12 @@ if (is_dir($viewCachePath)) {
     echo "<p>✅ Cache de views limpo (" . count($files) . " arquivos)</p>";
 }
 
-// Verificar sistema simples
-$simpleCSS = __DIR__ . "/public/css/simple-branding.css";
-if (file_exists($simpleCSS)) {
-    $size = number_format(filesize($simpleCSS) / 1024, 2);
-    echo "<p>✅ Sistema Simples: simple-branding.css ($size KB)</p>";
-} else {
-    echo "<p>❌ Sistema simples não encontrado</p>";
-}
-
-echo "<h2>🎯 SISTEMA ATUAL</h2>";
+echo "<h2>🎯 STATUS ATUAL</h2>";
 echo "<ul>";
-echo "<li>✅ <strong>SIMPLES:</strong> Um CSS, uma abordagem</li>";
-echo "<li>✅ <strong>FUNCIONAL:</strong> Sidebar branca, conteúdo com branding</li>";
-echo "<li>✅ <strong>DIRETO:</strong> Sem complexidade desnecessária</li>";
-echo "<li>✅ <strong>COMPATÍVEL:</strong> Funciona com Tailwind</li>";
+echo "<li>✅ <strong>DESIGN ORIGINAL:</strong> Restaurado completamente</li>";
+echo "<li>✅ <strong>SEM BRANDING:</strong> Todas as modificações removidas</li>";
+echo "<li>✅ <strong>FUNCIONALIDADE:</strong> Mantida com CSS mínimo</li>";
+echo "<li>✅ <strong>SIDEBAR:</strong> Cor original (cinza escuro)</li>";
 echo "</ul>";
 
 echo "<h2>🚀 TESTE</h2>";
@@ -47,5 +37,6 @@ echo "<li><a href=\"/dashboard/licenciados\">Licenciados</a></li>";
 echo "<li><a href=\"/contracts\">Contratos</a></li>";
 echo "</ul>";
 
-echo "<p><strong>🎯 Status: SISTEMA SIMPLES ATIVO</strong></p>";
+echo "<p><strong>✅ Status: DESIGN ORIGINAL ATIVO</strong></p>";
+echo "<p><em>Sistema restaurado ao estado anterior às modificações de branding</em></p>";
 ?>

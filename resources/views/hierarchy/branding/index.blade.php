@@ -1,4 +1,4 @@
-<x-simple-branding />
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -14,54 +14,7 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <!-- Branding Dinâmico -->
-    
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .sidebar-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-        .sidebar-link.active {
-            background: rgba(255, 255, 255, 0.2);
-            border-left: 4px solid white;
-        }
-        .card {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        
-        /* Garantir scroll completo da página */
-        html, body {
-            height: 100%;
-            overflow-x: hidden;
-        }
-        
-        .main-content {
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        /* Espaçamento adequado para o conteúdo */
-        .content-wrapper {
-            min-height: calc(100vh - 4rem);
-            padding-bottom: 2rem;
-        }
-        
-        /* Garantir que cards não sejam cortados */
-        .branding-section {
-            margin-bottom: 2rem;
-        }
-        
-        .branding-section:last-child {
-            margin-bottom: 4rem;
-        }
-    </style>
+
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
