@@ -23,36 +23,36 @@
 <style>
 /* BRANDING FORÇADO PARA ESTA PÁGINA */
 :root {
-    --primary-color: #3B82F6;
-    --secondary-color: #6B7280;
-    --accent-color: #10B981;
+    --primary-color: var(--primary-color);
+    --secondary-color: var(--secondary-color);
+    --accent-color: var(--accent-color);
     --text-color: #1F2937;
     --background-color: #FFFFFF;
-    --primary-light: rgba(59, 130, 246, 0.1);
-    --primary-dark: #2563EB;
+    --primary-light: rgba(var(--primary-color-rgb), 0.1);
+    --primary-dark: var(--primary-dark);
     --primary-text: #FFFFFF;
 }
 
 /* Sobrescrita agressiva de todas as cores azuis */
 .bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
-.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.bg-primary, .bg-primary, .bg-primary-dark, .bg-blue-800, .bg-blue-900,
 .bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
-.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+.bg-primary, .bg-primary, .bg-primary-dark, .bg-indigo-800, .bg-indigo-900 {
     background-color: var(--primary-color) !important;
 }
 
-.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover,
-.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
+.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-blue-800:hover,
+.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-indigo-800:hover {
     background-color: var(--primary-dark) !important;
 }
 
-.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
-.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+.text-primary, .text-primary, .text-primary, .text-blue-800, .text-blue-900,
+.text-primary, .text-primary, .text-primary, .text-indigo-800, .text-indigo-900 {
     color: var(--primary-color) !important;
 }
 
-.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
-.border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+.border-primary, .border-primary, .border-primary, .border-blue-800, .border-blue-900,
+.border-primary, .border-primary, .border-primary, .border-indigo-800, .border-indigo-900 {
     border-color: var(--primary-color) !important;
 }
 
@@ -75,18 +75,124 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
 }
 
 /* Sobrescrever estilos inline hardcoded */
-[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
-[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"] {
+[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"],
+[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"] {
     background-color: var(--primary-color) !important;
 }
 
-[style*="color: #3b82f6"], [style*="color: #2563eb"],
-[style*="color: #1d4ed8"], [style*="color: #1e40af"] {
+[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"],
+[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"] {
     color: var(--primary-color) !important;
 }
 
 .animate-spin[class*="border-blue"], .animate-spin[class*="border-indigo"] {
     border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
+}
+</style>
+<style>
+/* CORREÇÃO AGRESSIVA DE CORES - GERADO AUTOMATICAMENTE */
+:root {
+    --primary-color: #3B82F6;
+    --primary-color-rgb: 59, 130, 246;
+    --primary-dark: #2563EB;
+    --primary-light: rgba(59, 130, 246, 0.1);
+    --primary-text: #FFFFFF;
+    --secondary-color: #6B7280;
+    --accent-color: #10B981;
+}
+
+/* Classes customizadas para substituir Tailwind */
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-primary-dark { background-color: var(--primary-dark) !important; }
+.text-primary { color: var(--primary-color) !important; }
+.border-primary { border-color: var(--primary-color) !important; }
+.hover\:bg-primary-dark:hover { background-color: var(--primary-dark) !important; }
+
+/* Sobrescrita total de cores azuis */
+.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
+.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+    background-color: var(--primary-color) !important;
+}
+
+.text-blue-50, .text-blue-100, .text-blue-200, .text-blue-300, .text-blue-400,
+.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
+.text-indigo-50, .text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400,
+.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+    color: var(--primary-color) !important;
+}
+
+.border-blue-50, .border-blue-100, .border-blue-200, .border-blue-300, .border-blue-400,
+.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
+.border-indigo-50, .border-indigo-100, .border-indigo-200, .border-indigo-300, .border-indigo-400,
+.border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+    border-color: var(--primary-color) !important;
+}
+
+/* Hovers */
+.hover\:bg-blue-50:hover, .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover,
+.hover\:bg-blue-300:hover, .hover\:bg-blue-400:hover, .hover\:bg-blue-500:hover,
+.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover,
+.hover\:bg-indigo-50:hover, .hover\:bg-indigo-100:hover, .hover\:bg-indigo-200:hover,
+.hover\:bg-indigo-300:hover, .hover\:bg-indigo-400:hover, .hover\:bg-indigo-500:hover,
+.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Sobrescrever estilos inline */
+[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
+[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"],
+[style*="background-color: rgb(59, 130, 246)"], [style*="background-color: rgb(37, 99, 235)"] {
+    background-color: var(--primary-color) !important;
+}
+
+[style*="color: #3b82f6"], [style*="color: #2563eb"],
+[style*="color: #1d4ed8"], [style*="color: #1e40af"],
+[style*="color: rgb(59, 130, 246)"], [style*="color: rgb(37, 99, 235)"] {
+    color: var(--primary-color) !important;
+}
+
+/* Botões e elementos interativos */
+button:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+input[type="submit"], input[type="button"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+button:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Links */
+a:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-color) !important;
+}
+
+a:hover:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-dark) !important;
+}
+
+/* Focus states */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+    outline: none !important;
+}
+
+/* Spinners e loading */
+.animate-spin {
+    border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
+}
+
+/* Badges e tags */
+.badge:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.tag:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
 }
 </style>
 </head>
@@ -111,7 +217,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                         
                         <div>
                             <h1 class="text-2xl font-bold text-gray-800">
-                                <i class="fas fa-edit text-blue-600 mr-3"></i>
+                                <i class="fas fa-edit text-primary mr-3"></i>
                                 Editar Template
                             </h1>
                             <p class="text-gray-600 mt-1">{{ $template->name }} • v{{ $template->version }}</p>
@@ -152,7 +258,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                            name="name" 
                                            value="{{ old('name', $template->name) }}"
                                            required
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-primary">
                                 </div>
                                 
                                 <div>
@@ -164,7 +270,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                                name="is_active" 
                                                value="1"
                                                {{ old('is_active', $template->is_active) ? 'checked' : '' }}
-                                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                               class="h-4 w-4 text-primary focus:ring-blue-500 border-gray-300 rounded">
                                         <label for="is_active" class="ml-2 text-sm text-gray-700">
                                             Template ativo
                                         </label>
@@ -180,7 +286,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                           name="description" 
                                           rows="3"
                                           placeholder="Descreva o propósito deste template..."
-                                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">{{ old('description', $template->description) }}</textarea>
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-primary">{{ old('description', $template->description) }}</textarea>
                             </div>
                         </div>
 
@@ -198,7 +304,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                 <div class="flex items-center space-x-2">
                                     <button type="button" 
                                             @click="detectVariables()"
-                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors">
+                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-primary hover:text-primary hover:bg-blue-50 rounded-md transition-colors">
                                         <i class="fas fa-search mr-1"></i>
                                         Detectar Variáveis
                                     </button>
@@ -221,7 +327,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                           rows="20"
                                           required
                                           placeholder="Cole aqui o texto do seu contrato. Use @{{NOME}}, @{{DOCUMENTO}}, @{{ENDERECO}} etc. para marcar as variáveis que serão substituídas automaticamente..."
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 font-mono text-sm">{{ old('content', $template->content) }}</textarea>
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-primary font-mono text-sm">{{ old('content', $template->content) }}</textarea>
                                 
                                 <!-- Contador de caracteres -->
                                 <div class="mt-2 flex items-center justify-between text-sm text-gray-500">
@@ -248,7 +354,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                 
                                 <button type="submit" 
                                         :disabled="content.length < 50"
-                                        class="inline-flex items-center px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg transition-colors">
+                                        class="inline-flex items-center px-6 py-2 bg-primary hover:bg-primary-dark disabled:bg-gray-300 text-white text-sm font-medium rounded-lg transition-colors">
                                     <i class="fas fa-save mr-2"></i>
                                     Atualizar Template
                                 </button>
@@ -272,7 +378,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                         <span class="font-mono text-sm" x-text="variable"></span>
                                         <button type="button" 
                                                 @click="insertVariable(variable)"
-                                                class="text-xs text-blue-600 hover:text-blue-700">
+                                                class="text-xs text-primary hover:text-primary">
                                             Inserir
                                         </button>
                                     </div>
@@ -303,12 +409,12 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                             @foreach($variables as $key => $description)
                                                 <div class="flex items-center justify-between p-2 text-xs border-l-2 border-gray-200 ml-2">
                                                     <div class="flex-1">
-                                                        <div class="font-mono text-blue-600">{{ $key }}</div>
+                                                        <div class="font-mono text-primary">{{ $key }}</div>
                                                         <div class="text-gray-500 mt-1">{{ $description }}</div>
                                                     </div>
                                                     <button type="button" 
                                                             @click="insertVariable('{{ $key }}')"
-                                                            class="ml-2 text-blue-600 hover:text-blue-700">
+                                                            class="ml-2 text-primary hover:text-primary">
                                                         <i class="fas fa-plus"></i>
                                                     </button>
                                                 </div>

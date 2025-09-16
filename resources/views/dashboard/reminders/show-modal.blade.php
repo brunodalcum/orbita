@@ -34,7 +34,7 @@
             <label class="block text-sm font-medium text-gray-500 mb-1">Canal</label>
             <p class="text-sm text-gray-900 flex items-center">
                 @if($reminder->channel === 'email')
-                    <i class="fas fa-envelope text-blue-600 mr-2"></i>
+                    <i class="fas fa-envelope text-primary mr-2"></i>
                 @elseif($reminder->channel === 'sms')
                     <i class="fas fa-sms text-green-600 mr-2"></i>
                 @elseif($reminder->channel === 'push')
@@ -47,7 +47,7 @@
         <div>
             <label class="block text-sm font-medium text-gray-500 mb-1">Envio Programado</label>
             <p class="text-sm text-gray-900">
-                <i class="fas fa-calendar text-blue-600 mr-2"></i>
+                <i class="fas fa-calendar text-primary mr-2"></i>
                 {{ \Carbon\Carbon::parse($reminder->send_at)->format('d/m/Y H:i') }}
             </p>
         </div>
@@ -74,7 +74,7 @@
             <label class="block text-sm font-medium text-gray-500 mb-2">Participante</label>
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-user text-blue-600"></i>
+                    <i class="fas fa-user text-primary"></i>
                 </div>
                 <div>
                     <p class="text-sm font-semibold text-gray-900">{{ $reminder->participant->name }}</p>
@@ -163,7 +163,7 @@
             @endif
         </div>
 
-        <a href="{{ route('reminders.show', $reminder->id) }}" class="text-blue-600 hover:text-blue-800 text-sm">
+        <a href="{{ route('reminders.show', $reminder->id) }}" class="text-primary hover:text-blue-800 text-sm">
             <i class="fas fa-external-link-alt mr-1"></i>
             Ver Completo
         </a>

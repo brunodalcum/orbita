@@ -1,36 +1,36 @@
 <style>
 /* BRANDING FORÇADO PARA ESTA PÁGINA */
 :root {
-    --primary-color: #3B82F6;
-    --secondary-color: #6B7280;
-    --accent-color: #10B981;
+    --primary-color: var(--primary-color);
+    --secondary-color: var(--secondary-color);
+    --accent-color: var(--accent-color);
     --text-color: #1F2937;
     --background-color: #FFFFFF;
-    --primary-light: rgba(59, 130, 246, 0.1);
-    --primary-dark: #2563EB;
+    --primary-light: rgba(var(--primary-color-rgb), 0.1);
+    --primary-dark: var(--primary-dark);
     --primary-text: #FFFFFF;
 }
 
 /* Sobrescrita agressiva de todas as cores azuis */
 .bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
-.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.bg-primary, .bg-primary, .bg-primary-dark, .bg-blue-800, .bg-blue-900,
 .bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
-.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+.bg-primary, .bg-primary, .bg-primary-dark, .bg-indigo-800, .bg-indigo-900 {
     background-color: var(--primary-color) !important;
 }
 
-.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover,
-.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
+.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-blue-800:hover,
+.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-indigo-800:hover {
     background-color: var(--primary-dark) !important;
 }
 
-.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
-.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+.text-primary, .text-primary, .text-primary, .text-blue-800, .text-blue-900,
+.text-primary, .text-primary, .text-primary, .text-indigo-800, .text-indigo-900 {
     color: var(--primary-color) !important;
 }
 
-.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
-.border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+.border-primary, .border-primary, .border-primary, .border-blue-800, .border-blue-900,
+.border-primary, .border-primary, .border-primary, .border-indigo-800, .border-indigo-900 {
     border-color: var(--primary-color) !important;
 }
 
@@ -53,18 +53,124 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
 }
 
 /* Sobrescrever estilos inline hardcoded */
-[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
-[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"] {
+[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"],
+[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"] {
     background-color: var(--primary-color) !important;
 }
 
-[style*="color: #3b82f6"], [style*="color: #2563eb"],
-[style*="color: #1d4ed8"], [style*="color: #1e40af"] {
+[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"],
+[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"] {
     color: var(--primary-color) !important;
 }
 
 .animate-spin[class*="border-blue"], .animate-spin[class*="border-indigo"] {
     border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
+}
+</style>
+<style>
+/* CORREÇÃO AGRESSIVA DE CORES - GERADO AUTOMATICAMENTE */
+:root {
+    --primary-color: #3B82F6;
+    --primary-color-rgb: 59, 130, 246;
+    --primary-dark: #2563EB;
+    --primary-light: rgba(59, 130, 246, 0.1);
+    --primary-text: #FFFFFF;
+    --secondary-color: #6B7280;
+    --accent-color: #10B981;
+}
+
+/* Classes customizadas para substituir Tailwind */
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-primary-dark { background-color: var(--primary-dark) !important; }
+.text-primary { color: var(--primary-color) !important; }
+.border-primary { border-color: var(--primary-color) !important; }
+.hover\:bg-primary-dark:hover { background-color: var(--primary-dark) !important; }
+
+/* Sobrescrita total de cores azuis */
+.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
+.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+    background-color: var(--primary-color) !important;
+}
+
+.text-blue-50, .text-blue-100, .text-blue-200, .text-blue-300, .text-blue-400,
+.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
+.text-indigo-50, .text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400,
+.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+    color: var(--primary-color) !important;
+}
+
+.border-blue-50, .border-blue-100, .border-blue-200, .border-blue-300, .border-blue-400,
+.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
+.border-indigo-50, .border-indigo-100, .border-indigo-200, .border-indigo-300, .border-indigo-400,
+.border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+    border-color: var(--primary-color) !important;
+}
+
+/* Hovers */
+.hover\:bg-blue-50:hover, .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover,
+.hover\:bg-blue-300:hover, .hover\:bg-blue-400:hover, .hover\:bg-blue-500:hover,
+.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover,
+.hover\:bg-indigo-50:hover, .hover\:bg-indigo-100:hover, .hover\:bg-indigo-200:hover,
+.hover\:bg-indigo-300:hover, .hover\:bg-indigo-400:hover, .hover\:bg-indigo-500:hover,
+.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Sobrescrever estilos inline */
+[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
+[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"],
+[style*="background-color: rgb(59, 130, 246)"], [style*="background-color: rgb(37, 99, 235)"] {
+    background-color: var(--primary-color) !important;
+}
+
+[style*="color: #3b82f6"], [style*="color: #2563eb"],
+[style*="color: #1d4ed8"], [style*="color: #1e40af"],
+[style*="color: rgb(59, 130, 246)"], [style*="color: rgb(37, 99, 235)"] {
+    color: var(--primary-color) !important;
+}
+
+/* Botões e elementos interativos */
+button:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+input[type="submit"], input[type="button"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+button:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Links */
+a:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-color) !important;
+}
+
+a:hover:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-dark) !important;
+}
+
+/* Focus states */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+    outline: none !important;
+}
+
+/* Spinners e loading */
+.animate-spin {
+    border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
+}
+
+/* Badges e tags */
+.badge:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.tag:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
 }
 </style>
 @extends('layouts.dashboard')
@@ -86,7 +192,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
             pointer-events: none;
         }
         
-        .badge-1x { @apply bg-blue-500 text-white; }
+        .badge-1x { @apply bg-primary text-white; }
         .badge-2-6x { @apply bg-green-500 text-white; }
         .badge-7-12x { @apply bg-yellow-500 text-white; }
         .badge-13-18x { @apply bg-red-500 text-white; }
@@ -94,7 +200,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
         
         .loading-spinner {
             border: 3px solid #f3f4f6;
-            border-top: 3px solid #3b82f6;
+            border-top: 3px solid var(--primary-color);
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -137,7 +243,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                         <div class="lg:col-span-4">
                             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                    <i class="fas fa-sliders-h text-blue-600 mr-2"></i>
+                                    <i class="fas fa-sliders-h text-primary mr-2"></i>
                                     Parâmetros
                                 </h2>
                                 
@@ -158,7 +264,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                                    min="0" 
                                                    max="100"
                                                    placeholder="1,49"
-                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-primary">
                                             <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">%</span>
                                         </div>
                                     </div>
@@ -177,7 +283,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                                    min="0" 
                                                    max="100"
                                                    placeholder="3,09"
-                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-primary">
                                             <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">%</span>
                                         </div>
                                     </div>
@@ -196,7 +302,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                                    min="0" 
                                                    max="100"
                                                    placeholder="3,49"
-                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-primary">
                                             <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">%</span>
                                         </div>
                                     </div>
@@ -215,7 +321,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                                    min="0" 
                                                    max="100"
                                                    placeholder="3,99"
-                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-primary">
                                             <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">%</span>
                                         </div>
                                     </div>
@@ -234,7 +340,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                                    min="0" 
                                                    max="100"
                                                    placeholder="4,49"
-                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-primary">
                                             <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">%</span>
                                         </div>
                                     </div>
@@ -253,7 +359,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                                    min="0" 
                                                    max="20"
                                                    placeholder="2,99"
-                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                   class="w-full px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-primary">
                                             <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">% a.m.</span>
                                         </div>
                                     </div>
@@ -291,7 +397,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                         <!-- Base do Mês -->
                                         <div>
                                             <label class="block text-sm text-gray-600 mb-1">Base de mês para pró-rata:</label>
-                                            <select name="month_base_days" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                            <select name="month_base_days" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-primary text-sm">
                                                 <option value="30" selected>30 dias (padrão)</option>
                                                 <option value="28">28 dias</option>
                                                 <option value="29">29 dias</option>
@@ -588,7 +694,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
         // Obter classe CSS para badge
         function getBadgeClass(installments) {
             if (installments === 0) return 'bg-gray-500 text-white';
-            if (installments === 1) return 'bg-blue-500 text-white';
+            if (installments === 1) return 'bg-primary text-white';
             if (installments >= 2 && installments <= 6) return 'bg-green-500 text-white';
             if (installments >= 7 && installments <= 12) return 'bg-yellow-500 text-white';
             if (installments >= 13 && installments <= 18) return 'bg-red-500 text-white';
@@ -609,19 +715,19 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                 <h3 class="font-medium text-blue-900 mb-2">📊 Resumo da Simulação</h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
-                        <span class="text-blue-700">Taxa Mínima:</span>
+                        <span class="text-primary">Taxa Mínima:</span>
                         <div class="font-semibold text-green-600">${formatPercentage(summary.min_total_rate)}</div>
                     </div>
                     <div>
-                        <span class="text-blue-700">Taxa Máxima:</span>
+                        <span class="text-primary">Taxa Máxima:</span>
                         <div class="font-semibold text-red-600">${formatPercentage(summary.max_total_rate)}</div>
                     </div>
                     <div>
-                        <span class="text-blue-700">Taxa Média:</span>
-                        <div class="font-semibold text-blue-600">${formatPercentage(summary.avg_total_rate)}</div>
+                        <span class="text-primary">Taxa Média:</span>
+                        <div class="font-semibold text-primary">${formatPercentage(summary.avg_total_rate)}</div>
                     </div>
                     <div>
-                        <span class="text-blue-700">Simulações:</span>
+                        <span class="text-primary">Simulações:</span>
                         <div class="font-semibold text-gray-700">${summary.total_simulations}</div>
                     </div>
                 </div>

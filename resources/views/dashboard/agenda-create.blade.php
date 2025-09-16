@@ -1,36 +1,36 @@
 <style>
 /* BRANDING FORÇADO PARA ESTA PÁGINA */
 :root {
-    --primary-color: #3B82F6;
-    --secondary-color: #6B7280;
-    --accent-color: #10B981;
+    --primary-color: var(--primary-color);
+    --secondary-color: var(--secondary-color);
+    --accent-color: var(--accent-color);
     --text-color: #1F2937;
     --background-color: #FFFFFF;
-    --primary-light: rgba(59, 130, 246, 0.1);
-    --primary-dark: #2563EB;
+    --primary-light: rgba(var(--primary-color-rgb), 0.1);
+    --primary-dark: var(--primary-dark);
     --primary-text: #FFFFFF;
 }
 
 /* Sobrescrita agressiva de todas as cores azuis */
 .bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
-.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.bg-primary, .bg-primary, .bg-primary-dark, .bg-blue-800, .bg-blue-900,
 .bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
-.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+.bg-primary, .bg-primary, .bg-primary-dark, .bg-indigo-800, .bg-indigo-900 {
     background-color: var(--primary-color) !important;
 }
 
-.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover,
-.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
+.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-blue-800:hover,
+.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-indigo-800:hover {
     background-color: var(--primary-dark) !important;
 }
 
-.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
-.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+.text-primary, .text-primary, .text-primary, .text-blue-800, .text-blue-900,
+.text-primary, .text-primary, .text-primary, .text-indigo-800, .text-indigo-900 {
     color: var(--primary-color) !important;
 }
 
-.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
-.border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+.border-primary, .border-primary, .border-primary, .border-blue-800, .border-blue-900,
+.border-primary, .border-primary, .border-primary, .border-indigo-800, .border-indigo-900 {
     border-color: var(--primary-color) !important;
 }
 
@@ -53,18 +53,124 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
 }
 
 /* Sobrescrever estilos inline hardcoded */
-[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
-[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"] {
+[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"],
+[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"] {
     background-color: var(--primary-color) !important;
 }
 
-[style*="color: #3b82f6"], [style*="color: #2563eb"],
-[style*="color: #1d4ed8"], [style*="color: #1e40af"] {
+[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"],
+[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"] {
     color: var(--primary-color) !important;
 }
 
 .animate-spin[class*="border-blue"], .animate-spin[class*="border-indigo"] {
     border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
+}
+</style>
+<style>
+/* CORREÇÃO AGRESSIVA DE CORES - GERADO AUTOMATICAMENTE */
+:root {
+    --primary-color: #3B82F6;
+    --primary-color-rgb: 59, 130, 246;
+    --primary-dark: #2563EB;
+    --primary-light: rgba(59, 130, 246, 0.1);
+    --primary-text: #FFFFFF;
+    --secondary-color: #6B7280;
+    --accent-color: #10B981;
+}
+
+/* Classes customizadas para substituir Tailwind */
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-primary-dark { background-color: var(--primary-dark) !important; }
+.text-primary { color: var(--primary-color) !important; }
+.border-primary { border-color: var(--primary-color) !important; }
+.hover\:bg-primary-dark:hover { background-color: var(--primary-dark) !important; }
+
+/* Sobrescrita total de cores azuis */
+.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
+.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+    background-color: var(--primary-color) !important;
+}
+
+.text-blue-50, .text-blue-100, .text-blue-200, .text-blue-300, .text-blue-400,
+.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
+.text-indigo-50, .text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400,
+.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+    color: var(--primary-color) !important;
+}
+
+.border-blue-50, .border-blue-100, .border-blue-200, .border-blue-300, .border-blue-400,
+.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
+.border-indigo-50, .border-indigo-100, .border-indigo-200, .border-indigo-300, .border-indigo-400,
+.border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+    border-color: var(--primary-color) !important;
+}
+
+/* Hovers */
+.hover\:bg-blue-50:hover, .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover,
+.hover\:bg-blue-300:hover, .hover\:bg-blue-400:hover, .hover\:bg-blue-500:hover,
+.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover,
+.hover\:bg-indigo-50:hover, .hover\:bg-indigo-100:hover, .hover\:bg-indigo-200:hover,
+.hover\:bg-indigo-300:hover, .hover\:bg-indigo-400:hover, .hover\:bg-indigo-500:hover,
+.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Sobrescrever estilos inline */
+[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
+[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"],
+[style*="background-color: rgb(59, 130, 246)"], [style*="background-color: rgb(37, 99, 235)"] {
+    background-color: var(--primary-color) !important;
+}
+
+[style*="color: #3b82f6"], [style*="color: #2563eb"],
+[style*="color: #1d4ed8"], [style*="color: #1e40af"],
+[style*="color: rgb(59, 130, 246)"], [style*="color: rgb(37, 99, 235)"] {
+    color: var(--primary-color) !important;
+}
+
+/* Botões e elementos interativos */
+button:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+input[type="submit"], input[type="button"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+button:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Links */
+a:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-color) !important;
+}
+
+a:hover:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-dark) !important;
+}
+
+/* Focus states */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+    outline: none !important;
+}
+
+/* Spinners e loading */
+.animate-spin {
+    border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
+}
+
+/* Badges e tags */
+.badge:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.tag:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
 }
 </style>
 @extends('layouts.dashboard')
@@ -142,7 +248,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                 <div class="relative">
                                     <select name="licenciado_id" 
                                             id="licenciado_id" 
-                                            class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-gradient-to-r from-white to-blue-50/30 hover:border-blue-300">
+                                            class="w-full px-4 py-4 pr-12 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-primary transition-all duration-200 bg-gradient-to-r from-white to-blue-50/30 hover:border-blue-300">
                                         <option value="">🔍 Selecione um licenciado...</option>
                                         @foreach($licenciados as $licenciado)
                                             <option value="{{ $licenciado->id }}" 
@@ -152,7 +258,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                             </option>
                                         @endforeach
                                     </select>
-                                    <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                                    <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                                         <i class="fas fa-chevron-down"></i>
                                     </div>
                                 </div>
@@ -188,10 +294,10 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                     <textarea name="participantes" 
                                               id="participantes" 
                                               rows="3" 
-                                              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-gradient-to-r from-white to-blue-50/30 hover:border-blue-300 resize-none"
+                                              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-primary transition-all duration-200 bg-gradient-to-r from-white to-blue-50/30 hover:border-blue-300 resize-none"
                                               placeholder="Digite os emails separados por vírgula ou quebra de linha:&#10;email1@exemplo.com, email2@exemplo.com&#10;email3@exemplo.com">{{ old('participantes') }}</textarea>
                                     <p class="text-sm text-gray-500 mt-2 flex items-center">
-                                        <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                                        <i class="fas fa-info-circle mr-2 text-primary"></i>
                                         Separe múltiplos emails por vírgula ou quebra de linha
                                     </p>
                                 </div>
@@ -225,7 +331,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                             </div>
                                             <p style="color: var(--secondary-color);">✨ Link do Meet será gerado automaticamente</p>
                                         </div>
-                                        <div class="text-blue-500">
+                                        <div class="text-primary">
                                             <i class="fas fa-check-circle text-2xl opacity-0 transition-opacity duration-300"></i>
                                         </div>
                                     </label>
@@ -324,15 +430,15 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                     <input type="url" 
                                            name="meet_link" 
                                            id="meet_link" 
-                                           class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-gradient-to-r from-white to-blue-50/30 hover:border-blue-300"
+                                           class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-primary transition-all duration-200 bg-gradient-to-r from-white to-blue-50/30 hover:border-blue-300"
                                            placeholder="https://meet.google.com/xxx-xxx-xxx"
                                            value="{{ old('meet_link') }}">
-                                    <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500">
+                                    <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary">
                                         <i class="fab fa-google"></i>
                                     </div>
                                 </div>
                                 <p class="text-sm text-gray-500 mt-2 flex items-center">
-                                    <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                                    <i class="fas fa-info-circle mr-2 text-primary"></i>
                                     Se não informado, será gerado automaticamente para reuniões online
                                 </p>
                                 @error('meet_link')
@@ -352,7 +458,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                 <textarea name="descricao" 
                                           id="descricao" 
                                           rows="4" 
-                                          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-gradient-to-r from-white to-blue-50/30 hover:border-blue-300 resize-none"
+                                          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-primary transition-all duration-200 bg-gradient-to-r from-white to-blue-50/30 hover:border-blue-300 resize-none"
                                           placeholder="Adicione detalhes importantes sobre a reunião, pauta, documentos necessários, etc.">{{ old('descricao') }}</textarea>
                                 @error('descricao')
                                     <p class="text-red-500 text-sm mt-2 flex items-center">
@@ -399,7 +505,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                         <div class="flex items-center space-x-4">
                             <button type="button" 
                                     onclick="previewReuniao()" 
-                                    class="px-6 py-3 border-2 border-blue-300 text-blue-700 rounded-xl hover:bg-blue-50 hover:border-blue-400 font-medium flex items-center transition-all duration-200">
+                                    class="px-6 py-3 border-2 border-blue-300 text-primary rounded-xl hover:bg-blue-50 hover:border-blue-400 font-medium flex items-center transition-all duration-200">
                                 <i class="fas fa-eye mr-2"></i>
                                 Visualizar
                             </button>
@@ -408,7 +514,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                             <button type="submit" 
                                     id="saveButton"
                                     class="save-button-elegant px-8 py-3 text-white rounded-xl font-semibold flex items-center text-lg transform hover:scale-105 transition-all duration-300"
-                                    style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); border: 2px solid #3b82f6; box-shadow: 0 4px 15px rgba(var(--primary-color-rgb), 0.4); opacity: 1;">
+                                    style="background: linear-gradient(135deg, var(--primary-color) 0%, #8b5cf6 100%); border: 2px solid var(--primary-color); box-shadow: 0 4px 15px rgba(var(--primary-color-rgb), 0.4); opacity: 1;">
                                 <i class="fas fa-save mr-3 text-lg"></i>
                                 Salvar Reunião
                             </button>
@@ -418,7 +524,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                     <!-- Aviso sobre o botão -->
                     <div class="mt-4 text-center">
                         <p style="color: var(--secondary-color);">
-                            <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                            <i class="fas fa-info-circle mr-2 text-primary"></i>
                             Preencha todos os campos obrigatórios e clique em "Salvar Reunião"
                         </p>
                     </div>
@@ -800,7 +906,7 @@ function previewReuniao() {
     /* Hover effects para os cards de formato */
     input[type="radio"]:checked + div {
         background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-        border-color: #3b82f6;
+        border-color: var(--primary-color);
         box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.15);
         transform: translateY(-2px);
     }
@@ -835,7 +941,7 @@ function previewReuniao() {
     
     .gradient-input:focus {
         background: #ffffff !important;
-        border-color: #3b82f6 !important;
+        border-color: var(--primary-color) !important;
         box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.1) !important;
     }
     
@@ -848,25 +954,25 @@ function previewReuniao() {
     
     input:focus, textarea:focus, select:focus {
         background: #ffffff !important;
-        border-color: #3b82f6 !important;
+        border-color: var(--primary-color) !important;
         box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.1) !important;
         opacity: 1 !important;
     }
     
     /* Botões com efeitos */
     .btn-gradient {
-        background: linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%) !important;
-        border: 2px solid #1d4ed8 !important;
+        background: linear-gradient(135deg, var(--primary-color) 0%, #7c3aed 100%) !important;
+        border: 2px solid var(--primary-color) !important;
         box-shadow: 0 6px 20px rgba(29, 78, 216, 0.5) !important;
         transition: all 0.3s ease-in-out !important;
         opacity: 1 !important;
     }
     
     .btn-gradient:hover {
-        background: linear-gradient(135deg, #1e40af 0%, #6d28d9 100%) !important;
+        background: linear-gradient(135deg, var(--primary-color) 0%, #6d28d9 100%) !important;
         transform: translateY(-3px) !important;
         box-shadow: 0 10px 30px rgba(29, 78, 216, 0.6) !important;
-        border-color: #1e40af !important;
+        border-color: var(--primary-color) !important;
     }
     
     .btn-gradient:active {
@@ -876,8 +982,8 @@ function previewReuniao() {
     
     /* Botão elegante de salvar */
     .save-button-elegant {
-        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important;
-        border: 2px solid #3b82f6 !important;
+        background: linear-gradient(135deg, var(--primary-color) 0%, #8b5cf6 100%) !important;
+        border: 2px solid var(--primary-color) !important;
         box-shadow: 0 4px 15px rgba(var(--primary-color-rgb), 0.4) !important;
         opacity: 1 !important;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
@@ -901,10 +1007,10 @@ function previewReuniao() {
     }
     
     .save-button-elegant:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%) !important;
+        background: linear-gradient(135deg, var(--primary-color) 0%, #7c3aed 100%) !important;
         transform: translateY(-2px) scale(1.02) !important;
         box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.5) !important;
-        border-color: #2563eb !important;
+        border-color: var(--primary-color) !important;
     }
     
     .save-button-elegant:active {
@@ -927,7 +1033,7 @@ function previewReuniao() {
     
     .resumo-item:hover {
         transform: translateX(5px);
-        color: #3b82f6;
+        color: var(--primary-color);
     }
     
     /* Loading spinner */

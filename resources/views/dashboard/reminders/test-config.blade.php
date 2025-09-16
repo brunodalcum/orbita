@@ -1,3 +1,109 @@
+<style>
+/* CORREÇÃO AGRESSIVA DE CORES - GERADO AUTOMATICAMENTE */
+:root {
+    --primary-color: #3B82F6;
+    --primary-color-rgb: 59, 130, 246;
+    --primary-dark: #2563EB;
+    --primary-light: rgba(59, 130, 246, 0.1);
+    --primary-text: #FFFFFF;
+    --secondary-color: #6B7280;
+    --accent-color: #10B981;
+}
+
+/* Classes customizadas para substituir Tailwind */
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-primary-dark { background-color: var(--primary-dark) !important; }
+.text-primary { color: var(--primary-color) !important; }
+.border-primary { border-color: var(--primary-color) !important; }
+.hover\:bg-primary-dark:hover { background-color: var(--primary-dark) !important; }
+
+/* Sobrescrita total de cores azuis */
+.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
+.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+    background-color: var(--primary-color) !important;
+}
+
+.text-blue-50, .text-blue-100, .text-blue-200, .text-blue-300, .text-blue-400,
+.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
+.text-indigo-50, .text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400,
+.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+    color: var(--primary-color) !important;
+}
+
+.border-blue-50, .border-blue-100, .border-blue-200, .border-blue-300, .border-blue-400,
+.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
+.border-indigo-50, .border-indigo-100, .border-indigo-200, .border-indigo-300, .border-indigo-400,
+.border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+    border-color: var(--primary-color) !important;
+}
+
+/* Hovers */
+.hover\:bg-blue-50:hover, .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover,
+.hover\:bg-blue-300:hover, .hover\:bg-blue-400:hover, .hover\:bg-blue-500:hover,
+.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover,
+.hover\:bg-indigo-50:hover, .hover\:bg-indigo-100:hover, .hover\:bg-indigo-200:hover,
+.hover\:bg-indigo-300:hover, .hover\:bg-indigo-400:hover, .hover\:bg-indigo-500:hover,
+.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Sobrescrever estilos inline */
+[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
+[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"],
+[style*="background-color: rgb(59, 130, 246)"], [style*="background-color: rgb(37, 99, 235)"] {
+    background-color: var(--primary-color) !important;
+}
+
+[style*="color: #3b82f6"], [style*="color: #2563eb"],
+[style*="color: #1d4ed8"], [style*="color: #1e40af"],
+[style*="color: rgb(59, 130, 246)"], [style*="color: rgb(37, 99, 235)"] {
+    color: var(--primary-color) !important;
+}
+
+/* Botões e elementos interativos */
+button:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+input[type="submit"], input[type="button"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+button:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Links */
+a:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-color) !important;
+}
+
+a:hover:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-dark) !important;
+}
+
+/* Focus states */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+    outline: none !important;
+}
+
+/* Spinners e loading */
+.animate-spin {
+    border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
+}
+
+/* Badges e tags */
+.badge:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.tag:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+</style>
 @extends('layouts.dashboard')
 
 @section('title', 'Testes & Configuração de Lembretes')
@@ -10,7 +116,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 flex items-center">
-                        <i class="fas fa-cog text-blue-600 mr-3"></i>
+                        <i class="fas fa-cog text-primary mr-3"></i>
                         Testes & Configuração de Lembretes
                     </h1>
                     <p class="text-gray-600 mt-2">Configure o sistema de lembretes e execute testes</p>
@@ -52,13 +158,13 @@
                 <!-- Estatísticas Rápidas -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">
-                        <i class="fas fa-chart-bar text-blue-600 mr-2"></i>
+                        <i class="fas fa-chart-bar text-primary mr-2"></i>
                         Estatísticas do Sistema
                     </h3>
                     
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="text-center p-4 bg-blue-50 rounded-lg">
-                            <div class="text-2xl font-bold text-blue-600">{{ $stats['total_reminders'] }}</div>
+                            <div class="text-2xl font-bold text-primary">{{ $stats['total_reminders'] }}</div>
                             <div class="text-sm text-blue-800">Total</div>
                         </div>
                         <div class="text-center p-4 bg-yellow-50 rounded-lg">
@@ -126,7 +232,7 @@
                 <!-- Configurações do Usuário -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">
-                        <i class="fas fa-user-cog text-blue-600 mr-2"></i>
+                        <i class="fas fa-user-cog text-primary mr-2"></i>
                         Suas Configurações de Lembrete
                     </h3>
                     
@@ -187,7 +293,7 @@
                                 <label class="flex items-center">
                                     <input type="checkbox" name="enabled_channels[]" value="email" 
                                            {{ in_array('email', $userSettings->enabled_channels) ? 'checked' : '' }}
-                                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                           class="rounded border-gray-300 text-primary focus:ring-blue-500">
                                     <span class="ml-2 text-sm text-gray-700">
                                         <i class="fas fa-envelope mr-1"></i> Email
                                     </span>
@@ -195,7 +301,7 @@
                                 <label class="flex items-center">
                                     <input type="checkbox" name="enabled_channels[]" value="sms" 
                                            {{ in_array('sms', $userSettings->enabled_channels) ? 'checked' : '' }}
-                                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                           class="rounded border-gray-300 text-primary focus:ring-blue-500">
                                     <span class="ml-2 text-sm text-gray-700">
                                         <i class="fas fa-sms mr-1"></i> SMS
                                     </span>
@@ -203,7 +309,7 @@
                                 <label class="flex items-center">
                                     <input type="checkbox" name="enabled_channels[]" value="push" 
                                            {{ in_array('push', $userSettings->enabled_channels) ? 'checked' : '' }}
-                                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                           class="rounded border-gray-300 text-primary focus:ring-blue-500">
                                     <span class="ml-2 text-sm text-gray-700">
                                         <i class="fas fa-bell mr-1"></i> Push Notification
                                     </span>
@@ -211,7 +317,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        <button type="submit" class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors font-medium">
                             <i class="fas fa-save mr-2"></i>
                             Salvar Configurações
                         </button>
@@ -286,20 +392,20 @@
                 <!-- Links Úteis -->
                 <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
                     <h4 class="text-lg font-semibold text-blue-900 mb-4">
-                        <i class="fas fa-link text-blue-600 mr-2"></i>
+                        <i class="fas fa-link text-primary mr-2"></i>
                         Links Úteis
                     </h4>
                     
                     <div class="space-y-2">
-                        <a href="{{ route('reminders.index') }}" class="block text-blue-700 hover:text-blue-900 text-sm">
+                        <a href="{{ route('reminders.index') }}" class="block text-primary hover:text-blue-900 text-sm">
                             <i class="fas fa-list mr-2"></i>
                             Ver Todos os Lembretes
                         </a>
-                        <a href="{{ route('reminders.create') }}" class="block text-blue-700 hover:text-blue-900 text-sm">
+                        <a href="{{ route('reminders.create') }}" class="block text-primary hover:text-blue-900 text-sm">
                             <i class="fas fa-plus mr-2"></i>
                             Criar Novo Lembrete
                         </a>
-                        <a href="{{ route('dashboard.agenda') }}" class="block text-blue-700 hover:text-blue-900 text-sm">
+                        <a href="{{ route('dashboard.agenda') }}" class="block text-primary hover:text-blue-900 text-sm">
                             <i class="fas fa-calendar mr-2"></i>
                             Ver Agenda
                         </a>
@@ -390,7 +496,7 @@ function showToast(message, type = 'info') {
     toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 ${
         type === 'success' ? 'bg-green-600' : 
         type === 'error' ? 'bg-red-600' : 
-        'bg-blue-600'
+        'bg-primary'
     }`;
     toast.textContent = message;
     document.body.appendChild(toast);

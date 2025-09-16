@@ -69,16 +69,16 @@
         }
     
         /* Sobrescrever cores Tailwind específicas */
-        .bg-blue-500, .bg-blue-600, .bg-blue-700 {
+        .bg-primary, .bg-primary, .bg-primary-dark {
             background-color: var(--primary-color) !important;
         }
-        .hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover {
+        .hover\:bg-primary:hover, .hover\:bg-primary-dark:hover {
             background-color: var(--primary-dark) !important;
         }
-        .text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800 {
+        .text-primary, .text-primary, .text-primary, .text-blue-800 {
             color: var(--primary-color) !important;
         }
-        .border-blue-500, .hover\:border-blue-500:hover {
+        .border-primary, .hover\:border-primary:hover {
             border-color: var(--primary-color) !important;
         }
         .bg-blue-50, .bg-blue-100 {
@@ -87,51 +87,51 @@
         .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover {
             background-color: var(--primary-light) !important;
         }
-        .border-b-2.border-blue-500 {
+        .border-b-2.border-primary {
             border-color: var(--primary-color) !important;
         }
     </style>
 
     <style>
         /* Força aplicação do branding nesta página específica */
-        .bg-blue-500, .bg-blue-600, .bg-blue-700 { background-color: var(--primary-color) !important; }
-        .text-blue-500, .text-blue-600, .text-blue-700 { color: var(--primary-color) !important; }
-        .border-blue-500, .border-blue-600, .border-blue-700 { border-color: var(--primary-color) !important; }
-        .hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover { background-color: var(--primary-dark) !important; }
+        .bg-primary, .bg-primary, .bg-primary-dark { background-color: var(--primary-color) !important; }
+        .text-primary, .text-primary, .text-primary { color: var(--primary-color) !important; }
+        .border-primary, .border-primary, .border-primary { border-color: var(--primary-color) !important; }
+        .hover\:bg-primary:hover, .hover\:bg-primary-dark:hover { background-color: var(--primary-dark) !important; }
     </style>
 <style>
 /* BRANDING FORÇADO PARA ESTA PÁGINA */
 :root {
-    --primary-color: #3B82F6;
-    --secondary-color: #6B7280;
-    --accent-color: #10B981;
+    --primary-color: var(--primary-color);
+    --secondary-color: var(--secondary-color);
+    --accent-color: var(--accent-color);
     --text-color: #1F2937;
     --background-color: #FFFFFF;
-    --primary-light: rgba(59, 130, 246, 0.1);
-    --primary-dark: #2563EB;
+    --primary-light: rgba(var(--primary-color-rgb), 0.1);
+    --primary-dark: var(--primary-dark);
     --primary-text: #FFFFFF;
 }
 
 /* Sobrescrita agressiva de todas as cores azuis */
 .bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
-.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.bg-primary, .bg-primary, .bg-primary-dark, .bg-blue-800, .bg-blue-900,
 .bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
-.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+.bg-primary, .bg-primary, .bg-primary-dark, .bg-indigo-800, .bg-indigo-900 {
     background-color: var(--primary-color) !important;
 }
 
-.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover,
-.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
+.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-blue-800:hover,
+.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-indigo-800:hover {
     background-color: var(--primary-dark) !important;
 }
 
-.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
-.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+.text-primary, .text-primary, .text-primary, .text-blue-800, .text-blue-900,
+.text-primary, .text-primary, .text-primary, .text-indigo-800, .text-indigo-900 {
     color: var(--primary-color) !important;
 }
 
-.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
-.border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+.border-primary, .border-primary, .border-primary, .border-blue-800, .border-blue-900,
+.border-primary, .border-primary, .border-primary, .border-indigo-800, .border-indigo-900 {
     border-color: var(--primary-color) !important;
 }
 
@@ -154,18 +154,223 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
 }
 
 /* Sobrescrever estilos inline hardcoded */
-[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
-[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"] {
+[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"],
+[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"] {
     background-color: var(--primary-color) !important;
 }
 
-[style*="color: #3b82f6"], [style*="color: #2563eb"],
-[style*="color: #1d4ed8"], [style*="color: #1e40af"] {
+[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"],
+[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"] {
     color: var(--primary-color) !important;
 }
 
 .animate-spin[class*="border-blue"], .animate-spin[class*="border-indigo"] {
     border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
+}
+</style>
+<style>
+/* CSS SUPER AGRESSIVO PARA LICENCIADOS - FORÇA TODAS AS CORES */
+:root {
+    --primary-color: var(--primary-color) !important;
+    --secondary-color: var(--secondary-color) !important;
+    --accent-color: var(--accent-color) !important;
+    --text-color: #1F2937 !important;
+    --background-color: #FFFFFF !important;
+    --primary-light: rgba(var(--primary-color-rgb), 0.1) !important;
+    --primary-dark: var(--primary-dark) !important;
+    --primary-text: #FFFFFF !important;
+}
+
+/* FORÇA TODOS OS BOTÕES */
+button, .btn, input[type="button"], input[type="submit"], a.button {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+button:hover, .btn:hover, input[type="button"]:hover, input[type="submit"]:hover, a.button:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+/* FORÇA TODAS AS CLASSES TAILWIND AZUIS */
+[class*="bg-blue"], [class*="bg-indigo"] {
+    background-color: var(--primary-color) !important;
+}
+
+[class*="text-blue"], [class*="text-indigo"] {
+    color: var(--primary-color) !important;
+}
+
+[class*="border-blue"], [class*="border-indigo"] {
+    border-color: var(--primary-color) !important;
+}
+
+/* FORÇA ESTILOS INLINE */
+[style*="background-color"] {
+    background-color: var(--primary-color) !important;
+}
+
+[style*="color: #"] {
+    color: var(--primary-color) !important;
+}
+
+/* FORÇA LINKS */
+a:not(.no-style) {
+    color: var(--primary-color) !important;
+}
+
+a:not(.no-style):hover {
+    color: var(--primary-dark) !important;
+}
+
+/* FORÇA ÍCONES */
+.fa, .fas, .far, .fal, .fab, i[class*="fa"] {
+    color: var(--primary-color) !important;
+}
+
+/* FORÇA BADGES E PILLS */
+.badge, .pill, .tag {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+/* FORÇA CARDS E CONTAINERS */
+.card-header, .panel-header {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+/* FORÇA TABELAS */
+th {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+/* FORÇA FORMULÁRIOS */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+}
+
+/* FORÇA NAVEGAÇÃO */
+.nav-link.active, .nav-item.active {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+/* FORÇA QUALQUER ELEMENTO COM COR HARDCODED */
+* {
+    --tw-bg-primary: var(--primary-color) !important;
+    --tw-bg-primary: var(--primary-color) !important;
+    --tw-bg-primary: var(--primary-color) !important;
+    --tw-bg-primary: var(--primary-color) !important;
+}
+</style>
+<style>
+/* CORREÇÃO AGRESSIVA DE CORES - GERADO AUTOMATICAMENTE */
+:root {
+    --primary-color: #3B82F6;
+    --primary-color-rgb: 59, 130, 246;
+    --primary-dark: #2563EB;
+    --primary-light: rgba(59, 130, 246, 0.1);
+    --primary-text: #FFFFFF;
+    --secondary-color: #6B7280;
+    --accent-color: #10B981;
+}
+
+/* Classes customizadas para substituir Tailwind */
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-primary-dark { background-color: var(--primary-dark) !important; }
+.text-primary { color: var(--primary-color) !important; }
+.border-primary { border-color: var(--primary-color) !important; }
+.hover\:bg-primary-dark:hover { background-color: var(--primary-dark) !important; }
+
+/* Sobrescrita total de cores azuis */
+.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
+.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+    background-color: var(--primary-color) !important;
+}
+
+.text-blue-50, .text-blue-100, .text-blue-200, .text-blue-300, .text-blue-400,
+.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
+.text-indigo-50, .text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400,
+.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+    color: var(--primary-color) !important;
+}
+
+.border-blue-50, .border-blue-100, .border-blue-200, .border-blue-300, .border-blue-400,
+.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900,
+.border-indigo-50, .border-indigo-100, .border-indigo-200, .border-indigo-300, .border-indigo-400,
+.border-indigo-500, .border-indigo-600, .border-indigo-700, .border-indigo-800, .border-indigo-900 {
+    border-color: var(--primary-color) !important;
+}
+
+/* Hovers */
+.hover\:bg-blue-50:hover, .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover,
+.hover\:bg-blue-300:hover, .hover\:bg-blue-400:hover, .hover\:bg-blue-500:hover,
+.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover,
+.hover\:bg-indigo-50:hover, .hover\:bg-indigo-100:hover, .hover\:bg-indigo-200:hover,
+.hover\:bg-indigo-300:hover, .hover\:bg-indigo-400:hover, .hover\:bg-indigo-500:hover,
+.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Sobrescrever estilos inline */
+[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
+[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"],
+[style*="background-color: rgb(59, 130, 246)"], [style*="background-color: rgb(37, 99, 235)"] {
+    background-color: var(--primary-color) !important;
+}
+
+[style*="color: #3b82f6"], [style*="color: #2563eb"],
+[style*="color: #1d4ed8"], [style*="color: #1e40af"],
+[style*="color: rgb(59, 130, 246)"], [style*="color: rgb(37, 99, 235)"] {
+    color: var(--primary-color) !important;
+}
+
+/* Botões e elementos interativos */
+button:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+input[type="submit"], input[type="button"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+button:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.btn:hover:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Links */
+a:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-color) !important;
+}
+
+a:hover:not([class*="text-gray"]):not([class*="text-white"]):not([class*="text-black"]):not([class*="text-red"]):not([class*="text-green"]) {
+    color: var(--primary-dark) !important;
+}
+
+/* Focus states */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+    outline: none !important;
+}
+
+/* Spinners e loading */
+.animate-spin {
+    border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
+}
+
+/* Badges e tags */
+.badge:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]),
+.tag:not([class*="gray"]):not([class*="red"]):not([class*="green"]):not([class*="yellow"]) {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
 }
 </style>
 </head>
@@ -184,7 +389,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                         <p style="color: var(--secondary-color);">Gerencie os licenciados do sistema</p>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <button onclick="openLicenciadoModal()" style="background-color: var(--primary-color);" class="hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <button onclick="openLicenciadoModal()" style="background-color: var(--primary-color);" class="hover:bg-primary text-white px-4 py-2 rounded-lg transition-colors">
                             <i class="fas fa-plus mr-2"></i>
                             Novo Licenciado
                         </button>
@@ -266,10 +471,10 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                     <div class="p-6 border-b">
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-semibold text-gray-800">
-                                <i class="fas fa-filter mr-2 text-blue-500"></i>
+                                <i class="fas fa-filter mr-2" style="color: var(--primary-color);"></i>
                                 Filtros
                             </h3>
-                            <button onclick="toggleFilters()" style="color: var(--primary-color);" class=" hover:" style="color: var(--primary-color);" transition-colors">
+                            <button onclick="toggleFilters()" style="color: var(--primary-color);" class="hover:text-primary transition-colors">
                                 <i class="fas fa-chevron-down" id="filter-chevron"></i>
                             </button>
                         </div>
@@ -387,7 +592,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                             <!-- Botões de Ação -->
                             <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
                                 <div class="flex items-center space-x-4">
-                                    <button type="submit" style="background-color: var(--primary-color);" class="hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
+                                    <button type="submit" style="background-color: var(--primary-color);" class="hover:bg-primary text-white px-6 py-2 rounded-lg transition-colors">
                                         <i class="fas fa-search mr-2"></i>
                                         Aplicar Filtros
                                     </button>
@@ -411,7 +616,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                     <div class="flex items-center justify-between p-6 border-b">
                         <h3 class="text-lg font-semibold text-gray-800">Lista de Licenciados</h3>
                         <div class="flex items-center space-x-4">
-                            <button style="background-color: var(--primary-color);" class="hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <button style="background-color: var(--primary-color);" class="hover:bg-primary text-white px-4 py-2 rounded-lg transition-colors">
                                 <i class="fas fa-download mr-2"></i>
                                 Exportar
                             </button>
@@ -461,7 +666,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 <div class="flex space-x-2">
                                                     <a href="{{ route('licenciados.gerenciar', $licenciado->id) }}" 
-                                                       class="inline-flex items-center px-3 py-2 text-sm font-medium " style="color: var(--primary-color);" bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors duration-200" 
+                                                       class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200" style="color: var(--primary-color); background-color: var(--primary-light);" onmouseover="this.style.backgroundColor='var(--primary-light)'" onmouseout="this.style.backgroundColor='var(--primary-light)'" 
                                                        title="Gerenciar Licenciado">
                                                         <i class="fas fa-eye mr-1"></i>
                                                         <span class="hidden sm:inline">Gerenciar</span>
@@ -583,7 +788,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                 <label class="block text-sm font-medium text-gray-700 mb-2">CNPJ/CPF *</label>
                                 <div class="flex space-x-2">
                                     <input type="text" name="cnpj_cpf" id="cnpj_cpf" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="00.000.000/0000-00" required>
-                                    <button type="button" id="consultarCnpjBtn" onclick="consultarCNPJ()" class="px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <button type="button" id="consultarCnpjBtn" onclick="consultarCNPJ()" style="background-color: var(--primary-color);" class="px-4 py-3 hover:bg-primary text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                                         <i class="fas fa-search" id="cnpj-search-icon"></i>
                                         <i class="fas fa-spinner fa-spin hidden" id="cnpj-loading-icon"></i>
                                     </button>
@@ -668,7 +873,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="document-upload">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Cartão CNPJ *</label>
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
                                     <input type="file" name="cartao_cnpj" id="cartao_cnpj" class="hidden" accept=".pdf,.jpg,.jpeg,.png" required>
                                     <label for="cartao_cnpj" class="cursor-pointer">
                                         <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
@@ -683,7 +888,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
 
                             <div class="document-upload">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Contrato Social *</label>
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
                                     <input type="file" name="contrato_social" id="contrato_social" class="hidden" accept=".pdf,.jpg,.jpeg,.png" required>
                                     <label for="contrato_social" class="cursor-pointer">
                                         <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
@@ -698,7 +903,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
 
                             <div class="document-upload">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">RG ou CNH *</label>
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
                                     <input type="file" name="rg_cnh" id="rg_cnh" class="hidden" accept=".pdf,.jpg,.jpeg,.png" required>
                                     <label for="rg_cnh" class="cursor-pointer">
                                         <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
@@ -713,7 +918,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
 
                             <div class="document-upload">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Comprovante de Residência *</label>
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
                                     <input type="file" name="comprovante_residencia" id="comprovante_residencia" class="hidden" accept=".pdf,.jpg,.jpeg,.png" required>
                                     <label for="comprovante_residencia" class="cursor-pointer">
                                         <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
@@ -728,7 +933,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
 
                             <div class="document-upload md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Comprovante de Atividade *</label>
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
                                     <input type="file" name="comprovante_atividade" id="comprovante_atividade" class="hidden" accept=".pdf,.jpg,.jpeg,.png" required>
                                     <label for="comprovante_atividade" class="cursor-pointer">
                                         <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
@@ -779,7 +984,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                         <button type="button" onclick="closeLicenciadoModal()" class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors">
                             Cancelar
                         </button>
-                        <button type="button" id="nextBtn" onclick="changeStep(1)" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+                        <button type="button" id="nextBtn" onclick="changeStep(1)" style="background-color: var(--primary-color);" class="px-6 py-2 hover:bg-primary text-white rounded-lg transition-colors">
                             Próximo<i class="fas fa-arrow-right ml-2"></i>
                         </button>
                         <button type="submit" id="submitBtn" class="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors hidden disabled:opacity-50 disabled:cursor-not-allowed">
@@ -997,7 +1202,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                 <!-- Licenciado Info -->
                 <div class="bg-gray-50 rounded-lg p-4 mb-6">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background-color: var(--primary-light);">
                             <i class="fas fa-building " style="color: var(--primary-color);""></i>
                         </div>
                         <div>
@@ -1129,7 +1334,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
             
             operacoes.forEach(operacao => {
                 const div = document.createElement('div');
-                div.className = 'border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-colors cursor-pointer operacao-item';
+                div.className = 'border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors cursor-pointer operacao-item';
                 div.innerHTML = `
                     <div class="flex items-center">
                         <input type="checkbox" id="operacao_${operacao.id}" value="${operacao.id}" class="mr-3 operacao-checkbox">
@@ -1803,7 +2008,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
         function generateLicenciadoDetailsHTML(licenciado) {
             const statusBadge = getStatusBadge(licenciado.status);
             const operacoesList = licenciado.operacoes && licenciado.operacoes.length > 0 
-                ? licenciado.operacoes.map(op => `<span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">${op}</span>`).join('')
+                ? licenciado.operacoes.map(op => `<span class="inline-block text-xs px-2 py-1 rounded-full mr-1 mb-1" style="background-color: var(--primary-light); color: var(--primary-color);">${op}</span>`).join('')
                 : '<span class="text-gray-500">Nenhuma operação selecionada</span>';
 
             return `
@@ -1824,7 +2029,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-white border border-gray-200 rounded-lg p-4">
                             <h5 class="font-semibold text-gray-900 mb-3 flex items-center">
-                                <i class="fas fa-building text-blue-500 mr-2"></i>
+                                <i class="fas fa-building text-primary mr-2"></i>
                                 Dados da Empresa
                             </h5>
                             <div class="space-y-2 text-sm">
@@ -1872,7 +2077,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                     <!-- Documentos -->
                     <div class="bg-white border border-gray-200 rounded-lg p-4">
                         <h5 class="font-semibold text-gray-900 mb-3 flex items-center">
-                            <i class="fas fa-file-alt text-indigo-500 mr-2"></i>
+                            <i class="fas fa-file-alt text-primary mr-2"></i>
                             Documentos
                         </h5>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1912,7 +2117,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
                                 <span class="text-sm font-medium text-gray-700">${doc.name}</span>
                             </div>
                             <a href="/dashboard/licenciados/${licenciado.id}/download/${doc.key}" 
-                               class="" style="color: var(--primary-color);" hover:text-blue-800 text-sm">
+                               class="text-sm transition-colors duration-200" style="color: var(--primary-color);" onmouseover="this.style.color='var(--primary-dark)'" onmouseout="this.style.color='var(--primary-color)'"
                                 <i class="fas fa-download"></i>
                             </a>
                         </div>
@@ -2754,16 +2959,16 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
         }
     
         /* Sobrescrever cores Tailwind específicas */
-        .bg-blue-500, .bg-blue-600, .bg-blue-700 {
+        .bg-primary, .bg-primary, .bg-primary-dark {
             background-color: var(--primary-color) !important;
         }
-        .hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover {
+        .hover\:bg-primary:hover, .hover\:bg-primary-dark:hover {
             background-color: var(--primary-dark) !important;
         }
-        .text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800 {
+        .text-primary, .text-primary, .text-primary, .text-blue-800 {
             color: var(--primary-color) !important;
         }
-        .border-blue-500, .hover\:border-blue-500:hover {
+        .border-primary, .hover\:border-primary:hover {
             border-color: var(--primary-color) !important;
         }
         .bg-blue-50, .bg-blue-100 {
@@ -2772,7 +2977,7 @@ button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:
         .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover {
             background-color: var(--primary-light) !important;
         }
-        .border-b-2.border-blue-500 {
+        .border-b-2.border-primary {
             border-color: var(--primary-color) !important;
         }
     </style>
