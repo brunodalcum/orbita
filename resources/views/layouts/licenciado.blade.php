@@ -186,6 +186,8 @@
         }
     </style>
     
+    <!-- CSS Global de Branding Dinâmico -->
+    <link href="{{ asset('css/global-branding.css') }}" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">

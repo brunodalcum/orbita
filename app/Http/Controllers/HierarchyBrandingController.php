@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\BrandingService;
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -88,7 +90,8 @@ class HierarchyBrandingController extends Controller
         if ($user->isSuperAdminNode() && $selectedNodeId) {
             $targetUser = User::find($selectedNodeId);
             if (!$targetUser) {
-                return response()->json(['error' => 'Nó não encontrado'], 404);
+                BrandingService::updateGlobalCSS();
+        return response()->json(['error' => 'Nó não encontrado'], 404);
             }
         }
         

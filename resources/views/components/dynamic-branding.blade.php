@@ -326,6 +326,140 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-dark);
 }
+
+
+/* SISTEMA DE BRANDING DINÂMICO APRIMORADO */
+/* Sobrescrever TODAS as classes Tailwind de cores azuis */
+.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400, 
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900 {
+    background-color: var(--primary-color) !important;
+}
+
+.hover\:bg-blue-50:hover, .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover,
+.hover\:bg-blue-300:hover, .hover\:bg-blue-400:hover, .hover\:bg-blue-500:hover,
+.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+.text-blue-50, .text-blue-100, .text-blue-200, .text-blue-300, .text-blue-400,
+.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900 {
+    color: var(--primary-color) !important;
+}
+
+.border-blue-50, .border-blue-100, .border-blue-200, .border-blue-300, .border-blue-400,
+.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900 {
+    border-color: var(--primary-color) !important;
+}
+
+/* Sobrescrever cores indigo também */
+.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
+.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+    background-color: var(--primary-color) !important;
+}
+
+.text-indigo-50, .text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400,
+.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+    color: var(--primary-color) !important;
+}
+
+/* Cores verdes para accent */
+.bg-green-50, .bg-green-100 {
+    background-color: var(--accent-color) !important;
+    opacity: 0.1;
+}
+
+.bg-green-500, .bg-green-600, .bg-green-700 {
+    background-color: var(--accent-color) !important;
+}
+
+.text-green-500, .text-green-600, .text-green-700, .text-green-800 {
+    color: var(--accent-color) !important;
+}
+
+/* Estilos específicos para elementos comuns */
+button[class*="bg-blue"], a[class*="bg-blue"], .btn[class*="blue"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+button[class*="bg-blue"]:hover, a[class*="bg-blue"]:hover, .btn[class*="blue"]:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Elementos com cores hardcoded via style */
+[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
+[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"] {
+    background-color: var(--primary-color) !important;
+}
+
+[style*="color: #3b82f6"], [style*="color: #2563eb"],
+[style*="color: #1d4ed8"], [style*="color: #1e40af"] {
+    color: var(--primary-color) !important;
+}
+
+/* Animações e loading spinners */
+.animate-spin[class*="border-blue"] {
+    border-color: var(--primary-color) !important;
+}
+
+/* Links e elementos interativos */
+a:not([class*="text-"]):not([class*="bg-"]) {
+    color: var(--primary-color);
+}
+
+a:not([class*="text-"]):not([class*="bg-"]):hover {
+    color: var(--primary-dark);
+}
+
+/* Formulários */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+}
+
+/* Badges e tags */
+.badge, .tag, [class*="rounded-full"][class*="bg-blue"] {
+    background-color: var(--primary-light) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Tabelas */
+th, .table-header {
+    border-bottom-color: var(--primary-color) !important;
+}
+
+/* Modais e overlays */
+.modal-header, .dialog-header {
+    background: var(--primary-gradient) !important;
+    color: var(--primary-text) !important;
+}
+
+/* Sidebar e navegação */
+.sidebar [class*="bg-blue"], .nav [class*="bg-blue"] {
+    background-color: var(--primary-color) !important;
+}
+
+/* Cards e containers */
+.card-primary, .container-primary {
+    border-left: 4px solid var(--primary-color) !important;
+}
+
+/* Elementos específicos do dashboard */
+.dashboard-stat, .metric-card {
+    background: var(--primary-gradient) !important;
+    color: var(--primary-text) !important;
+}
+
+/* Força aplicação em elementos inline */
+* {
+    --tw-bg-blue-500: var(--primary-color) !important;
+    --tw-bg-blue-600: var(--primary-color) !important;
+    --tw-bg-blue-700: var(--primary-dark) !important;
+    --tw-text-blue-500: var(--primary-color) !important;
+    --tw-text-blue-600: var(--primary-color) !important;
+    --tw-text-blue-700: var(--primary-color) !important;
+}
 </style>
 @endonce
 
@@ -334,6 +468,140 @@ body {
 <style id="custom-branding-css">
 /* CSS personalizado do usuário */
 {!! $branding['custom_css'] !!}
+
+
+/* SISTEMA DE BRANDING DINÂMICO APRIMORADO */
+/* Sobrescrever TODAS as classes Tailwind de cores azuis */
+.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400, 
+.bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900 {
+    background-color: var(--primary-color) !important;
+}
+
+.hover\:bg-blue-50:hover, .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover,
+.hover\:bg-blue-300:hover, .hover\:bg-blue-400:hover, .hover\:bg-blue-500:hover,
+.hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-blue-800:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+.text-blue-50, .text-blue-100, .text-blue-200, .text-blue-300, .text-blue-400,
+.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900 {
+    color: var(--primary-color) !important;
+}
+
+.border-blue-50, .border-blue-100, .border-blue-200, .border-blue-300, .border-blue-400,
+.border-blue-500, .border-blue-600, .border-blue-700, .border-blue-800, .border-blue-900 {
+    border-color: var(--primary-color) !important;
+}
+
+/* Sobrescrever cores indigo também */
+.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
+.bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900 {
+    background-color: var(--primary-color) !important;
+}
+
+.text-indigo-50, .text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400,
+.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+    color: var(--primary-color) !important;
+}
+
+/* Cores verdes para accent */
+.bg-green-50, .bg-green-100 {
+    background-color: var(--accent-color) !important;
+    opacity: 0.1;
+}
+
+.bg-green-500, .bg-green-600, .bg-green-700 {
+    background-color: var(--accent-color) !important;
+}
+
+.text-green-500, .text-green-600, .text-green-700, .text-green-800 {
+    color: var(--accent-color) !important;
+}
+
+/* Estilos específicos para elementos comuns */
+button[class*="bg-blue"], a[class*="bg-blue"], .btn[class*="blue"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+button[class*="bg-blue"]:hover, a[class*="bg-blue"]:hover, .btn[class*="blue"]:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+/* Elementos com cores hardcoded via style */
+[style*="background-color: #3b82f6"], [style*="background-color: #2563eb"],
+[style*="background-color: #1d4ed8"], [style*="background-color: #1e40af"] {
+    background-color: var(--primary-color) !important;
+}
+
+[style*="color: #3b82f6"], [style*="color: #2563eb"],
+[style*="color: #1d4ed8"], [style*="color: #1e40af"] {
+    color: var(--primary-color) !important;
+}
+
+/* Animações e loading spinners */
+.animate-spin[class*="border-blue"] {
+    border-color: var(--primary-color) !important;
+}
+
+/* Links e elementos interativos */
+a:not([class*="text-"]):not([class*="bg-"]) {
+    color: var(--primary-color);
+}
+
+a:not([class*="text-"]):not([class*="bg-"]):hover {
+    color: var(--primary-dark);
+}
+
+/* Formulários */
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+}
+
+/* Badges e tags */
+.badge, .tag, [class*="rounded-full"][class*="bg-blue"] {
+    background-color: var(--primary-light) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Tabelas */
+th, .table-header {
+    border-bottom-color: var(--primary-color) !important;
+}
+
+/* Modais e overlays */
+.modal-header, .dialog-header {
+    background: var(--primary-gradient) !important;
+    color: var(--primary-text) !important;
+}
+
+/* Sidebar e navegação */
+.sidebar [class*="bg-blue"], .nav [class*="bg-blue"] {
+    background-color: var(--primary-color) !important;
+}
+
+/* Cards e containers */
+.card-primary, .container-primary {
+    border-left: 4px solid var(--primary-color) !important;
+}
+
+/* Elementos específicos do dashboard */
+.dashboard-stat, .metric-card {
+    background: var(--primary-gradient) !important;
+    color: var(--primary-text) !important;
+}
+
+/* Força aplicação em elementos inline */
+* {
+    --tw-bg-blue-500: var(--primary-color) !important;
+    --tw-bg-blue-600: var(--primary-color) !important;
+    --tw-bg-blue-700: var(--primary-dark) !important;
+    --tw-text-blue-500: var(--primary-color) !important;
+    --tw-text-blue-600: var(--primary-color) !important;
+    --tw-text-blue-700: var(--primary-color) !important;
+}
 </style>
 @endonce
 @endif

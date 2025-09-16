@@ -55,7 +55,9 @@
         <!-- Styles -->
         @livewireStyles
         @stack('styles')
-    </head>
+        <!-- CSS Global de Branding Dinâmico -->
+    <link href="{{ asset('css/global-branding.css') }}" rel="stylesheet">
+</head>
     <body class="font-sans antialiased">
         <x-banner />
 
