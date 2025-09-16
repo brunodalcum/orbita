@@ -4,6 +4,7 @@
 
 echo "<h1>🚨 SISTEMA SIMPLES DE BRANDING</h1>";
 echo "<p><strong>Versão SIMPLES - Funcional e Direto</strong></p>";
+echo "<p><em>✅ Erro de componente corrigido!</em></p>";
 
 // Limpar caches
 if (function_exists("opcache_reset")) {

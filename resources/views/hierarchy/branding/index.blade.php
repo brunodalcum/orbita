@@ -1,4 +1,4 @@
-<x-dynamic-branding />
+<x-simple-branding />
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

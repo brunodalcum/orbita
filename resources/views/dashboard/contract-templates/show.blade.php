@@ -1,5 +1,5 @@
 
-<x-dynamic-branding />
+<x-simple-branding />
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,78 +15,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @endif
     
-    <style>
-        .variable-highlight { background-color: #fef3c7; border: 1px solid #f59e0b; padding: 2px 4px; border-radius: 3px; }
-    </style>
-<style>
-/* BRANDING FORÇADO PARA ESTA PÁGINA */
-:root {
-    --primary-color: var(--primary-color);
-    --secondary-color: var(--secondary-color);
-    --accent-color: var(--accent-color);
-    --text-color: #1F2937;
-    --background-color: #FFFFFF;
-    --primary-light: rgba(var(--primary-color-rgb), 0.1);
-    --primary-dark: var(--primary-dark);
-    --primary-text: #FFFFFF;
-}
-
-/* Sobrescrita agressiva de todas as cores azuis */
-.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
-.bg-primary, .bg-primary, .bg-primary-dark, .bg-blue-800, .bg-blue-900,
-.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
-.bg-primary, .bg-primary, .bg-primary-dark, .bg-indigo-800, .bg-indigo-900 {
-    background-color: var(--primary-color) !important;
-}
-
-.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-blue-800:hover,
-.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-indigo-800:hover {
-    background-color: var(--primary-dark) !important;
-}
-
-.text-primary, .text-primary, .text-primary, .text-blue-800, .text-blue-900,
-.text-primary, .text-primary, .text-primary, .text-indigo-800, .text-indigo-900 {
-    color: var(--primary-color) !important;
-}
-
-.border-primary, .border-primary, .border-primary, .border-blue-800, .border-blue-900,
-.border-primary, .border-primary, .border-primary, .border-indigo-800, .border-indigo-900 {
-    border-color: var(--primary-color) !important;
-}
-
-button[class*="blue"], .btn[class*="blue"], button[class*="indigo"], .btn[class*="indigo"] {
-    background-color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
-    color: var(--primary-text) !important;
-}
-
-button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:hover, .btn[class*="indigo"]:hover {
-    background-color: var(--primary-dark) !important;
-}
-
-.bg-green-500, .bg-green-600, .bg-green-700 {
-    background-color: var(--accent-color) !important;
-}
-
-.text-green-500, .text-green-600, .text-green-700, .text-green-800 {
-    color: var(--accent-color) !important;
-}
-
-/* Sobrescrever estilos inline hardcoded */
-[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"],
-[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"] {
-    background-color: var(--primary-color) !important;
-}
-
-[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"],
-[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"] {
-    color: var(--primary-color) !important;
-}
-
-.animate-spin[class*="border-blue"], .animate-spin[class*="border-indigo"] {
-    border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
-}
-</style>
+    
 <style>
 /* CORREÇÃO AGRESSIVA DE CORES - GERADO AUTOMATICAMENTE */
 :root {
