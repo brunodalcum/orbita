@@ -29,7 +29,7 @@
     $textColor = 'white'; // Padrão para sidebar com gradiente
 @endphp
 
-<div class="w-64 flex-shrink-0 relative brand-sidebar {{ $nodeTypeClass }}">
+<div class="w-64 flex-shrink-0 relative sidebar {{ $nodeTypeClass }}">
     <div class="p-6">
         <!-- Logo -->
         <div class="flex items-center justify-center mb-8 w-full">

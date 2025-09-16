@@ -1,4 +1,3 @@
-<x-dynamic-branding />
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -43,8 +42,9 @@
     <!-- CSS ESPECÍFICO PARA ELEMENTOS TEIMOSOS -->
     <link href="{{ asset('css/specific-elements-fix.css') }}" rel="stylesheet">
     <!-- SISTEMA UNIFICADO DE BRANDING -->
-    <link href="{{ asset('css/unified-branding.css') }}" rel="stylesheet">
-    <x-unified-branding />
+    <!-- SISTEMA SIMPLES DE BRANDING -->
+    <link href="{{ asset('css/simple-branding.css') }}" rel="stylesheet">
+    <x-simple-branding />
 </head>
     <body class="bg-gray-50">
         <x-banner />
