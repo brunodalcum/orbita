@@ -1,3 +1,4 @@
+<x-dynamic-branding />
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -184,7 +185,7 @@
             }
         }
     </style>
-    <x-dynamic-branding />
+    
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">

@@ -1,7 +1,8 @@
+<x-dynamic-branding />
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<x-dynamic-branding />
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Lead - Orbita</title>
@@ -259,7 +260,4 @@
     </script>
 </body>
 </html>
-
-
-
 

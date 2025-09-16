@@ -5,6 +5,7 @@
 
 @section('content')
 <x-dynamic-branding />
+
 <div class="space-y-6">
     <!-- Contact Options -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -1,3 +1,4 @@
+<x-dynamic-branding />
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -50,7 +51,6 @@
         @endif
         
         <!-- Branding Dinâmico -->
-        <x-dynamic-branding />
 
         <!-- Styles -->
         @livewireStyles

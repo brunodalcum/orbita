@@ -1,3 +1,4 @@
+<x-dynamic-branding />
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -13,8 +14,7 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <!-- Branding Dinâmico -->
-    <x-dynamic-branding />
-    
+
     <style>
         body {
             font-family: 'Inter', sans-serif;

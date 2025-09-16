@@ -5,6 +5,7 @@
 
 @section('content')
 <x-dynamic-branding />
+
 <div class="space-y-6">
     <!-- Welcome Message -->
     <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white">

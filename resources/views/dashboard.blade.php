@@ -1,3 +1,4 @@
+<x-dynamic-branding />
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -24,8 +25,7 @@
     <link rel="shortcut icon" type="image/png" href="{{ asset($faviconUrl) }}?v={{ time() }}">
     
     <!-- Branding Dinâmico -->
-    <x-dynamic-branding />
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -167,8 +167,6 @@
                         </div>
                     </div>
                 </div>
-
-
 
                 <!-- Recent Activity & Quick Actions -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -353,7 +351,6 @@
             </main>
         </div>
     </div>
-
 
 </body>
 </html>

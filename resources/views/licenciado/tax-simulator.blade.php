@@ -39,6 +39,7 @@
 
 @section('content')
 <x-dynamic-branding />
+
 <div class="space-y-6">
     <!-- Header -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">

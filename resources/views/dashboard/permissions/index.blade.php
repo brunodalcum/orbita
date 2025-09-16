@@ -4,6 +4,7 @@
 
 @section('content')
 <x-dynamic-branding />
+
 <div class="container mx-auto px-6 py-8">
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">

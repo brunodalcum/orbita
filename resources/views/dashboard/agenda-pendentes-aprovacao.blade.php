@@ -3,8 +3,9 @@
 @section('title', 'Aprovação de Compromissos')
 
 @section('content')
-<!-- Branding Dinâmico -->
 <x-dynamic-branding />
+<!-- Branding Dinâmico -->
+
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
     <div class="container mx-auto px-6 py-8">
         <!-- Header -->

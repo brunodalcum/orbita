@@ -1,3 +1,4 @@
+<x-dynamic-branding />
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,8 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Branding Dinâmico -->
-    <x-dynamic-branding />
-    
+
     <style>
         body { font-family: 'Inter', sans-serif; }
         .card { 

@@ -3,8 +3,8 @@
 @section('title', 'Simulador de Taxas')
 
 @section('content')
-<!-- Branding Dinâmico -->
 <x-dynamic-branding />
+<!-- Branding Dinâmico -->
 
 <style>
         .input-percentage::after {

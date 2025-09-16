@@ -9,28 +9,28 @@
     $textColor = $branding['text_color'] ?? '#1F2937';
     $backgroundColor = $branding['background_color'] ?? '#FFFFFF';
     
-    // Determinar se as cores são escuras ou claras para contraste
-    function hexToRgb($hex) {
+    // Função inline para converter hex para RGB (evita redeclaração)
+    $hexToRgb = function($hex) {
         $hex = ltrim($hex, '#');
         return [
             hexdec(substr($hex, 0, 2)),
             hexdec(substr($hex, 2, 2)),
             hexdec(substr($hex, 4, 2))
         ];
-    }
+    };
     
-    function getBrightness($hex) {
-        $rgb = hexToRgb($hex);
+    // Função inline para calcular brilho
+    $getBrightness = function($hex) use ($hexToRgb) {
+        $rgb = $hexToRgb($hex);
         return ($rgb[0] * 299 + $rgb[1] * 587 + $rgb[2] * 114) / 1000;
-    }
+    };
     
-    $primaryBrightness = getBrightness($primaryColor);
+    $primaryBrightness = $getBrightness($primaryColor);
     $isDarkPrimary = $primaryBrightness < 128;
     
     // Cores derivadas para diferentes elementos
-    $primaryLight = $isDarkPrimary ? 
-        'rgba(' . implode(',', hexToRgb($primaryColor)) . ', 0.1)' : 
-        'rgba(' . implode(',', hexToRgb($primaryColor)) . ', 0.1)';
+    $primaryRgb = $hexToRgb($primaryColor);
+    $primaryLight = 'rgba(' . implode(',', $primaryRgb) . ', 0.1)';
     
     $primaryDark = $isDarkPrimary ? 
         $primaryColor : 
@@ -44,7 +44,8 @@
     $primaryTextColor = $isDarkPrimary ? '#FFFFFF' : '#000000';
 @endphp
 
-<style>
+@once
+<style id="dynamic-branding-styles">
 :root {
     /* Cores principais do branding */
     --primary-color: {{ $primaryColor }};
@@ -326,10 +327,13 @@ body {
     background: var(--primary-dark);
 }
 </style>
+@endonce
 
 @if(!empty($branding['custom_css']))
-<style>
+@once
+<style id="custom-branding-css">
 /* CSS personalizado do usuário */
 {!! $branding['custom_css'] !!}
 </style>
+@endonce
 @endif

@@ -1,3 +1,4 @@
+<x-dynamic-branding />
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -31,7 +32,7 @@
 
         <!-- Styles -->
         @livewireStyles
-        <x-dynamic-branding />
+        
 </head>
     <body class="bg-gray-50">
         <x-banner />
@@ -82,8 +83,4 @@
         @livewireScripts
     </body>
 </html>
-
-
-
-
 
