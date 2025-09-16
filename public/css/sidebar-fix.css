@@ -1,0 +1,170 @@
+/* CORREÇÃO ESPECÍFICA PARA SIDEBAR - FORÇA TEXTOS BRANCOS */
+/* Gerado automaticamente em: 2025-09-16 14:07:25 */
+
+/* FORÇA TEXTOS BRANCOS NA SIDEBAR - MÁXIMA PRIORIDADE */
+.sidebar-gradient, .sidebar-gradient *, 
+.w-64.flex-shrink-0, .w-64.flex-shrink-0 *,
+.dynamic-sidebar, .dynamic-sidebar *,
+div[class*="sidebar"], div[class*="sidebar"] * {
+    color: white !important;
+}
+
+/* Seletores ultra-específicos para elementos da sidebar */
+.sidebar-gradient .sidebar-menu-item,
+.sidebar-gradient .sidebar-menu-item *,
+.sidebar-gradient .sidebar-submenu-item,
+.sidebar-gradient .sidebar-submenu-item *,
+.sidebar-gradient nav,
+.sidebar-gradient nav *,
+.sidebar-gradient .menu-item,
+.sidebar-gradient .menu-item *,
+.sidebar-gradient .space-y-2,
+.sidebar-gradient .space-y-2 * {
+    color: white !important;
+}
+
+/* Links da sidebar */
+.sidebar-gradient a,
+.sidebar-gradient a *,
+.sidebar-gradient .flex.items-center,
+.sidebar-gradient .flex.items-center *,
+.sidebar-gradient .font-medium,
+.sidebar-gradient .text-sm,
+.sidebar-gradient .text-xs {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* Ícones da sidebar */
+.sidebar-gradient i,
+.sidebar-gradient .fas,
+.sidebar-gradient .far,
+.sidebar-gradient .fab,
+.sidebar-gradient [class*="fa-"] {
+    color: white !important;
+}
+
+/* Spans e textos da sidebar */
+.sidebar-gradient span,
+.sidebar-gradient p,
+.sidebar-gradient div,
+.sidebar-gradient .truncate {
+    color: white !important;
+}
+
+/* Estados hover e active da sidebar */
+.sidebar-gradient .sidebar-menu-hover:hover,
+.sidebar-gradient .sidebar-menu-hover:hover *,
+.sidebar-gradient .sidebar-menu-active,
+.sidebar-gradient .sidebar-menu-active *,
+.sidebar-gradient .sidebar-submenu-item:hover,
+.sidebar-gradient .sidebar-submenu-item:hover * {
+    color: white !important;
+}
+
+/* Informações do usuário na sidebar */
+.sidebar-gradient .border-t,
+.sidebar-gradient .border-t *,
+.sidebar-gradient .text-white,
+.sidebar-gradient .text-white\/70 {
+    color: white !important;
+}
+
+/* Chevron e elementos especiais */
+.sidebar-gradient .chevron-icon,
+.sidebar-gradient .ml-auto,
+.sidebar-gradient .bg-white\/20 {
+    color: white !important;
+}
+
+/* Força aplicação por atributos style */
+.sidebar-gradient [style*="color:"],
+.sidebar-gradient [style*="color "] {
+    color: white !important;
+}
+
+/* PROTEÇÃO CONTRA SOBRESCRITA DO CSS SELETIVO */
+/* Anula qualquer regra que tente mudar a cor da sidebar */
+.sidebar-gradient .text-blue-500,
+.sidebar-gradient .text-blue-600,
+.sidebar-gradient .text-blue-700,
+.sidebar-gradient .text-indigo-500,
+.sidebar-gradient .text-indigo-600,
+.sidebar-gradient .text-indigo-700,
+.sidebar-gradient .text-primary {
+    color: white !important;
+}
+
+/* BRANDING APLICADO APENAS NO CONTEÚDO PRINCIPAL */
+/* Exclui sidebar de qualquer aplicação de branding */
+:not(.sidebar-gradient) .bg-blue-500,
+:not(.sidebar-gradient) .bg-blue-600,
+:not(.sidebar-gradient) .bg-blue-700,
+:not(.sidebar-gradient) .bg-indigo-500,
+:not(.sidebar-gradient) .bg-indigo-600,
+:not(.sidebar-gradient) .bg-indigo-700 {
+    background-color: var(--primary-color) !important;
+}
+
+:not(.sidebar-gradient) .text-blue-500,
+:not(.sidebar-gradient) .text-blue-600,
+:not(.sidebar-gradient) .text-blue-700,
+:not(.sidebar-gradient) .text-indigo-500,
+:not(.sidebar-gradient) .text-indigo-600,
+:not(.sidebar-gradient) .text-indigo-700 {
+    color: var(--primary-color) !important;
+}
+
+/* BOTÕES NO CONTEÚDO PRINCIPAL (NÃO NA SIDEBAR) */
+.dashboard-content button,
+.main-content button,
+.content-area button,
+main button,
+.container button,
+.max-w-7xl button,
+.px-4.sm\:px-6.lg\:px-8 button {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+.dashboard-content button:hover,
+.main-content button:hover,
+.content-area button:hover,
+main button:hover,
+.container button:hover,
+.max-w-7xl button:hover,
+.px-4.sm\:px-6.lg\:px-8 button:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+/* LINKS NO CONTEÚDO PRINCIPAL (NÃO NA SIDEBAR) */
+.dashboard-content a[class*="bg-"],
+.main-content a[class*="bg-"],
+.content-area a[class*="bg-"],
+main a[class*="bg-"],
+.container a[class*="bg-"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+.dashboard-content a[class*="bg-"]:hover,
+.main-content a[class*="bg-"]:hover,
+.content-area a[class*="bg-"]:hover,
+main a[class*="bg-"]:hover,
+.container a[class*="bg-"]:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+/* DEBUG: Marcar sidebar para verificação */
+/*
+.sidebar-gradient {
+    border: 2px solid red !important;
+}
+.sidebar-gradient * {
+    background-color: rgba(255, 0, 0, 0.1) !important;
+}
+*/

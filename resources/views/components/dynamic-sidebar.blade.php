@@ -205,6 +205,18 @@
         max-height: 35px;
     }
 }
+
+/* FORÇA TEXTOS BRANCOS NA SIDEBAR - INLINE */
+.sidebar-gradient, .sidebar-gradient * {
+    color: white !important;
+}
+.sidebar-gradient a, .sidebar-gradient a * {
+    color: white !important;
+}
+.sidebar-gradient i, .sidebar-gradient span, .sidebar-gradient p {
+    color: white !important;
+}
+
 </style>
 
 <script>

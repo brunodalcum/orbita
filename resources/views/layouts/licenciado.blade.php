@@ -192,6 +192,10 @@
     <link href="{{ asset('css/dynamic-branding.css.php') }}" rel="stylesheet" type="text/css">
     <!-- CSS SELETIVO DE BRANDING - PRESERVA MENUS -->
     <link href="{{ asset('css/selective-branding.css') }}" rel="stylesheet">
+    <!-- CSS ESPECÍFICO PARA SIDEBAR - FORÇA TEXTOS BRANCOS -->
+    <link href="{{ asset('css/sidebar-fix.css') }}" rel="stylesheet">
+    <!-- CSS ABRANGENTE - BRANDING EM TODAS AS PÁGINAS -->
+    <link href="{{ asset('css/comprehensive-branding.css') }}" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">

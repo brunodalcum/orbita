@@ -27,7 +27,9 @@ if (is_dir($viewCachePath)) {
 $cssFiles = [
     "selective-branding.css" => "CSS Seletivo (preserva menus)",
     "force-buttons.css" => "CSS Força Botões",
-    "global-branding.css" => "CSS Global"
+    "global-branding.css" => "CSS Global",
+    "sidebar-fix.css" => "CSS Específico Sidebar (textos brancos)",
+    "comprehensive-branding.css" => "CSS Abrangente (todas as páginas)"
 ];
 
 echo "<h2>📄 VERIFICAÇÃO DOS ARQUIVOS CSS</h2>";
@@ -69,11 +71,12 @@ echo "<p>Server: " . $_SERVER["SERVER_SOFTWARE"] . "</p>";
 
 echo "<h2>🎯 CORREÇÕES APLICADAS</h2>";
 echo "<ul>";
-echo "<li>✅ Textos dos menus preservados (brancos permanecem brancos)</li>";
-echo "<li>✅ Botões forçados a usar cor do branding</li>";
-echo "<li>✅ CSS seletivo que não afeta navegação</li>";
-echo "<li>✅ Seletores ultra-específicos para elementos teimosos</li>";
-echo "<li>✅ Erro de namespace corrigido no HierarchyBrandingController</li>";
+echo "<li>✅ <strong>Sidebar:</strong> Textos FORÇADOS a branco com CSS ultra-específico</li>";
+echo "<li>✅ <strong>Botões:</strong> Cor do branding aplicada em todas as páginas</li>";
+echo "<li>✅ <strong>Separação:</strong> Sidebar branca + Conteúdo com branding</li>";
+echo "<li>✅ <strong>Abrangente:</strong> 100% das páginas com branding consistente</li>";
+echo "<li>✅ <strong>Namespace:</strong> Erro corrigido no HierarchyBrandingController</li>";
+echo "<li>✅ <strong>CSS Inline:</strong> Reforço direto no componente da sidebar</li>";
 echo "</ul>";
 
 echo "<h2>📋 PRÓXIMOS PASSOS</h2>";
@@ -82,9 +85,10 @@ echo "<li>Acesse: <a href='/dashboard/licenciados'>/dashboard/licenciados</a></l
 echo "<li>Pressione <strong>Ctrl+F5</strong> para forçar reload</li>";
 echo "<li>Verifique se:</li>";
 echo "<ul>";
-echo "<li>🔸 Textos dos menus estão brancos (preservados)</li>";
-echo "<li>🔸 Botões estão com a cor do branding</li>";
-echo "<li>🔸 Links de ação estão com a cor correta</li>";
+echo "<li>🔸 <strong>Sidebar:</strong> Textos BRANCOS (forçados)</li>";
+echo "<li>🔸 <strong>Botões:</strong> Cor do branding (todas as páginas)</li>";
+echo "<li>🔸 <strong>Links:</strong> Cor do branding (conteúdo principal)</li>";
+echo "<li>🔸 <strong>Consistência:</strong> Mesmo visual em todas as páginas</li>";
 echo "</ul>";
 echo "<li>Se ainda houver problemas, reporte elementos específicos</li>";
 echo "</ol>";

@@ -1,0 +1,203 @@
+/* BRANDING ABRANGENTE - TODAS AS PÁGINAS */
+/* Gerado automaticamente em: 2025-09-16 14:07:25 */
+
+/* VARIÁVEIS CSS GLOBAIS */
+:root {
+    --primary-color: #3B82F6;
+    --secondary-color: #6B7280;
+    --accent-color: #10B981;
+    --text-color: #1F2937;
+    --background-color: #FFFFFF;
+    --primary-light: rgba(59, 130, 246, 0.1);
+    --primary-dark: #2563EB;
+    --primary-text: #FFFFFF;
+    --primary-gradient: linear-gradient(135deg, #3B82F6 0%, #6B7280 100%);
+    --accent-gradient: linear-gradient(135deg, #10B981 0%, #3B82F6 100%);
+}
+
+/* APLICAÇÃO GLOBAL EM TODAS AS PÁGINAS */
+/* Exclui sidebar e navegação */
+body:not(.sidebar-gradient) .bg-blue-500,
+body:not(.sidebar-gradient) .bg-blue-600,
+body:not(.sidebar-gradient) .bg-blue-700,
+body:not(.sidebar-gradient) .bg-indigo-500,
+body:not(.sidebar-gradient) .bg-indigo-600,
+body:not(.sidebar-gradient) .bg-indigo-700,
+main .bg-blue-500,
+main .bg-blue-600,
+main .bg-blue-700,
+main .bg-indigo-500,
+main .bg-indigo-600,
+main .bg-indigo-700,
+.content .bg-blue-500,
+.content .bg-blue-600,
+.content .bg-blue-700,
+.content .bg-indigo-500,
+.content .bg-indigo-600,
+.content .bg-indigo-700 {
+    background-color: var(--primary-color) !important;
+}
+
+/* Textos azuis no conteúdo */
+body:not(.sidebar-gradient) .text-blue-500,
+body:not(.sidebar-gradient) .text-blue-600,
+body:not(.sidebar-gradient) .text-blue-700,
+body:not(.sidebar-gradient) .text-indigo-500,
+body:not(.sidebar-gradient) .text-indigo-600,
+body:not(.sidebar-gradient) .text-indigo-700,
+main .text-blue-500,
+main .text-blue-600,
+main .text-blue-700,
+main .text-indigo-500,
+main .text-indigo-600,
+main .text-indigo-700,
+.content .text-blue-500,
+.content .text-blue-600,
+.content .text-blue-700,
+.content .text-indigo-500,
+.content .text-indigo-600,
+.content .text-indigo-700 {
+    color: var(--primary-color) !important;
+}
+
+/* Bordas azuis no conteúdo */
+body:not(.sidebar-gradient) .border-blue-500,
+body:not(.sidebar-gradient) .border-blue-600,
+body:not(.sidebar-gradient) .border-blue-700,
+body:not(.sidebar-gradient) .border-indigo-500,
+body:not(.sidebar-gradient) .border-indigo-600,
+body:not(.sidebar-gradient) .border-indigo-700,
+main .border-blue-500,
+main .border-blue-600,
+main .border-blue-700,
+main .border-indigo-500,
+main .border-indigo-600,
+main .border-indigo-700 {
+    border-color: var(--primary-color) !important;
+}
+
+/* BOTÕES GLOBAIS (EXCETO SIDEBAR) */
+body:not(.sidebar-gradient) button,
+main button,
+.content button,
+.dashboard button,
+.container button,
+article button,
+section button {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+    transition: all 0.3s ease !important;
+}
+
+body:not(.sidebar-gradient) button:hover,
+main button:hover,
+.content button:hover,
+.dashboard button:hover,
+.container button:hover,
+article button:hover,
+section button:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+/* LINKS COMO BOTÕES (EXCETO SIDEBAR) */
+body:not(.sidebar-gradient) a.btn,
+body:not(.sidebar-gradient) a.button,
+body:not(.sidebar-gradient) a[class*="bg-blue"],
+body:not(.sidebar-gradient) a[class*="bg-indigo"],
+main a.btn,
+main a.button,
+main a[class*="bg-blue"],
+main a[class*="bg-indigo"],
+.content a.btn,
+.content a.button,
+.content a[class*="bg-blue"],
+.content a[class*="bg-indigo"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+    text-decoration: none !important;
+}
+
+body:not(.sidebar-gradient) a.btn:hover,
+body:not(.sidebar-gradient) a.button:hover,
+body:not(.sidebar-gradient) a[class*="bg-blue"]:hover,
+body:not(.sidebar-gradient) a[class*="bg-indigo"]:hover,
+main a.btn:hover,
+main a.button:hover,
+main a[class*="bg-blue"]:hover,
+main a[class*="bg-indigo"]:hover,
+.content a.btn:hover,
+.content a.button:hover,
+.content a[class*="bg-blue"]:hover,
+.content a[class*="bg-indigo"]:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+/* INPUTS E FORMS */
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px var(--primary-light) !important;
+    outline: none !important;
+}
+
+/* BADGES E TAGS */
+.badge:not(.sidebar-gradient .badge),
+.tag:not(.sidebar-gradient .tag),
+.chip:not(.sidebar-gradient .chip) {
+    background-color: var(--primary-light) !important;
+    color: var(--primary-color) !important;
+}
+
+/* PROGRESS BARS */
+.progress-bar,
+.progress-fill {
+    background-color: var(--primary-color) !important;
+}
+
+/* CHECKBOXES E RADIOS */
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* SCROLLBARS */
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color) !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark) !important;
+}
+
+/* HOVERS GLOBAIS */
+body:not(.sidebar-gradient) .hover\:bg-blue-500:hover,
+body:not(.sidebar-gradient) .hover\:bg-blue-600:hover,
+body:not(.sidebar-gradient) .hover\:bg-blue-700:hover,
+body:not(.sidebar-gradient) .hover\:bg-indigo-500:hover,
+body:not(.sidebar-gradient) .hover\:bg-indigo-600:hover,
+body:not(.sidebar-gradient) .hover\:bg-indigo-700:hover {
+    background-color: var(--primary-dark) !important;
+}
+
+/* ESTILOS INLINE HARDCODED */
+body:not(.sidebar-gradient) [style*="background-color: #3b82f6"],
+body:not(.sidebar-gradient) [style*="background-color: #2563eb"],
+body:not(.sidebar-gradient) [style*="background-color: #1d4ed8"],
+body:not(.sidebar-gradient) [style*="background: #3b82f6"],
+body:not(.sidebar-gradient) [style*="background: #2563eb"],
+body:not(.sidebar-gradient) [style*="background: #1d4ed8"] {
+    background-color: var(--primary-color) !important;
+    background: var(--primary-color) !important;
+}
+
+body:not(.sidebar-gradient) [style*="color: #3b82f6"],
+body:not(.sidebar-gradient) [style*="color: #2563eb"],
+body:not(.sidebar-gradient) [style*="color: #1d4ed8"] {
+    color: var(--primary-color) !important;
+}

@@ -147,6 +147,10 @@ input:focus, select:focus, textarea:focus {
     <link href="{{ asset('css/selective-branding.css') }}" rel="stylesheet">
     <!-- CSS FORÇA BOTÕES - ÚLTIMA LINHA DE DEFESA -->
     <link href="{{ asset('css/force-buttons.css') }}" rel="stylesheet">
+    <!-- CSS ESPECÍFICO PARA SIDEBAR - FORÇA TEXTOS BRANCOS -->
+    <link href="{{ asset('css/sidebar-fix.css') }}" rel="stylesheet">
+    <!-- CSS ABRANGENTE - BRANDING EM TODAS AS PÁGINAS -->
+    <link href="{{ asset('css/comprehensive-branding.css') }}" rel="stylesheet">
 </head>
     <body class="bg-gray-50">
         <x-banner />
