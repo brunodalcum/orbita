@@ -1,7 +1,5 @@
 <?php
 
-use App\Services\BrandingService;
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -15,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use App\Services\BrandingService;
 
 class HierarchyBrandingController extends Controller
 {

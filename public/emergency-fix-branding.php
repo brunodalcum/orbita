@@ -73,6 +73,7 @@ echo "<li>✅ Textos dos menus preservados (brancos permanecem brancos)</li>";
 echo "<li>✅ Botões forçados a usar cor do branding</li>";
 echo "<li>✅ CSS seletivo que não afeta navegação</li>";
 echo "<li>✅ Seletores ultra-específicos para elementos teimosos</li>";
+echo "<li>✅ Erro de namespace corrigido no HierarchyBrandingController</li>";
 echo "</ul>";
 
 echo "<h2>📋 PRÓXIMOS PASSOS</h2>";
