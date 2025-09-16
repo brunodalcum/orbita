@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Taxas - Órbita</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <style>
+@extends('layouts.dashboard')
+
+@section('title', 'Simulador de Taxas')
+
+@section('content')
+<!-- Branding Dinâmico -->
+<x-dynamic-branding />
+
+<style>
         .input-percentage::after {
             content: '%';
             position: absolute;
@@ -46,37 +37,29 @@
             100% { transform: rotate(360deg); }
         }
     </style>
-</head>
 
-<body class="bg-gray-50">
-    <div class="flex h-screen">
-        <!-- Sidebar Dinâmico -->
-        <x-dynamic-sidebar />
-
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Header -->
-            <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900 flex items-center">
-                            <i class="fas fa-calculator text-blue-600 mr-3"></i>
-                            Simulador de Taxas
-                        </h1>
-                        <p class="text-gray-600 mt-1">Calcule taxas efetivas (MDR + Antecipação) para 1 a 18 parcelas</p>
-                    </div>
-                    
-                    <!-- Botão de Ajuda -->
-                    <button onclick="showHelpModal()" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-200 transition-colors">
-                        <i class="fas fa-question-circle mr-2"></i>
-                        Como funciona?
-                    </button>
+<div class="min-h-screen bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 flex items-center">
+                        <i class="fas fa-calculator mr-3" style="color: var(--primary-color);"></i>
+                        Simulador de Taxas
+                    </h1>
+                    <p class="text-gray-600 mt-2">Calcule taxas efetivas (MDR + Antecipação) para 1 a 18 parcelas</p>
                 </div>
-            </header>
+                    
+                <!-- Botão de Ajuda -->
+                <button onclick="showHelpModal()" class="px-4 py-2 rounded-lg transition-colors" style="background-color: var(--primary-light); color: var(--primary-color); border: 1px solid var(--primary-color);">
+                    <i class="fas fa-question-circle mr-2"></i>
+                    Como funciona?
+                </button>
+            </div>
+        </div>
 
-            <!-- Content -->
-            <main class="flex-1 overflow-auto p-6">
-                <div class="max-w-7xl mx-auto">
+        <!-- Content -->
                     
                     <!-- Layout Responsivo: Form + Resultados -->
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -252,7 +235,7 @@
                                     <div class="flex space-x-3 pt-4">
                                         <button type="submit" 
                                                 id="calculateBtn"
-                                                class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center">
+                                                class="flex-1 px-4 py-3 rounded-lg transition-colors font-medium flex items-center justify-center text-white" style="background-color: var(--primary-color);" onmouseover="this.style.backgroundColor='var(--primary-dark)'" onmouseout="this.style.backgroundColor='var(--primary-color)'">
                                             <span id="calculateBtnText">
                                                 <i class="fas fa-calculator mr-2"></i>
                                                 Calcular
@@ -285,7 +268,7 @@
                                     
                                     <button id="exportCsvBtn" 
                                             onclick="exportToCsv()" 
-                                            class="hidden bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm">
+                                            class="hidden px-4 py-2 rounded-lg transition-colors text-sm text-white" style="background-color: var(--accent-color);" onmouseover="this.style.backgroundColor='var(--primary-dark)'" onmouseout="this.style.backgroundColor='var(--accent-color)'">
                                         <i class="fas fa-download mr-2"></i>
                                         Exportar CSV
                                     </button>
@@ -327,7 +310,7 @@
                                     </div>
                                     
                                     <!-- Resumo -->
-                                    <div id="resultsSummary" class="mt-6 p-4 bg-blue-50 rounded-lg">
+                                    <div id="resultsSummary" class="mt-6 p-4 rounded-lg" style="background-color: var(--primary-light);">
                                         <!-- Resumo será inserido aqui via JavaScript -->
                                     </div>
                                     
@@ -407,8 +390,8 @@
                         </div>
                     </div>
                     
-                    <div class="bg-blue-50 p-3 rounded-lg">
-                        <p class="text-blue-800">
+                                    <div class="p-3 rounded-lg" style="background-color: var(--primary-light);">
+                        <p style="color: var(--primary-color);">
                             <i class="fas fa-info-circle mr-2"></i>
                             <strong>Exemplo:</strong> MDR 3,49% + Antecipação 10,47% (6x) = <strong>13,96% total</strong>
                         </p>
@@ -691,5 +674,4 @@
             document.getElementById('anticipation_rate').value = '2.99';
         });
     </script>
-</body>
-</html>
+@endsection
