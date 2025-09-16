@@ -151,6 +151,8 @@ input:focus, select:focus, textarea:focus {
     <link href="{{ asset('css/sidebar-fix.css') }}" rel="stylesheet">
     <!-- CSS ABRANGENTE - BRANDING EM TODAS AS PÁGINAS -->
     <link href="{{ asset('css/comprehensive-branding.css') }}" rel="stylesheet">
+    <!-- CSS ESPECÍFICO PARA ELEMENTOS TEIMOSOS -->
+    <link href="{{ asset('css/specific-elements-fix.css') }}" rel="stylesheet">
 </head>
     <body class="bg-gray-50">
         <x-banner />

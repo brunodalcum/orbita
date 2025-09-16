@@ -373,8 +373,26 @@ input:focus, select:focus, textarea:focus {
     color: var(--primary-text) !important;
 }
 </style>
+
+<style>
+/* CORREÇÃO ESPECÍFICA PARA ESTA PÁGINA */
+.dashboard-page .flex.items-center.justify-between:not(.sidebar-gradient *) {
+    background: var(--primary-gradient) !important;
+    color: var(--primary-text) !important;
+}
+.dashboard-page .flex.items-center.justify-between:not(.sidebar-gradient *) * {
+    color: var(--primary-text) !important;
+}
+.dashboard-page .w-12.h-12:not(.sidebar-gradient *) {
+    background-color: var(--primary-light) !important;
+    color: var(--primary-color) !important;
+}
+.sidebar-gradient a, .sidebar-gradient a * {
+    color: white !important;
+}
+</style>
 </head>
-<body class="bg-gray-50 licenciados-page">
+<body class="dashboard-page bg-gray-50 licenciados-page">
     <div class="flex h-screen">
         <!-- Sidebar Dinâmico -->
         <x-dynamic-sidebar />

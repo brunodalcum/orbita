@@ -36,8 +36,26 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
     </style>
+
+<style>
+/* CORREÇÃO ESPECÍFICA PARA ESTA PÁGINA */
+.dashboard-page .flex.items-center.justify-between:not(.sidebar-gradient *) {
+    background: var(--primary-gradient) !important;
+    color: var(--primary-text) !important;
+}
+.dashboard-page .flex.items-center.justify-between:not(.sidebar-gradient *) * {
+    color: var(--primary-text) !important;
+}
+.dashboard-page .w-12.h-12:not(.sidebar-gradient *) {
+    background-color: var(--primary-light) !important;
+    color: var(--primary-color) !important;
+}
+.sidebar-gradient a, .sidebar-gradient a * {
+    color: white !important;
+}
+</style>
 </head>
-<body class="bg-gray-50">
+<body class="dashboard-page bg-gray-50">
     <div class="flex h-screen">
         <!-- Sidebar Dinâmico -->
         <x-dynamic-sidebar />

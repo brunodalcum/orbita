@@ -29,7 +29,8 @@ $cssFiles = [
     "force-buttons.css" => "CSS Força Botões",
     "global-branding.css" => "CSS Global",
     "sidebar-fix.css" => "CSS Específico Sidebar (textos brancos)",
-    "comprehensive-branding.css" => "CSS Abrangente (todas as páginas)"
+    "comprehensive-branding.css" => "CSS Abrangente (todas as páginas)",
+    "specific-elements-fix.css" => "CSS Elementos Específicos (teimosos)"
 ];
 
 echo "<h2>📄 VERIFICAÇÃO DOS ARQUIVOS CSS</h2>";
@@ -77,6 +78,7 @@ echo "<li>✅ <strong>Separação:</strong> Sidebar branca + Conteúdo com brand
 echo "<li>✅ <strong>Abrangente:</strong> 100% das páginas com branding consistente</li>";
 echo "<li>✅ <strong>Namespace:</strong> Erro corrigido no HierarchyBrandingController</li>";
 echo "<li>✅ <strong>CSS Inline:</strong> Reforço direto no componente da sidebar</li>";
+echo "<li>✅ <strong>Elementos Específicos:</strong> Correção direcionada para elementos teimosos</li>";
 echo "</ul>";
 
 echo "<h2>📋 PRÓXIMOS PASSOS</h2>";
