@@ -35,6 +35,29 @@
             background: var(--background-color);
             color: var(--text-color);
         }
+    
+        /* Sobrescrever cores Tailwind específicas */
+        .bg-blue-500, .bg-blue-600, .bg-blue-700 {
+            background-color: var(--primary-color) !important;
+        }
+        .hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover {
+            background-color: var(--primary-dark) !important;
+        }
+        .text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800 {
+            color: var(--primary-color) !important;
+        }
+        .border-blue-500, .hover\:border-blue-500:hover {
+            border-color: var(--primary-color) !important;
+        }
+        .bg-blue-50, .bg-blue-100 {
+            background-color: var(--primary-light) !important;
+        }
+        .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover {
+            background-color: var(--primary-light) !important;
+        }
+        .border-b-2.border-blue-500 {
+            border-color: var(--primary-color) !important;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -148,7 +171,7 @@
                             </select>
                         </div>
                         <div class="flex items-end">
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                            <button type="submit" style="background-color: var(--primary-color);" class="hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
                                 <i class="fas fa-search mr-2"></i>Filtrar
                             </button>
                         </div>
@@ -238,7 +261,7 @@
                                                 <i class="fas fa-file-contract text-gray-300 text-6xl mb-4"></i>
                                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum contrato encontrado</h3>
                                                 <p class="text-gray-500 mb-4">Comece criando um novo contrato para um licenciado.</p>
-                                                <a href="{{ route('contracts.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                                <a href="{{ route('contracts.create') }}" style="background-color: var(--primary-color);" class="hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
                                                     <i class="fas fa-plus mr-2"></i>Criar Primeiro Contrato
                                                 </a>
                                             </div>

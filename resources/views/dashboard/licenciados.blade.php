@@ -67,6 +67,29 @@
         .progress-bar {
             background: var(--accent-gradient);
         }
+    
+        /* Sobrescrever cores Tailwind específicas */
+        .bg-blue-500, .bg-blue-600, .bg-blue-700 {
+            background-color: var(--primary-color) !important;
+        }
+        .hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover {
+            background-color: var(--primary-dark) !important;
+        }
+        .text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800 {
+            color: var(--primary-color) !important;
+        }
+        .border-blue-500, .hover\:border-blue-500:hover {
+            border-color: var(--primary-color) !important;
+        }
+        .bg-blue-50, .bg-blue-100 {
+            background-color: var(--primary-light) !important;
+        }
+        .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover {
+            background-color: var(--primary-light) !important;
+        }
+        .border-b-2.border-blue-500 {
+            border-color: var(--primary-color) !important;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -84,7 +107,7 @@
                         <p style="color: var(--secondary-color);">Gerencie os licenciados do sistema</p>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <button onclick="openLicenciadoModal()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <button onclick="openLicenciadoModal()" style="background-color: var(--primary-color);" class="hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                             <i class="fas fa-plus mr-2"></i>
                             Novo Licenciado
                         </button>
@@ -169,7 +192,7 @@
                                 <i class="fas fa-filter mr-2 text-blue-500"></i>
                                 Filtros
                             </h3>
-                            <button onclick="toggleFilters()" class="text-blue-500 hover:" style="color: var(--primary-color);" transition-colors">
+                            <button onclick="toggleFilters()" style="color: var(--primary-color);" class=" hover:" style="color: var(--primary-color);" transition-colors">
                                 <i class="fas fa-chevron-down" id="filter-chevron"></i>
                             </button>
                         </div>
@@ -287,7 +310,7 @@
                             <!-- Botões de Ação -->
                             <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
                                 <div class="flex items-center space-x-4">
-                                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
+                                    <button type="submit" style="background-color: var(--primary-color);" class="hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
                                         <i class="fas fa-search mr-2"></i>
                                         Aplicar Filtros
                                     </button>
@@ -311,7 +334,7 @@
                     <div class="flex items-center justify-between p-6 border-b">
                         <h3 class="text-lg font-semibold text-gray-800">Lista de Licenciados</h3>
                         <div class="flex items-center space-x-4">
-                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <button style="background-color: var(--primary-color);" class="hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                                 <i class="fas fa-download mr-2"></i>
                                 Exportar
                             </button>
@@ -706,7 +729,7 @@
                 <div id="licenciadoDetails">
                     <!-- Conteúdo será carregado via JavaScript -->
                     <div class="flex items-center justify-center py-12">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2" style="border-color: var(--primary-color);"></div>
                         <span class="ml-3 text-gray-600">Carregando detalhes...</span>
                     </div>
                 </div>
@@ -1669,7 +1692,7 @@
             modal.classList.add('show');
             detailsContainer.innerHTML = `
                 <div class="flex items-center justify-center py-12">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2" style="border-color: var(--primary-color);"></div>
                     <span class="ml-3 text-gray-600">Carregando detalhes...</span>
                 </div>
             `;
@@ -2628,7 +2651,7 @@
             background-color: #f8fafc;
         }
         .operacao-checkbox:checked + label {
-            color: #3b82f6;
+            color: var(--primary-color);
         }
         
         /* Garantir que o modal fique oculto por padrão */
@@ -2651,6 +2674,29 @@
         }
         .progress-bar {
             background: var(--accent-gradient);
+        }
+    
+        /* Sobrescrever cores Tailwind específicas */
+        .bg-blue-500, .bg-blue-600, .bg-blue-700 {
+            background-color: var(--primary-color) !important;
+        }
+        .hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover {
+            background-color: var(--primary-dark) !important;
+        }
+        .text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800 {
+            color: var(--primary-color) !important;
+        }
+        .border-blue-500, .hover\:border-blue-500:hover {
+            border-color: var(--primary-color) !important;
+        }
+        .bg-blue-50, .bg-blue-100 {
+            background-color: var(--primary-light) !important;
+        }
+        .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover {
+            background-color: var(--primary-light) !important;
+        }
+        .border-b-2.border-blue-500 {
+            border-color: var(--primary-color) !important;
         }
     </style>
 </body>

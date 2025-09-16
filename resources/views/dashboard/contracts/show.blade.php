@@ -53,7 +53,41 @@
         .step-completed { background: #10b981; color: white; }
         .step-current { background: #3b82f6; color: white; }
         .step-pending { background: #e5e7eb; color: #6b7280; }
-    </style>
+    
+        /* Sobrescrever cores específicas da página de contratos */
+        .bg-blue-600, .bg-blue-700 {
+            background-color: var(--primary-color) !important;
+        }
+        .hover\:bg-blue-700:hover {
+            background-color: var(--primary-dark) !important;
+        }
+        .bg-green-600, .bg-green-700 {
+            background-color: var(--accent-color) !important;
+        }
+        .hover\:bg-green-700:hover {
+            opacity: 0.9;
+        }
+        .bg-blue-50 {
+            background-color: var(--primary-light) !important;
+        }
+        .border-blue-200 {
+            border-color: var(--primary-color) !important;
+            opacity: 0.3;
+        }
+        .bg-blue-100 {
+            background-color: var(--primary-light) !important;
+        }
+        .text-blue-800, .text-blue-900 {
+            color: var(--primary-color) !important;
+        }
+        .bg-green-100 {
+            background-color: var(--accent-color) !important;
+            opacity: 0.2;
+        }
+        .text-green-800 {
+            color: var(--accent-color) !important;
+        }
+</style>
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
@@ -81,25 +115,25 @@
                             {{ $contract->status_label }}
                         </span>
                         @if($contract->canSendContract())
-                            <button onclick="openGenerateModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            <button onclick="openGenerateModal()" style="background-color: var(--accent-color);" class="hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
                                 <i class="fas fa-paper-plane mr-2"></i>Enviar Contrato
                             </button>
                         @elseif($contract->contract_pdf_path)
                             <div class="flex items-center space-x-3">
-                                <a href="{{ route('contracts.view-pdf', $contract) }}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                <a href="{{ route('contracts.view-pdf', $contract) }}" target="_blank" style="background-color: var(--accent-color);" class="hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
                                     <i class="fas fa-eye mr-2"></i>Exibir Contrato
                                 </a>
                                 @if($contract->signed_contract_path)
-                                    <a href="{{ route('contracts.download', $contract) }}" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                    <a href="{{ route('contracts.download', $contract) }}" style="background-color: #8B5CF6;" class="hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors">
                                         <i class="fas fa-file-signature mr-2"></i>Download Assinado
                                     </a>
                                 @else
-                                    <a href="{{ route('contracts.download', $contract) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                    <a href="{{ route('contracts.download', $contract) }}" style="background-color: var(--primary-color);" class="hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
                                         <i class="fas fa-download mr-2"></i>Download PDF
                                     </a>
                                 @endif
                                 @if($contract->status === 'contrato_enviado')
-                                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                                    <span style="background-color: var(--primary-light); color: var(--primary-color);" class=" px-3 py-1 rounded-full text-sm">
                                         <i class="fas fa-envelope mr-1"></i>Contrato Enviado
                                     </span>
                                 @elseif($contract->status === 'aguardando_assinatura')
@@ -107,7 +141,7 @@
                                         <i class="fas fa-clock mr-1"></i>Aguardando Assinatura
                                     </span>
                                 @elseif($contract->status === 'contrato_assinado')
-                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                                    <span style="background-color: var(--accent-color); color: white;" class=" px-3 py-1 rounded-full text-sm">
                                         <i class="fas fa-signature mr-1"></i>Contrato Assinado
                                     </span>
                                 @elseif($contract->status === 'licenciado_aprovado')
@@ -207,7 +241,7 @@
                                 <div class="flex items-center justify-between mb-6">
                                     <h3 class="text-lg font-semibold text-gray-800">Documentos Enviados</h3>
                                     @if($contract->canApproveDocuments())
-                                        <button onclick="openReviewModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                        <button onclick="openReviewModal()" style="background-color: var(--primary-color);" class="hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
                                             <i class="fas fa-gavel mr-2"></i>Analisar Documentos
                                         </button>
                                     @endif
@@ -274,7 +308,7 @@
                         <div class="card rounded-xl p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Observações do Admin</h3>
                             @if($contract->observacoes_admin)
-                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                                <div style="background-color: var(--primary-light); border-color: var(--primary-color);" class="border rounded-lg p-4 mb-4">
                                     <p class="text-gray-700">{{ $contract->observacoes_admin }}</p>
                                 </div>
                             @endif
@@ -373,7 +407,7 @@
                                 Cancelar
                             </button>
                             <button type="submit" 
-                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                                    style="background-color: var(--primary-color);" class="px-4 py-2 hover:bg-blue-700 text-white rounded-lg transition-colors">
                                 <i class="fas fa-gavel mr-2"></i>Finalizar Análise
                             </button>
                         </div>
@@ -397,8 +431,8 @@
 
                     <!-- Validação de Campos -->
                     <div id="validationSection" class="mb-6">
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                            <h4 class="font-medium text-blue-900 mb-2">Verificando dados obrigatórios...</h4>
+                        <div style="background-color: var(--primary-light); border-color: var(--primary-color);" class="border rounded-lg p-4 mb-4">
+                            <h4 class="font-medium style="color: var(--primary-dark);" mb-2">Verificando dados obrigatórios...</h4>
                             <div id="validationResults">
                                 <div class="flex items-center text-blue-700">
                                     <i class="fas fa-spinner fa-spin mr-2"></i>
@@ -438,7 +472,7 @@
                     <div id="modalActions" class="flex justify-between space-x-3">
                         <div>
                             <button type="button" onclick="previewPDF()" 
-                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors" 
+                                    style="background-color: var(--primary-color);" class="px-4 py-2 hover:bg-blue-700 text-white rounded-lg transition-colors" 
                                     id="previewBtn" disabled>
                                 <i class="fas fa-eye mr-2"></i>Pré-visualizar PDF
                             </button>
@@ -449,7 +483,7 @@
                                 Cancelar
                             </button>
                             <button type="button" onclick="generateContract()" 
-                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                                    style="background-color: var(--accent-color);" class="px-4 py-2 hover:bg-green-700 text-white rounded-lg transition-colors"
                                     id="generateBtn" disabled>
                                 <i class="fas fa-paper-plane mr-2"></i>Gerar e Enviar
                             </button>
@@ -579,7 +613,7 @@
         function showToast(message, type) {
             const toast = document.createElement('div');
             toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
-                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                type === 'success' ? 'text-white' style='background-color: var(--accent-color);' : 'bg-red-500 text-white'
             }`;
             toast.innerHTML = `
                 <div class="flex items-center">
