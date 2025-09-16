@@ -30,112 +30,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .card {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        .stat-card {
-            background: var(--primary-gradient);
-            color: var(--primary-text);
-        }
-        .stat-card-secondary {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-            color: white;
-        }
-        .stat-card-success {
-            background: var(--accent-gradient);
-            color: white;
-        }
-        .stat-card-warning {
-            background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
-            color: white;
-        }
-        .dashboard-header {
-            background: var(--background-color);
-            color: var(--text-color);
-        }
-        .dashboard-card {
-            border-left: 4px solid var(--primary-color);
-        }
-    </style>
-<style>
-/* BRANDING FORÇADO PARA ESTA PÁGINA */
-:root {
-    --primary-color: var(--primary-color);
-    --secondary-color: var(--secondary-color);
-    --accent-color: var(--accent-color);
-    --text-color: #1F2937;
-    --background-color: #FFFFFF;
-    --primary-light: rgba(var(--primary-color-rgb), 0.1);
-    --primary-dark: var(--primary-dark);
-    --primary-text: #FFFFFF;
-}
-
-/* Sobrescrita agressiva de todas as cores azuis */
-.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
-.bg-primary, .bg-primary, .bg-primary-dark, .bg-blue-800, .bg-blue-900,
-.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
-.bg-primary, .bg-primary, .bg-primary-dark, .bg-indigo-800, .bg-indigo-900 {
-    background-color: var(--primary-color) !important;
-}
-
-.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-blue-800:hover,
-.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-indigo-800:hover {
-    background-color: var(--primary-dark) !important;
-}
-
-.text-primary, .text-primary, .text-primary, .text-blue-800, .text-blue-900,
-.text-primary, .text-primary, .text-primary, .text-indigo-800, .text-indigo-900 {
-    color: var(--primary-color) !important;
-}
-
-.border-primary, .border-primary, .border-primary, .border-blue-800, .border-blue-900,
-.border-primary, .border-primary, .border-primary, .border-indigo-800, .border-indigo-900 {
-    border-color: var(--primary-color) !important;
-}
-
-button[class*="blue"], .btn[class*="blue"], button[class*="indigo"], .btn[class*="indigo"] {
-    background-color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
-    color: var(--primary-text) !important;
-}
-
-button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:hover, .btn[class*="indigo"]:hover {
-    background-color: var(--primary-dark) !important;
-}
-
-.bg-green-500, .bg-green-600, .bg-green-700 {
-    background-color: var(--accent-color) !important;
-}
-
-.text-green-500, .text-green-600, .text-green-700, .text-green-800 {
-    color: var(--accent-color) !important;
-}
-
-/* Sobrescrever estilos inline hardcoded */
-[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"],
-[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"] {
-    background-color: var(--primary-color) !important;
-}
-
-[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"],
-[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"] {
-    color: var(--primary-color) !important;
-}
-
-.animate-spin[class*="border-blue"], .animate-spin[class*="border-indigo"] {
-    border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
-}
-</style>
+    
 <style>
 /* CORREÇÃO AGRESSIVA DE CORES - GERADO AUTOMATICAMENTE */
 :root {
@@ -297,64 +192,64 @@ input:focus, select:focus, textarea:focus {
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="stat-card card rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Total de Licenciados</p>
-                                <p class="text-3xl font-bold">{{ $stats['total'] }}</p>
+                                <p class="stat-label">Total de Licenciados</p>
+                                <p class="stat-value">{{ $stats['total'] }}</p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-users mr-1"></i>
                                     Cadastros ativos
                                 </p>
                             </div>
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                            <div class="stat-icon">
                                 <i class="fas fa-users text-2xl"></i>
                             </div>
                         </div>
                     </div>
 
                     <div class="stat-card-secondary card rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Aprovados</p>
-                                <p class="text-3xl font-bold">{{ $stats['aprovados'] }}</p>
+                                <p class="stat-label">Aprovados</p>
+                                <p class="stat-value">{{ $stats['aprovados'] }}</p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-check mr-1"></i>
                                     Licenciados ativos
                                 </p>
                             </div>
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                            <div class="stat-icon">
                                 <i class="fas fa-check-circle text-2xl"></i>
                             </div>
                         </div>
                     </div>
 
                     <div class="stat-card-success card rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Em Análise</p>
-                                <p class="text-3xl font-bold">{{ $stats['em_analise'] }}</p>
+                                <p class="stat-label">Em Análise</p>
+                                <p class="stat-value">{{ $stats['em_analise'] }}</p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-clock mr-1"></i>
                                     Aguardando aprovação
                                 </p>
                             </div>
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                            <div class="stat-icon">
                                 <i class="fas fa-clock text-2xl"></i>
                             </div>
                         </div>
                     </div>
 
                     <div class="stat-card-warning card rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Recusados</p>
-                                <p class="text-3xl font-bold">{{ $stats['recusados'] }}</p>
+                                <p class="stat-label">Recusados</p>
+                                <p class="stat-value">{{ $stats['recusados'] }}</p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-times mr-1"></i>
                                     Cadastros recusados
                                 </p>
                             </div>
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                            <div class="stat-icon">
                                 <i class="fas fa-times-circle text-2xl"></i>
                             </div>
                         </div>

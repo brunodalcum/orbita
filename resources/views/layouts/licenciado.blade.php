@@ -24,180 +24,19 @@
     <!-- Tailwind CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <style>
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 16px;
-            padding: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transform: translate(30px, -30px);
-        }
-        
-        .stat-card.green {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        }
-        
-        .stat-card.blue {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .stat-card.orange {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-        
-        .stat-card.purple {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-        
-        .activity-item {
-            border-left: 3px solid #e5e7eb;
-            padding-left: 16px;
-            position: relative;
-        }
-        
-        .activity-item::before {
-            content: '';
-            position: absolute;
-            left: -6px;
-            top: 8px;
-            width: 10px;
-            height: 10px;
-            background: #6b7280;
-            border-radius: 50%;
-        }
-        
-        .activity-item.green::before {
-            background: #10b981;
-        }
-        
-        .activity-item.blue::before {
-            background: #3b82f6;
-        }
-        
-        .activity-item.yellow::before {
-            background: #f59e0b;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        .table-responsive {
-            overflow-x: auto;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        
-        .table {
-            width: 100%;
-            background: white;
-        }
-        
-        .table th {
-            background: #f8fafc;
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            color: var(--secondary-color);
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .table td {
-            padding: 16px;
-            border-bottom: 1px solid #f3f4f6;
-        }
-        
-        .table tbody tr:hover {
-            background: #f9fafb;
-        }
-        
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        
-        .status-badge.ativo {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        .status-badge.inativo {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        
-        .status-badge.pendente {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-        }
-        
-        @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .desktop-sidebar {
-                display: none;
-            }
-        }
-    </style>
+    
     
     <!-- CSS Global de Branding Dinâmico -->
-    <link href="{{ asset('css/global-branding.css') }}" rel="stylesheet">
     <!-- CSS Dinâmico de Branding -->
-    <link href="{{ asset('css/dynamic-branding.css.php') }}" rel="stylesheet" type="text/css">
     <!-- CSS SELETIVO DE BRANDING - PRESERVA MENUS -->
-    <link href="{{ asset('css/selective-branding.css') }}" rel="stylesheet">
     <!-- CSS ESPECÍFICO PARA SIDEBAR - FORÇA TEXTOS BRANCOS -->
     <link href="{{ asset('css/sidebar-fix.css') }}" rel="stylesheet">
     <!-- CSS ABRANGENTE - BRANDING EM TODAS AS PÁGINAS -->
-    <link href="{{ asset('css/comprehensive-branding.css') }}" rel="stylesheet">
     <!-- CSS ESPECÍFICO PARA ELEMENTOS TEIMOSOS -->
     <link href="{{ asset('css/specific-elements-fix.css') }}" rel="stylesheet">
+    <!-- SISTEMA UNIFICADO DE BRANDING -->
+    <link href="{{ asset('css/unified-branding.css') }}" rel="stylesheet">
+    <x-unified-branding />
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">

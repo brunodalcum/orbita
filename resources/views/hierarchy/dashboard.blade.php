@@ -64,7 +64,7 @@
         <div class="flex-1 flex flex-col overflow-hidden ml-64">
             <div class="min-h-screen bg-gray-50" x-data="hierarchyDashboard()">
     <!-- Header com contexto atual -->
-    <div class="bg-white shadow-sm border-b">
+    <div class="brand-card-sm border-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Breadcrumb contextual -->
@@ -186,7 +186,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-5 py-3">
+                <div class="brand-table th px-5 py-3">
                     <div class="text-sm">
                         <span class="font-medium text-green-600" x-text="metrics.active_nodes">{{ $metrics['active_nodes'] }}</span>
                         <span class="text-gray-500">ativos</span>
@@ -213,7 +213,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-5 py-3">
+                <div class="brand-table th px-5 py-3">
                     <div class="text-sm">
                         <span class="font-medium text-green-600">+{{ $metrics['recent_growth'] }}</span>
                         <span class="text-gray-500">últimos 30 dias</span>
@@ -240,7 +240,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-5 py-3">
+                <div class="brand-table th px-5 py-3">
                     <div class="text-sm">
                         <span class="text-gray-500">de 8 disponíveis</span>
                     </div>
@@ -268,7 +268,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-5 py-3">
+                <div class="brand-table th px-5 py-3">
                     <div class="text-sm">
                         <div class="w-full bg-gray-200 rounded-full h-2">
                             <div class="bg-purple-600 h-2 rounded-full" :style="`width: ${metrics.performance_score}%`" style="width: {{ $metrics['performance_score'] }}%"></div>
@@ -282,7 +282,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Coluna esquerda - Atividades recentes -->
             <div class="lg:col-span-2">
-                <div class="bg-white shadow rounded-lg">
+                <div class="brand-card rounded-lg">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900">Atividades Recentes</h3>
                     </div>
@@ -335,7 +335,7 @@
             <!-- Coluna direita -->
             <div class="space-y-6">
                 <!-- Resumo da hierarquia -->
-                <div class="bg-white shadow rounded-lg">
+                <div class="brand-card rounded-lg">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900">Estrutura Hierárquica</h3>
                     </div>
@@ -399,14 +399,14 @@
                 </div>
 
                 <!-- Status dos módulos -->
-                <div class="bg-white shadow rounded-lg">
+                <div class="brand-card rounded-lg">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900">Status dos Módulos</h3>
                     </div>
                     <div class="p-6">
                         <div class="space-y-3">
                             @foreach($modulesStatus as $module)
-                            <div class="flex items-center justify-between">
+                            <div class="brand-stat-card">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0">
                                         @if($module['enabled'])

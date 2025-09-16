@@ -12,130 +12,7 @@
     
     <!-- Branding Dinâmico -->
     
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .card { 
-            background: white; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
-            transition: all 0.3s ease; 
-        }
-        .card:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
-        }
-        .stat-card { 
-            background: var(--primary-gradient);
-            color: var(--primary-text);
-        }
-        .progress-bar { 
-            background: var(--accent-gradient);
-            transition: width 0.5s ease-in-out;
-        }
-        .dashboard-header {
-            background: var(--background-color);
-            color: var(--text-color);
-        }
     
-        /* Sobrescrever cores Tailwind específicas */
-        .bg-primary, .bg-primary, .bg-primary-dark {
-            background-color: var(--primary-color) !important;
-        }
-        .hover\:bg-primary:hover, .hover\:bg-primary-dark:hover {
-            background-color: var(--primary-dark) !important;
-        }
-        .text-primary, .text-primary, .text-primary, .text-blue-800 {
-            color: var(--primary-color) !important;
-        }
-        .border-primary, .hover\:border-primary:hover {
-            border-color: var(--primary-color) !important;
-        }
-        .bg-blue-50, .bg-blue-100 {
-            background-color: var(--primary-light) !important;
-        }
-        .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover {
-            background-color: var(--primary-light) !important;
-        }
-        .border-b-2.border-primary {
-            border-color: var(--primary-color) !important;
-        }
-    </style>
-
-    <style>
-        /* Força aplicação do branding nesta página específica */
-        .bg-primary, .bg-primary, .bg-primary-dark { background-color: var(--primary-color) !important; }
-        .text-primary, .text-primary, .text-primary { color: var(--primary-color) !important; }
-        .border-primary, .border-primary, .border-primary { border-color: var(--primary-color) !important; }
-        .hover\:bg-primary:hover, .hover\:bg-primary-dark:hover { background-color: var(--primary-dark) !important; }
-    </style>
-<style>
-/* BRANDING FORÇADO PARA ESTA PÁGINA */
-:root {
-    --primary-color: var(--primary-color);
-    --secondary-color: var(--secondary-color);
-    --accent-color: var(--accent-color);
-    --text-color: #1F2937;
-    --background-color: #FFFFFF;
-    --primary-light: rgba(var(--primary-color-rgb), 0.1);
-    --primary-dark: var(--primary-dark);
-    --primary-text: #FFFFFF;
-}
-
-/* Sobrescrita agressiva de todas as cores azuis */
-.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
-.bg-primary, .bg-primary, .bg-primary-dark, .bg-blue-800, .bg-blue-900,
-.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
-.bg-primary, .bg-primary, .bg-primary-dark, .bg-indigo-800, .bg-indigo-900 {
-    background-color: var(--primary-color) !important;
-}
-
-.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-blue-800:hover,
-.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-indigo-800:hover {
-    background-color: var(--primary-dark) !important;
-}
-
-.text-primary, .text-primary, .text-primary, .text-blue-800, .text-blue-900,
-.text-primary, .text-primary, .text-primary, .text-indigo-800, .text-indigo-900 {
-    color: var(--primary-color) !important;
-}
-
-.border-primary, .border-primary, .border-primary, .border-blue-800, .border-blue-900,
-.border-primary, .border-primary, .border-primary, .border-indigo-800, .border-indigo-900 {
-    border-color: var(--primary-color) !important;
-}
-
-button[class*="blue"], .btn[class*="blue"], button[class*="indigo"], .btn[class*="indigo"] {
-    background-color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
-    color: var(--primary-text) !important;
-}
-
-button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:hover, .btn[class*="indigo"]:hover {
-    background-color: var(--primary-dark) !important;
-}
-
-.bg-green-500, .bg-green-600, .bg-green-700 {
-    background-color: var(--accent-color) !important;
-}
-
-.text-green-500, .text-green-600, .text-green-700, .text-green-800 {
-    color: var(--accent-color) !important;
-}
-
-/* Sobrescrever estilos inline hardcoded */
-[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"],
-[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"] {
-    background-color: var(--primary-color) !important;
-}
-
-[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"],
-[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"] {
-    color: var(--primary-color) !important;
-}
-
-.animate-spin[class*="border-blue"], .animate-spin[class*="border-indigo"] {
-    border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
-}
-</style>
 <style>
 /* CORREÇÃO AGRESSIVA DE CORES - GERADO AUTOMATICAMENTE */
 :root {
@@ -243,7 +120,7 @@ input:focus, select:focus, textarea:focus {
 }
 </style>
 </head>
-<body class="bg-gray-50">
+<body class="brand-table th">
     <div class="flex h-screen">
         <!-- Sidebar Dinâmico -->
         <x-dynamic-sidebar />
@@ -272,9 +149,9 @@ input:focus, select:focus, textarea:focus {
                 <!-- Statistics Cards -->
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
                     <div class="stat-card rounded-xl p-4 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Criados</p>
+                                <p class="stat-label">Criados</p>
                                 <p class="text-2xl font-bold">{{ $statusStats['criado'] }}</p>
                             </div>
                             <i class="fas fa-plus text-white/60 text-2xl"></i>
@@ -282,9 +159,9 @@ input:focus, select:focus, textarea:focus {
                     </div>
 
                     <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-4 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Enviados</p>
+                                <p class="stat-label">Enviados</p>
                                 <p class="text-2xl font-bold">{{ $statusStats['contrato_enviado'] }}</p>
                             </div>
                             <i class="fas fa-envelope text-white/60 text-2xl"></i>
@@ -292,9 +169,9 @@ input:focus, select:focus, textarea:focus {
                     </div>
 
                     <div class="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-4 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Aguardando</p>
+                                <p class="stat-label">Aguardando</p>
                                 <p class="text-2xl font-bold">{{ $statusStats['aguardando_assinatura'] }}</p>
                             </div>
                             <i class="fas fa-clock text-white/60 text-2xl"></i>
@@ -302,9 +179,9 @@ input:focus, select:focus, textarea:focus {
                     </div>
 
                     <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-4 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Assinados</p>
+                                <p class="stat-label">Assinados</p>
                                 <p class="text-2xl font-bold">{{ $statusStats['contrato_assinado'] }}</p>
                             </div>
                             <i class="fas fa-signature text-white/60 text-2xl"></i>
@@ -312,9 +189,9 @@ input:focus, select:focus, textarea:focus {
                     </div>
 
                     <div class="bg-gradient-to-br from-emerald-600 to-green-700 rounded-xl p-4 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Aprovados</p>
+                                <p class="stat-label">Aprovados</p>
                                 <p class="text-2xl font-bold">{{ $statusStats['licenciado_aprovado'] }}</p>
                             </div>
                             <i class="fas fa-check-circle text-white/60 text-2xl"></i>
@@ -322,9 +199,9 @@ input:focus, select:focus, textarea:focus {
                     </div>
 
                     <div class="bg-gradient-to-br from-red-500 to-pink-600 rounded-xl p-4 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Cancelados</p>
+                                <p class="stat-label">Cancelados</p>
                                 <p class="text-2xl font-bold">{{ $statusStats['cancelado'] }}</p>
                             </div>
                             <i class="fas fa-times text-white/60 text-2xl"></i>
@@ -365,7 +242,7 @@ input:focus, select:focus, textarea:focus {
                 <div class="card rounded-xl overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full">
-                            <thead class="bg-gray-50">
+                            <thead class="brand-table th">
                                 <tr>
                                     <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Licenciado</th>
                                     <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -480,7 +357,7 @@ input:focus, select:focus, textarea:focus {
                     <p class="text-gray-600 mb-3">
                         Deseja enviar o contrato do licenciado <strong id="emailLicenseeName"></strong> para o e-mail:
                     </p>
-                    <div class="bg-gray-50 p-3 rounded-lg">
+                    <div class="brand-table th p-3 rounded-lg">
                         <div class="flex items-center">
                             <i class="fas fa-envelope text-gray-400 mr-2"></i>
                             <span id="emailLicenseeEmail" class="font-medium text-gray-900"></span>

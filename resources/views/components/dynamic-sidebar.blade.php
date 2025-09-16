@@ -29,7 +29,7 @@
     $textColor = 'white'; // Padrão para sidebar com gradiente
 @endphp
 
-<div class="w-64 flex-shrink-0 relative sidebar-gradient {{ $nodeTypeClass }}">
+<div class="w-64 flex-shrink-0 relative brand-sidebar {{ $nodeTypeClass }}">
     <div class="p-6">
         <!-- Logo -->
         <div class="flex items-center justify-center mb-8 w-full">
@@ -124,100 +124,7 @@
     </div>
 </div>
 
-<style>
-/* Estilos específicos da sidebar */
-.sidebar-gradient {
-    background: var(--primary-gradient);
-}
 
-.sidebar-logo-container {
-    min-height: 40px;
-    max-height: 50px;
-    width: 100%;
-    max-width: 180px;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    padding: 4px;
-}
-
-.sidebar-logo {
-    max-width: 100%; 
-    max-height: 100%; 
-    width: auto; 
-    height: auto; 
-    object-fit: contain;
-    display: block;
-}
-
-.sidebar-menu-item {
-    transition: all 0.3s ease;
-}
-
-.sidebar-menu-hover:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateX(4px);
-}
-
-.sidebar-menu-active {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-left: 4px solid white;
-    transform: translateX(4px);
-}
-
-.sidebar-submenu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateX(2px);
-}
-
-/* Badges específicos por tipo de nó */
-.super-admin-badge {
-    background: linear-gradient(135deg, #6B46C1 0%, #9333EA 100%);
-    color: white;
-    box-shadow: 0 2px 4px rgba(107, 70, 193, 0.3);
-}
-
-.operacao-badge {
-    background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
-    color: white;
-    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
-}
-
-.white-label-badge {
-    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color) 100%);
-    color: white;
-    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
-}
-
-/* Animações */
-.chevron-icon {
-    transition: transform 0.3s ease;
-}
-
-.menu-item:hover .chevron-icon {
-    transform: rotate(180deg);
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .sidebar-logo-container {
-        max-width: 120px;
-        max-height: 35px;
-    }
-}
-
-/* FORÇA TEXTOS BRANCOS NA SIDEBAR - INLINE */
-.sidebar-gradient, .sidebar-gradient * {
-    color: white !important;
-}
-.sidebar-gradient a, .sidebar-gradient a * {
-    color: white !important;
-}
-.sidebar-gradient i, .sidebar-gradient span, .sidebar-gradient p {
-    color: white !important;
-}
-
-</style>
 
 <script>
 // JavaScript para controle do menu

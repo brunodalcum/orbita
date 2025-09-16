@@ -15,159 +15,7 @@
     
     <!-- Branding Dinâmico -->
 
-    <style>
-        /* Estilos para os filtros */
-        #filter-chevron {
-            transition: transform 0.3s ease;
-        }
-        
-        .filter-card {
-            transition: all 0.3s ease;
-        }
-        
-        .filter-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Animação para os campos de filtro */
-        .filter-input {
-            transition: all 0.3s ease;
-        }
-        
-        .filter-input:focus {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.15);
-        }
-        
-        /* Estilo para o contador de resultados */
-        .results-counter {
-            background: var(--primary-gradient); color: var(--primary-text);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 600;
-        }
-        
-        /* Responsividade para filtros */
-        @media (max-width: 768px) {
-            .filter-grid {
-                grid-template-columns: 1fr !important;
-            }
-        }
-            
-        /* Estilos dinâmicos do dashboard */
-        .dashboard-header {
-            background: var(--background-color);
-            color: var(--text-color);
-        }
-        .stat-card {
-            background: var(--primary-gradient);
-            color: var(--primary-text);
-        }
-        .progress-bar {
-            background: var(--accent-gradient);
-        }
     
-        /* Sobrescrever cores Tailwind específicas */
-        .bg-primary, .bg-primary, .bg-primary-dark {
-            background-color: var(--primary-color) !important;
-        }
-        .hover\:bg-primary:hover, .hover\:bg-primary-dark:hover {
-            background-color: var(--primary-dark) !important;
-        }
-        .text-primary, .text-primary, .text-primary, .text-blue-800 {
-            color: var(--primary-color) !important;
-        }
-        .border-primary, .hover\:border-primary:hover {
-            border-color: var(--primary-color) !important;
-        }
-        .bg-blue-50, .bg-blue-100 {
-            background-color: var(--primary-light) !important;
-        }
-        .hover\:bg-blue-100:hover, .hover\:bg-blue-200:hover {
-            background-color: var(--primary-light) !important;
-        }
-        .border-b-2.border-primary {
-            border-color: var(--primary-color) !important;
-        }
-    </style>
-
-    <style>
-        /* Força aplicação do branding nesta página específica */
-        .bg-primary, .bg-primary, .bg-primary-dark { background-color: var(--primary-color) !important; }
-        .text-primary, .text-primary, .text-primary { color: var(--primary-color) !important; }
-        .border-primary, .border-primary, .border-primary { border-color: var(--primary-color) !important; }
-        .hover\:bg-primary:hover, .hover\:bg-primary-dark:hover { background-color: var(--primary-dark) !important; }
-    </style>
-<style>
-/* BRANDING FORÇADO PARA ESTA PÁGINA */
-:root {
-    --primary-color: var(--primary-color);
-    --secondary-color: var(--secondary-color);
-    --accent-color: var(--accent-color);
-    --text-color: #1F2937;
-    --background-color: #FFFFFF;
-    --primary-light: rgba(var(--primary-color-rgb), 0.1);
-    --primary-dark: var(--primary-dark);
-    --primary-text: #FFFFFF;
-}
-
-/* Sobrescrita agressiva de todas as cores azuis */
-.bg-blue-50, .bg-blue-100, .bg-blue-200, .bg-blue-300, .bg-blue-400,
-.bg-primary, .bg-primary, .bg-primary-dark, .bg-blue-800, .bg-blue-900,
-.bg-indigo-50, .bg-indigo-100, .bg-indigo-200, .bg-indigo-300, .bg-indigo-400,
-.bg-primary, .bg-primary, .bg-primary-dark, .bg-indigo-800, .bg-indigo-900 {
-    background-color: var(--primary-color) !important;
-}
-
-.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-blue-800:hover,
-.hover\:bg-primary:hover, .hover\:bg-primary-dark:hover, .hover\:bg-indigo-800:hover {
-    background-color: var(--primary-dark) !important;
-}
-
-.text-primary, .text-primary, .text-primary, .text-blue-800, .text-blue-900,
-.text-primary, .text-primary, .text-primary, .text-indigo-800, .text-indigo-900 {
-    color: var(--primary-color) !important;
-}
-
-.border-primary, .border-primary, .border-primary, .border-blue-800, .border-blue-900,
-.border-primary, .border-primary, .border-primary, .border-indigo-800, .border-indigo-900 {
-    border-color: var(--primary-color) !important;
-}
-
-button[class*="blue"], .btn[class*="blue"], button[class*="indigo"], .btn[class*="indigo"] {
-    background-color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
-    color: var(--primary-text) !important;
-}
-
-button[class*="blue"]:hover, .btn[class*="blue"]:hover, button[class*="indigo"]:hover, .btn[class*="indigo"]:hover {
-    background-color: var(--primary-dark) !important;
-}
-
-.bg-green-500, .bg-green-600, .bg-green-700 {
-    background-color: var(--accent-color) !important;
-}
-
-.text-green-500, .text-green-600, .text-green-700, .text-green-800 {
-    color: var(--accent-color) !important;
-}
-
-/* Sobrescrever estilos inline hardcoded */
-[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"],
-[style*="background-color: var(--primary-color)"], [style*="background-color: var(--primary-color)"] {
-    background-color: var(--primary-color) !important;
-}
-
-[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"],
-[style*="color: var(--primary-color)"], [style*="color: var(--primary-color)"] {
-    color: var(--primary-color) !important;
-}
-
-.animate-spin[class*="border-blue"], .animate-spin[class*="border-indigo"] {
-    border-color: var(--primary-color) transparent var(--primary-color) transparent !important;
-}
-</style>
 <style>
 /* CSS SUPER AGRESSIVO PARA LICENCIADOS - FORÇA TODAS AS CORES */
 :root {
@@ -420,64 +268,64 @@ input:focus, select:focus, textarea:focus {
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Total de Licenciados</p>
-                                <p class="text-3xl font-bold">{{ $stats['total'] ?? 0 }}</p>
+                                <p class="stat-label">Total de Licenciados</p>
+                                <p class="stat-value">{{ $stats['total'] ?? 0 }}</p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-users mr-1"></i>
                                     Cadastros ativos
                                 </p>
                             </div>
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                            <div class="stat-icon">
                                 <i class="fas fa-users text-2xl"></i>
                             </div>
                         </div>
                     </div>
 
                     <div class="bg-gradient-to-r from-pink-500 to-red-500 rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Aprovados</p>
-                                <p class="text-3xl font-bold">{{ $stats['aprovados'] ?? 0 }}</p>
+                                <p class="stat-label">Aprovados</p>
+                                <p class="stat-value">{{ $stats['aprovados'] ?? 0 }}</p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-check mr-1"></i>
                                     Licenciados ativos
                                 </p>
                             </div>
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                            <div class="stat-icon">
                                 <i class="fas fa-check-circle text-2xl"></i>
                             </div>
                         </div>
                     </div>
 
                     <div class="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Em Análise</p>
-                                <p class="text-3xl font-bold">{{ $stats['em_analise'] ?? 0 }}</p>
+                                <p class="stat-label">Em Análise</p>
+                                <p class="stat-value">{{ $stats['em_analise'] ?? 0 }}</p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-clock mr-1"></i>
                                     Aguardando aprovação
                                 </p>
                             </div>
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                            <div class="stat-icon">
                                 <i class="fas fa-clock text-2xl"></i>
                             </div>
                         </div>
                     </div>
 
                     <div class="bg-gradient-to-r from-green-500 to-teal-500 rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <div>
-                                <p class="text-white/80 text-sm">Recusados</p>
-                                <p class="text-3xl font-bold">{{ $stats['recusados'] ?? 0 }}</p>
+                                <p class="stat-label">Recusados</p>
+                                <p class="stat-value">{{ $stats['recusados'] ?? 0 }}</p>
                                 <p class="text-white/80 text-sm mt-1">
                                     <i class="fas fa-times mr-1"></i>
                                     Cadastros recusados
                                 </p>
                             </div>
-                            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                            <div class="stat-icon">
                                 <i class="fas fa-times-circle text-2xl"></i>
                             </div>
                         </div>
@@ -485,9 +333,9 @@ input:focus, select:focus, textarea:focus {
                 </div>
 
                 <!-- Filtros -->
-                <div class="bg-white rounded-lg shadow-sm border mb-6 filter-card">
+                <div class="brand-card-sm border mb-6 filter-card">
                     <div class="p-6 border-b">
-                        <div class="flex items-center justify-between">
+                        <div class="brand-stat-card">
                             <h3 class="text-lg font-semibold text-gray-800">
                                 <i class="fas fa-filter mr-2" style="color: var(--primary-color);"></i>
                                 Filtros
@@ -614,7 +462,7 @@ input:focus, select:focus, textarea:focus {
                                         <i class="fas fa-search mr-2"></i>
                                         Aplicar Filtros
                                     </button>
-                                    <a href="{{ route('dashboard.licenciados') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
+                                    <a href="{{ route('dashboard.licenciados') }}" class="brand-table th0 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
                                         <i class="fas fa-times mr-2"></i>
                                         Limpar Filtros
                                     </a>
@@ -630,7 +478,7 @@ input:focus, select:focus, textarea:focus {
                 </div>
 
                 <!-- Tabela de Licenciados -->
-                <div class="bg-white rounded-lg shadow-sm border">
+                <div class="brand-card-sm border">
                     <div class="flex items-center justify-between p-6 border-b">
                         <h3 class="text-lg font-semibold text-gray-800">Lista de Licenciados</h3>
                         <div class="flex items-center space-x-4">
@@ -643,7 +491,7 @@ input:focus, select:focus, textarea:focus {
 
                     <div class="overflow-x-auto">
                         <table class="w-full">
-                            <thead class="bg-gray-50">
+                            <thead class="brand-table th">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Razão Social</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CNPJ/CPF</th>
@@ -732,7 +580,7 @@ input:focus, select:focus, textarea:focus {
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
             <!-- Header do Modal -->
             <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
-                <div class="flex items-center justify-between">
+                <div class="brand-stat-card">
                     <div>
                         <h2 class="text-2xl font-bold">Cadastro de Licenciado</h2>
                         <p class="text-white/80 mt-1">Preencha as informações do novo licenciado</p>
@@ -744,7 +592,7 @@ input:focus, select:focus, textarea:focus {
                 
                 <!-- Progress Steps -->
                 <div class="mt-6">
-                    <div class="flex items-center justify-between">
+                    <div class="brand-stat-card">
                         <div class="flex items-center">
                             <div id="step1-indicator" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-semibold step-indicator active">
                                 1
@@ -985,7 +833,7 @@ input:focus, select:focus, textarea:focus {
                             <h3 class="text-xl font-semibold text-gray-800 mb-2">Revisar Dados</h3>
                             <p style="color: var(--secondary-color);">Confira as informações antes de finalizar o cadastro</p>
                             
-                            <div id="resumo-dados" class="bg-gray-50 rounded-lg p-6 text-left">
+                            <div id="resumo-dados" class="brand-table th rounded-lg p-6 text-left">
                                 <!-- Resumo será preenchido via JavaScript -->
                             </div>
                         </div>
@@ -993,7 +841,7 @@ input:focus, select:focus, textarea:focus {
                 </div>
 
                 <!-- Footer do Modal -->
-                <div class="bg-gray-50 px-6 py-4 flex items-center justify-between">
+                <div class="brand-table th px-6 py-4 flex items-center justify-between">
                     <button type="button" id="prevBtn" onclick="changeStep(-1)" class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors hidden">
                         <i class="fas fa-arrow-left mr-2"></i>Voltar
                     </button>
@@ -1017,7 +865,7 @@ input:focus, select:focus, textarea:focus {
 
     <!-- Modal de Visualização de Licenciado -->
     <div id="viewLicenciadoModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="brand-card-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-900">Detalhes do Licenciado</h3>
                 <button onclick="closeViewModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
@@ -1039,7 +887,7 @@ input:focus, select:focus, textarea:focus {
 
     <!-- Modal de Confirmação de Exclusão -->
     <div id="deleteConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+        <div class="brand-card-xl max-w-md w-full">
             <div class="p-6">
                 <div class="flex items-center mb-4">
                     <div class="flex-shrink-0">
@@ -1218,7 +1066,7 @@ input:focus, select:focus, textarea:focus {
                 </div>
 
                 <!-- Licenciado Info -->
-                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <div class="brand-table th rounded-lg p-4 mb-6">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background-color: var(--primary-light);">
                             <i class="fas fa-building " style="color: var(--primary-color);""></i>
