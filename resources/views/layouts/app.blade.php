@@ -57,6 +57,8 @@
         @stack('styles')
         <!-- CSS Global de Branding Dinâmico -->
     <link href="{{ asset('css/global-branding.css') }}" rel="stylesheet">
+    <!-- CSS Dinâmico de Branding -->
+    <link href="{{ asset('css/dynamic-branding.css.php') }}" rel="stylesheet" type="text/css">
 </head>
     <body class="font-sans antialiased">
         <x-banner />

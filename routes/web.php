@@ -714,3 +714,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 });
 
+// Rota para CSS dinâmico de branding
+Route::get('/css/dynamic-branding.css', [App\Http\Controllers\DynamicCSSController::class, 'serveBrandingCSS'])
+    ->name('dynamic.branding.css')
+    ->middleware(['web']);

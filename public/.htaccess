@@ -76,3 +76,12 @@
     php_value max_execution_time 300
     php_value max_input_vars 3000
 </IfModule>
+
+# Servir arquivos .css.php como CSS
+<Files "*.css.php">
+    Header set Content-Type "text/css"
+</Files>
+
+# Rewrite para CSS dinâmico
+RewriteEngine On
+RewriteRule ^css/dynamic-branding\.css$ css/dynamic-branding.css.php [L]
