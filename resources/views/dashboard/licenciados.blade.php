@@ -295,9 +295,9 @@ input:focus, select:focus, textarea:focus {
 }
 
 .text-blue-50, .text-blue-100, .text-blue-200, .text-blue-300, .text-blue-400,
-.text-blue-500, .text-blue-600, .text-blue-700, .text-blue-800, .text-blue-900,
+.text-primary" style="color: var(--primary-color);", .text-primary" style="color: var(--primary-color);", .text-primary" style="color: var(--primary-color);", .text-blue-800, .text-blue-900,
 .text-indigo-50, .text-indigo-100, .text-indigo-200, .text-indigo-300, .text-indigo-400,
-.text-indigo-500, .text-indigo-600, .text-indigo-700, .text-indigo-800, .text-indigo-900 {
+.text-primary" style="color: var(--primary-color);", .text-primary" style="color: var(--primary-color);", .text-primary" style="color: var(--primary-color);", .text-indigo-800, .text-indigo-900 {
     color: var(--primary-color) !important;
 }
 
@@ -374,13 +374,13 @@ input:focus, select:focus, textarea:focus {
 }
 </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 licenciados-page">
     <div class="flex h-screen">
         <!-- Sidebar Dinâmico -->
         <x-dynamic-sidebar />
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 flex flex-col overflow-hidden dashboard-content main-content content-area">
             <!-- Header -->
             <header class="dashboard-header bg-white shadow-sm border-b">
                 <div class="flex items-center justify-between px-6 py-4">
@@ -2980,6 +2980,50 @@ input:focus, select:focus, textarea:focus {
         .border-b-2.border-primary {
             border-color: var(--primary-color) !important;
         }
-    </style>
+    
+/* CORREÇÃO ESPECÍFICA PARA BOTÕES DA PÁGINA */
+.licenciados-page button:not(.keep-original), 
+.licenciados-page .btn:not(.keep-original),
+.licenciados-page a.btn:not(.keep-original) {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+    transition: all 0.3s ease !important;
+}
+
+.licenciados-page button:not(.keep-original):hover, 
+.licenciados-page .btn:not(.keep-original):hover,
+.licenciados-page a.btn:not(.keep-original):hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Botões específicos por seletor */
+button[onclick*="editLicenciado"], 
+button[onclick*="deleteLicenciado"],
+button[onclick*="showDetails"],
+a[href*="gerenciar"] {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+button[onclick*="editLicenciado"]:hover, 
+button[onclick*="deleteLicenciado"]:hover,
+button[onclick*="showDetails"]:hover,
+a[href*="gerenciar"]:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+/* Força aplicação em elementos teimosos */
+.table-actions *, .action-buttons *, .btn-group * {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-text) !important;
+}
+
+</style>
 </body>
 </html>

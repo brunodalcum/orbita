@@ -165,8 +165,10 @@ input:focus, select:focus, textarea:focus {
     color: var(--primary-text) !important;
 }
 </style>
-    <!-- CSS ULTRA-AGRESSIVO - FORÇA TODAS AS CORES -->
-    <link href="{{ asset('css/ultra-aggressive-branding.css') }}" rel="stylesheet">
+    <!-- CSS SELETIVO DE BRANDING - PRESERVA MENUS -->
+    <link href="{{ asset('css/selective-branding.css') }}" rel="stylesheet">
+    <!-- CSS FORÇA BOTÕES - ÚLTIMA LINHA DE DEFESA -->
+    <link href="{{ asset('css/force-buttons.css') }}" rel="stylesheet">
 </head>
     <body class="font-sans antialiased">
         <x-banner />

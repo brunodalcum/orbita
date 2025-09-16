@@ -190,8 +190,8 @@
     <link href="{{ asset('css/global-branding.css') }}" rel="stylesheet">
     <!-- CSS Dinâmico de Branding -->
     <link href="{{ asset('css/dynamic-branding.css.php') }}" rel="stylesheet" type="text/css">
-    <!-- CSS ULTRA-AGRESSIVO - FORÇA TODAS AS CORES -->
-    <link href="{{ asset('css/ultra-aggressive-branding.css') }}" rel="stylesheet">
+    <!-- CSS SELETIVO DE BRANDING - PRESERVA MENUS -->
+    <link href="{{ asset('css/selective-branding.css') }}" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
