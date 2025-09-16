@@ -4,6 +4,7 @@
 @section('subtitle', 'Agendar novo compromisso')
 
 @section('content')
+<x-dynamic-branding />
 <div class="max-w-4xl mx-auto">
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <!-- Header -->

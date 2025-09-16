@@ -3,6 +3,7 @@
 @section('title', 'Relatórios da Hierarquia')
 
 @section('content')
+<x-dynamic-branding />
 <div class="min-h-screen bg-gray-50" x-data="reportsManager()">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">
@@ -300,8 +301,8 @@ function reportsManager() {
                     datasets: [{
                         label: 'Nós',
                         data: @json($trendCharts['nodes_growth']['data']),
-                        borderColor: 'rgb(59, 130, 246)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderColor: 'var(--primary-color)',
+                        backgroundColor: 'rgba(var(--primary-color-rgb), 0.1)',
                         tension: 0.4
                     }]
                 },
@@ -350,7 +351,7 @@ function reportsManager() {
                     datasets: [{
                         data: @json($trendCharts['modules_usage']['data']),
                         backgroundColor: [
-                            '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'
+                            'var(--primary-color)', 'var(--accent-color)', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'
                         ]
                     }]
                 },

@@ -36,7 +36,7 @@
         
         .filter-input:focus {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+            box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.15);
         }
         
         /* Estilo para o contador de resultados */

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<x-dynamic-branding />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -640,7 +641,7 @@
         #agendaModal button[type="button"]:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4) !important;
-            background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important;
+            background: linear-gradient(135deg, #4b5563 0%, var(--secondary-color) 100%) !important;
         }
         @keyframes modalSlideIn {
             from {
@@ -783,7 +784,7 @@
         .modal-footer .btn-secondary:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4) !important;
-            background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important;
+            background: linear-gradient(135deg, #4b5563 0%, var(--secondary-color) 100%) !important;
         }
         
         .modal-body form {
@@ -920,7 +921,7 @@
         .btn-secondary:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 35px rgba(107, 114, 128, 0.4);
-            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+            background: linear-gradient(135deg, #4b5563 0%, var(--secondary-color) 100%);
         }
         .btn-danger {
             background: #ef4444;
@@ -944,7 +945,7 @@
             transition: all 0.3s ease;
         }
         .btn-success:hover {
-            background: #059669;
+            background: var(--accent-color);
         }
         .btn-warning {
             background: #f59e0b;
@@ -1065,7 +1066,7 @@
             border-left: 4px solid #10b981;
         }
         .agenda-card.online::before {
-            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(90deg, #10b981 0%, var(--accent-color) 100%);
         }
         .agenda-card.presencial {
             border-left: 4px solid #f59e0b;
@@ -1113,7 +1114,7 @@
             color: white;
         }
         .status-concluida {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #10b981 0%, var(--accent-color) 100%);
             color: white;
         }
         .status-cancelada {
@@ -1136,7 +1137,7 @@
             transform: translateX(0);
         }
         .toast.success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #10b981 0%, var(--accent-color) 100%);
         }
         .toast.error {
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
@@ -1207,7 +1208,7 @@
         }
         
         .meet-link:hover {
-            background: linear-gradient(90deg, #10b981, #059669, #10b981);
+            background: linear-gradient(90deg, #10b981, var(--accent-color), #10b981);
             background-size: 200% 100%;
             animation: shimmer 2s infinite;
         }
@@ -1234,7 +1235,7 @@
         .meet-link {
             display: inline-flex;
             align-items: center;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #10b981 0%, var(--accent-color) 100%);
             color: white;
             text-decoration: none;
             font-weight: 600;
@@ -1458,7 +1459,7 @@
         #agendaModal button[type="button"]:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4) !important;
-            background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important;
+            background: linear-gradient(135deg, #4b5563 0%, var(--secondary-color) 100%) !important;
         }
         
         /* Garantir que os botões sejam sempre visíveis mesmo com JavaScript */
@@ -1623,7 +1624,7 @@
         .modal button[type="button"]:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4) !important;
-            background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important;
+            background: linear-gradient(135deg, #4b5563 0%, var(--secondary-color) 100%) !important;
         }
         
         /* Responsividade do modal */
@@ -1778,7 +1779,7 @@
         
         .modal .form-group:last-child .form-control:focus {
             background: linear-gradient(135deg, #ffffff 0%, #d1fae5 100%);
-            border-color: #059669;
+            border-color: var(--accent-color);
         }
         
         /* Destaque para os campos de data */
@@ -1856,7 +1857,7 @@
         }
         
         .agenda-card .btn-success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #10b981 0%, var(--accent-color) 100%);
             color: white;
         }
         
@@ -2066,7 +2067,7 @@
         .modal button[type="button"]:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4) !important;
-            background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important;
+            background: linear-gradient(135deg, #4b5563 0%, var(--secondary-color) 100%) !important;
         }
     </style>
 </head>

@@ -520,9 +520,9 @@ function brandingManager() {
     return {
         inheritFromParent: @json(isset($currentBranding['inherit_from_parent']) ? $currentBranding['inherit_from_parent'] : false),
         colors: {
-            primary_color: @json(isset($currentBranding['primary_color']) ? $currentBranding['primary_color'] : '#3B82F6'),
-            secondary_color: @json(isset($currentBranding['secondary_color']) ? $currentBranding['secondary_color'] : '#6B7280'),
-            accent_color: @json(isset($currentBranding['accent_color']) ? $currentBranding['accent_color'] : '#10B981'),
+            primary_color: @json(isset($currentBranding['primary_color']) ? $currentBranding['primary_color'] : 'var(--primary-color)'),
+            secondary_color: @json(isset($currentBranding['secondary_color']) ? $currentBranding['secondary_color'] : 'var(--secondary-color)'),
+            accent_color: @json(isset($currentBranding['accent_color']) ? $currentBranding['accent_color'] : 'var(--accent-color)'),
             text_color: @json(isset($currentBranding['text_color']) ? $currentBranding['text_color'] : '#1F2937'),
             background_color: @json(isset($currentBranding['background_color']) ? $currentBranding['background_color'] : '#FFFFFF')
         },

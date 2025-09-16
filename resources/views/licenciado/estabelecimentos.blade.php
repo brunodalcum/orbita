@@ -4,6 +4,7 @@
 @section('subtitle', 'Gerencie seus estabelecimentos')
 
 @section('content')
+<x-dynamic-branding />
 <div class="space-y-6">
     <!-- Header Actions -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -204,8 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
             datasets: [{
                 label: 'Vendas (R$)',
                 data: @json($estabelecimentos->pluck('vendas_mes')),
-                backgroundColor: 'rgba(59, 130, 246, 0.6)',
-                borderColor: 'rgba(59, 130, 246, 1)',
+                backgroundColor: 'rgba(var(--primary-color-rgb), 0.6)',
+                borderColor: 'rgba(var(--primary-color-rgb), 1)',
                 borderWidth: 1
             }]
         },

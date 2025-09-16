@@ -4,6 +4,7 @@
 @section('subtitle', 'Acompanhe suas comissões e pagamentos')
 
 @section('content')
+<x-dynamic-branding />
 <div class="space-y-6">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -332,12 +333,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: [72.25, 144.00, 279.00],
                 backgroundColor: [
                     'rgba(34, 197, 94, 0.8)',
-                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(var(--primary-color-rgb), 0.8)',
                     'rgba(147, 51, 234, 0.8)'
                 ],
                 borderColor: [
                     'rgba(34, 197, 94, 1)',
-                    'rgba(59, 130, 246, 1)',
+                    'rgba(var(--primary-color-rgb), 1)',
                     'rgba(147, 51, 234, 1)'
                 ],
                 borderWidth: 2
@@ -374,12 +375,12 @@ document.addEventListener('DOMContentLoaded', function() {
             datasets: [{
                 label: 'Comissões (R$)',
                 data: [980, 1250, 1175],
-                borderColor: 'rgba(59, 130, 246, 1)',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderColor: 'rgba(var(--primary-color-rgb), 1)',
+                backgroundColor: 'rgba(var(--primary-color-rgb), 0.1)',
                 borderWidth: 3,
                 fill: true,
                 tension: 0.4,
-                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                pointBackgroundColor: 'rgba(var(--primary-color-rgb), 1)',
                 pointBorderColor: '#fff',
                 pointBorderWidth: 2,
                 pointRadius: 6

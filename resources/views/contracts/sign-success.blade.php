@@ -11,7 +11,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .gradient-bg {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #10b981 0%, var(--accent-color) 100%);
         }
         .success-animation {
             animation: successPulse 2s infinite;

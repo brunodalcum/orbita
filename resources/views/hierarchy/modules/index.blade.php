@@ -3,6 +3,7 @@
 @section('title', 'Gerenciamento de Módulos')
 
 @section('content')
+<x-dynamic-branding />
 <div class="min-h-screen bg-gray-50" x-data="modulesManager()">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">

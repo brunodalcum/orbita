@@ -3,6 +3,7 @@
 @section('title', 'Detalhes do Lembrete')
 
 @section('content')
+<x-dynamic-branding />
 <div class="min-h-screen bg-gray-50">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->

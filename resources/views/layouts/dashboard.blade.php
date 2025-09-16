@@ -31,7 +31,8 @@
 
         <!-- Styles -->
         @livewireStyles
-    </head>
+        <x-dynamic-branding />
+</head>
     <body class="bg-gray-50">
         <x-banner />
         

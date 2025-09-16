@@ -29,7 +29,7 @@
 
 .node-super_admin > .jstree-anchor { color: #dc2626; font-weight: bold; }
 .node-operacao > .jstree-anchor { color: #2563eb; font-weight: 600; }
-.node-white_label > .jstree-anchor { color: #059669; font-weight: 600; }
+.node-white_label > .jstree-anchor { color: var(--accent-color); font-weight: 600; }
 .node-licenciado_l1 > .jstree-anchor { color: #d97706; }
 .node-licenciado_l2 > .jstree-anchor { color: #ea580c; }
 .node-licenciado_l3 > .jstree-anchor { color: #dc2626; }
@@ -71,6 +71,7 @@
 @endpush
 
 @section('content')
+<x-dynamic-branding />
 <div class="min-h-screen bg-gray-50">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">

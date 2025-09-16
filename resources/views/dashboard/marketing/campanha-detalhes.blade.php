@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<x-dynamic-branding />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -323,9 +324,9 @@
         }
         
         .notification.success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #10b981 0%, var(--accent-color) 100%);
             color: white;
-            border-left: 4px solid #047857;
+            border-left: 4px solid var(--accent-color);
         }
         
         .notification.error {

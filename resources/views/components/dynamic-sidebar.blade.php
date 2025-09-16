@@ -184,7 +184,7 @@
 }
 
 .white-label-badge {
-    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color) 100%);
     color: white;
     box-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
 }

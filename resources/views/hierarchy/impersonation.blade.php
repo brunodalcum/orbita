@@ -3,6 +3,7 @@
 @section('title', 'Impersonação de Usuários')
 
 @section('content')
+<x-dynamic-branding />
 <div class="min-h-screen bg-gray-50" x-data="impersonationManager()">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">

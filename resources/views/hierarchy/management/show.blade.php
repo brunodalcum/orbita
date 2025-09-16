@@ -3,6 +3,7 @@
 @section('title', 'Detalhes do Nó')
 
 @section('content')
+<x-dynamic-branding />
 <div class="min-h-screen bg-gray-50">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">

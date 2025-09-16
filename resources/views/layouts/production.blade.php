@@ -48,7 +48,7 @@
         /* Fallback CSS caso TailwindCSS não carregue */
         .fallback-sidebar {
             width: 16rem;
-            background: linear-gradient(to bottom, #3B82F6, #8B5CF6);
+            background: linear-gradient(to bottom, var(--primary-color), #8B5CF6);
             flex-shrink: 0;
             position: relative;
         }

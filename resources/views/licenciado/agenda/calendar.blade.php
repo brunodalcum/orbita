@@ -4,6 +4,7 @@
 @section('subtitle', 'Visualização mensal dos compromissos')
 
 @section('content')
+<x-dynamic-branding />
 <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         

@@ -9,7 +9,7 @@
     body { font-family: 'Inter', sans-serif; }
     .calendar-modern { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); }
     .glass-effect { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8); }
-    .status-confirmed { background: linear-gradient(135deg, #10b981, #059669); }
+    .status-confirmed { background: linear-gradient(135deg, #10b981, var(--accent-color)); }
     .status-pending { background: linear-gradient(135deg, #f59e0b, #d97706); }
     .status-cancelled { background: linear-gradient(135deg, #ef4444, #dc2626); }
     .hover-scale { transition: all 0.3s ease; }
@@ -18,6 +18,7 @@
 @endpush
 
 @section('content')
+<x-dynamic-branding />
 <div class="calendar-modern min-h-screen py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         

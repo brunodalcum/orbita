@@ -4,6 +4,7 @@
 @section('subtitle', 'Gerencie suas informações pessoais')
 
 @section('content')
+<x-dynamic-branding />
 <div class="space-y-6">
     <!-- Profile Header -->
     <div class="card p-6">

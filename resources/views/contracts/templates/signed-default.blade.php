@@ -73,7 +73,7 @@
         .signature-header {
             text-align: center;
             font-weight: bold;
-            color: #059669;
+            color: var(--accent-color);
             margin-bottom: 20px;
             font-size: 18px;
         }
@@ -162,7 +162,7 @@
             </tr>
             <tr>
                 <td>Status:</td>
-                <td><strong style="color: #059669;">✓ CONTRATO ASSINADO DIGITALMENTE</strong></td>
+                <td><strong style="color: var(--accent-color);">✓ CONTRATO ASSINADO DIGITALMENTE</strong></td>
             </tr>
         </table>
     </div>
@@ -266,7 +266,7 @@
             </div>
             <div class="row">
                 <div class="cell">Status:</div>
-                <div class="cell"><strong style="color: #059669;">✓ ASSINADO DIGITALMENTE</strong></div>
+                <div class="cell"><strong style="color: var(--accent-color);">✓ ASSINADO DIGITALMENTE</strong></div>
             </div>
         </div>
 

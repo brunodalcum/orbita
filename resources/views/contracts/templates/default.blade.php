@@ -366,7 +366,7 @@
         @if(isset($signature_info) && $signature_info)
             <!-- CONTRATO ASSINADO DIGITALMENTE -->
             <div class="digital-signature-section" style="border: 2px solid #10b981; border-radius: 10px; padding: 20px; background: #f0fdf4; margin-bottom: 30px;">
-                <div style="text-align: center; font-weight: bold; color: #059669; margin-bottom: 20px; font-size: 18px;">
+                <div style="text-align: center; font-weight: bold; color: var(--accent-color); margin-bottom: 20px; font-size: 18px;">
                     🔒 CONTRATO ASSINADO DIGITALMENTE
                 </div>
                 
@@ -389,7 +389,7 @@
                     </div>
                     <div style="display: table-row;">
                         <div style="display: table-cell; padding: 8px; font-weight: bold; width: 30%; color: #065f46;">Status:</div>
-                        <div style="display: table-cell; padding: 8px;"><strong style="color: #059669;">✓ ASSINADO DIGITALMENTE</strong></div>
+                        <div style="display: table-cell; padding: 8px;"><strong style="color: var(--accent-color);">✓ ASSINADO DIGITALMENTE</strong></div>
                     </div>
                 </div>
 

@@ -3,6 +3,7 @@
 @section('title', 'Gerenciar Permissões - ' . $role->display_name)
 
 @section('content')
+<x-dynamic-branding />
 <div class="container mx-auto px-6 py-8">
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">

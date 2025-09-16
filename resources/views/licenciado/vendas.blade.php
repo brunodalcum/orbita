@@ -4,6 +4,7 @@
 @section('subtitle', 'Acompanhe suas vendas e performance')
 
 @section('content')
+<x-dynamic-branding />
 <div class="space-y-6">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -289,12 +290,12 @@ document.addEventListener('DOMContentLoaded', function() {
             datasets: [{
                 label: 'Vendas (R$)',
                 data: @json(collect($vendas->vendas_por_dia)->pluck('valor')),
-                borderColor: 'rgba(59, 130, 246, 1)',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderColor: 'rgba(var(--primary-color-rgb), 1)',
+                backgroundColor: 'rgba(var(--primary-color-rgb), 0.1)',
                 borderWidth: 3,
                 fill: true,
                 tension: 0.4,
-                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                pointBackgroundColor: 'rgba(var(--primary-color-rgb), 1)',
                 pointBorderColor: '#fff',
                 pointBorderWidth: 2,
                 pointRadius: 6,
@@ -330,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     titleColor: 'white',
                     bodyColor: 'white',
-                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderColor: 'rgba(var(--primary-color-rgb), 1)',
                     borderWidth: 1,
                     callbacks: {
                         label: function(context) {

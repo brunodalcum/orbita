@@ -338,7 +338,7 @@
                             <button type="submit" 
                                     id="saveButton"
                                     class="save-button-elegant px-8 py-3 text-white rounded-xl font-semibold flex items-center text-lg transform hover:scale-105 transition-all duration-300"
-                                    style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); border: 2px solid #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); opacity: 1;">
+                                    style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); border: 2px solid #3b82f6; box-shadow: 0 4px 15px rgba(var(--primary-color-rgb), 0.4); opacity: 1;">
                                 <i class="fas fa-save mr-3 text-lg"></i>
                                 Salvar Reunião
                             </button>
@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('input', function() {
         if (saveButton) {
             saveButton.classList.remove('animate-pulse');
-            saveButton.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.6)';
+            saveButton.style.boxShadow = '0 6px 20px rgba(var(--primary-color-rgb), 0.6)';
         }
     });
     
@@ -731,7 +731,7 @@ function previewReuniao() {
     input[type="radio"]:checked + div {
         background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
         border-color: #3b82f6;
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.15);
         transform: translateY(-2px);
     }
     
@@ -747,7 +747,7 @@ function previewReuniao() {
     /* Estilo para inputs focus melhorado */
     input:focus, textarea:focus, select:focus {
         outline: none;
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.1);
         transform: translateY(-1px);
     }
     
@@ -766,7 +766,7 @@ function previewReuniao() {
     .gradient-input:focus {
         background: #ffffff !important;
         border-color: #3b82f6 !important;
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+        box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.1) !important;
     }
     
     /* Melhorar todos os inputs */
@@ -779,7 +779,7 @@ function previewReuniao() {
     input:focus, textarea:focus, select:focus {
         background: #ffffff !important;
         border-color: #3b82f6 !important;
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+        box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.1) !important;
         opacity: 1 !important;
     }
     
@@ -808,7 +808,7 @@ function previewReuniao() {
     .save-button-elegant {
         background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important;
         border: 2px solid #3b82f6 !important;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
+        box-shadow: 0 4px 15px rgba(var(--primary-color-rgb), 0.4) !important;
         opacity: 1 !important;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
         position: relative !important;
@@ -833,20 +833,20 @@ function previewReuniao() {
     .save-button-elegant:hover {
         background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%) !important;
         transform: translateY(-2px) scale(1.02) !important;
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5) !important;
+        box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.5) !important;
         border-color: #2563eb !important;
     }
     
     .save-button-elegant:active {
         transform: translateY(-1px) scale(1.01) !important;
-        box-shadow: 0 3px 10px rgba(59, 130, 246, 0.4) !important;
+        box-shadow: 0 3px 10px rgba(var(--primary-color-rgb), 0.4) !important;
     }
     
     /* Cards com glassmorphism */
     .glass-card {
         background: rgba(255, 255, 255, 0.95) !important;
         backdrop-filter: blur(15px) !important;
-        border: 2px solid rgba(59, 130, 246, 0.2) !important;
+        border: 2px solid rgba(var(--primary-color-rgb), 0.2) !important;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
     }
     

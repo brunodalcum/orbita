@@ -3,6 +3,7 @@
 @section('title', 'Notificações')
 
 @section('content')
+<x-dynamic-branding />
 <div class="min-h-screen bg-gray-50" x-data="notificationsManager()">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">

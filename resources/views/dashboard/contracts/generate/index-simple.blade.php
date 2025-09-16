@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<x-dynamic-branding />
 <div class="min-h-screen bg-gray-50">
     <div class="flex">
         <!-- Sidebar -->

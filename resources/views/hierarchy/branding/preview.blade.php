@@ -7,9 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --primary-color: {{ $previewBranding['primary_color'] ?? '#3B82F6' }};
-            --secondary-color: {{ $previewBranding['secondary_color'] ?? '#6B7280' }};
-            --accent-color: {{ $previewBranding['accent_color'] ?? '#10B981' }};
+            --primary-color: {{ $previewBranding['primary_color'] ?? 'var(--primary-color)' }};
+            --secondary-color: {{ $previewBranding['secondary_color'] ?? 'var(--secondary-color)' }};
+            --accent-color: {{ $previewBranding['accent_color'] ?? 'var(--accent-color)' }};
             --text-color: {{ $previewBranding['text_color'] ?? '#1F2937' }};
             --background-color: {{ $previewBranding['background_color'] ?? '#FFFFFF' }};
             --font-family: '{{ $previewBranding['font_family'] ?? 'Inter' }}', sans-serif;

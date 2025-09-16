@@ -134,7 +134,7 @@
             padding: 16px;
             text-align: left;
             font-weight: 600;
-            color: #374151;
+            color: var(--secondary-color);
             border-bottom: 1px solid #e5e7eb;
         }
         
@@ -184,6 +184,7 @@
             }
         }
     </style>
+    <x-dynamic-branding />
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">

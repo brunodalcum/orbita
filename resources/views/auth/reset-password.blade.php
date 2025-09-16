@@ -37,7 +37,7 @@
         }
         .btn-secondary {
             background: #f3f4f6;
-            color: #374151;
+            color: var(--secondary-color);
             transition: all 0.3s ease;
         }
         .btn-secondary:hover {

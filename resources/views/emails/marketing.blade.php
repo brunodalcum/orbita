@@ -49,7 +49,7 @@
         }
         .cta-button {
             display: inline-block;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #10b981 0%, var(--accent-color) 100%);
             color: white;
             padding: 15px 30px;
             text-decoration: none;
